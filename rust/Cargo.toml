@@ -1,18 +1,18 @@
 [package]
 name = "dim-stream-deck"
-version = "1.0.0"
+version = "2.0.0"
 edition = "2021"
 
 [dependencies]
 tungstenite = "0.18.0"
-tokio-tungstenite = "*"
+tokio-tungstenite = "0.18.0"
 serde_json = "1.0.85"
 async-trait = "0.1.57"
 futures = "0.3"
 futures-util = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 tokio = { version = "1.21.2", features = ["full"] }
-stream_deck_sdk = { path = "../../../rust/sdk", features = ["download", "images"] }
+stream_deck_sdk = { version="1.0.0", features = ["download", "images", "logging"] }
 warp = "0.3.3"
 skia-safe = "0.57.0"
 tokio-stream = "0.1.11"

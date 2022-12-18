@@ -22,9 +22,9 @@
   ],
   "Category": "Destiny Item Manager",
   "CategoryIcon": "icons/category",
-  "CodePath": "plugin.exe",
-  "CodePathWin": "plugin.exe",
-  "CodePathMac": "stream-deck-debug.exe",
+  "CodePath": "com.dim.streamdeck.exe",
+  "CodePathWin": "com.dim.streamdeck.exe",
+  "CodePathMac": "com.dim.streamdeck",
   "PropertyInspectorPath": "pi/index.html",
   "Profiles": [
     {

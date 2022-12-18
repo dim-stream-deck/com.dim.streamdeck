@@ -3,7 +3,30 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-plugin:
+  build-win-plugin:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./rust/
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --manifest-path rust/Cargo.toml --release
+
+      - name: Temporary store plugin
+        uses: actions/upload-artifact@v3
+        with:
+          name: com.dim.streamdeck.exe
+          path: ./rust/target/release/plugin.exe
+          retention-days: 1
+
+  build-mac-plugin:
     runs-on: macos-latest
     defaults:
       run:
@@ -14,45 +37,15 @@ jobs:
         with:
           toolchain: stable
 
-      - name: Prepare cross compilation
-        run: rustup target add x86_64-pc-windows-gnu
-
       - uses: actions-rs/cargo@v1
         with:
             command: build
-            args: --release --target x86_64-pc-windows-gnu
+            args: --manifest-path rust/Cargo.toml --release
 
-      - name: Extract plugin version
-        id: version
-        uses: SebRollen/toml-action@v1.0.1
+      - name: Temporary store plugin
+        uses: actions/upload-artifact@v3
         with:
-          file: 'Cargo.toml'
-          field: 'version.version'
+          name: com.dim.streamdeck
+          path: ./rust/target/release/plugin
+          retention-days: 1
 
-      - uses: suisei-cn/actions-download-file@v1
-        id: distribution_tool
-        name: Download Elgato Distribution Tool
-        with:
-          url: "https://developer.elgato.com/documentation/stream-deck/distributiontool/DistributionToolMac.zip"
-          target: .
-
-      - name: Extract DistributionTool.exe
-        run: unzip "${{ steps.distribution_tool.outputs.filename }}"
-
-      - name: Prepare plugin directory
-        run: |
-          cp target/release/plugin.exe ../plugin/plugin.exe
-          mv plugin com.dim.streamdeck.sdPlugin
-
-      - name: Package plugin
-        run: ./DistributionTool.exe -b -i com.dim.streamdeck.sdPlugin -o .
-
-      - name: Publish stream deck package
-        uses: marvinpinto/action-automatic-releases@latest
-        with:
-          repo_token: "${{ secrets.SECRET_TOKEN }}"
-          automatic_release_tag: "${{steps.version.outputs.value}}"
-          prerelease: true
-          title: "${{steps.version.outputs.value}}"
-          files: |
-            ./com.dim.streamdeck.streamDeckPlugin
