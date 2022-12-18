@@ -1,0 +1,36 @@
+[package]
+name = "dim-stream-deck"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+tungstenite = "0.18.0"
+tokio-tungstenite = "*"
+serde_json = "1.0.85"
+async-trait = "0.1.57"
+futures = "0.3"
+futures-util = "0.3"
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.21.2", features = ["full"] }
+stream_deck_sdk = { path = "../../../rust/sdk", features = ["download", "images"] }
+warp = "0.3.3"
+skia-safe = "0.57.0"
+tokio-stream = "0.1.11"
+futures-channel = "0.3"
+open = "3"
+separator = "0.4.1"
+lazy_static = "1.4.0"
+cacache = "10.0.1"
+
+[profile.release]
+strip = true
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[[bin]]
+path = "src/main.rs"
+name = "plugin"
+test = false
+bench = false
