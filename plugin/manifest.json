@@ -5,7 +5,7 @@
   "Icon": "icons/pluginIcon",
   "Version": "1.0.8",
   "SDKVersion": 2,
-  "URL": "https://dim-stream-deck.netlify.app",
+  "URL": "https://dim-stream-deck.vercel.app",
   "uuid": "com.dim.streamdeck",
   "Software": {
     "MinimumVersion": "5.0"
