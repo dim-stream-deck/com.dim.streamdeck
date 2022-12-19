@@ -8,6 +8,22 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Build property inspector
+        working-directory: ./property-inspector/
+        run: pnpm install && pnpm build
+
       - uses: suisei-cn/actions-download-file@v1.3.0
         id: distribution_tool
         name: Download Elgato Distribution Tool
