@@ -3,7 +3,7 @@
   "Author": "fcannizzaro",
   "Description": "DIM actions",
   "Icon": "icons/pluginIcon",
-  "Version": "1.0.8",
+  "Version": "2.0.0",
   "SDKVersion": 2,
   "URL": "https://dim-stream-deck.vercel.app",
   "uuid": "com.dim.streamdeck",
@@ -143,12 +143,7 @@
       "Name": "Postmaster",
       "States": [
         {
-          "Image": "icons/vaultState",
-          "TitleAlignment": "bottom"
-        },
-        {
-          "Image": "icons/vaultState",
-          "TitleAlignment": "middle"
+          "Image": "icons/postmasterState"
         }
       ],
       "SupportedInMultiActions": false,
@@ -173,8 +168,7 @@
       "Name": "Max Power",
       "States": [
         {
-          "Image": "icons/loadoutState",
-          "TitleAlignment": "bottom"
+          "Image": "icons/maxPowerState"
         }
       ],
       "SupportedInMultiActions": false,

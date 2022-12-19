@@ -230,8 +230,8 @@ modules.xml
 
 # built using GitHub workflow
 *.exe
-com.dim.streamdeck-macos
-com.dim.streamdeck-win.exe
+com.dim.streamdeck
+com.dim.streamdeck.exe
 com.dim.streamdeck.streamDeckPlugin
 pi/
 
