@@ -12,7 +12,7 @@ or from below:
 -->
 ## Features
 
-Go to [dim-stream-deck.vercel.com](https://dim-stream-deck.vercel.com) to see the available actions.
+Go to [dim-stream-deck.vercel.app](https://dim-stream-deck.vercel.app) to see the available actions.
 
 <!--
 ## Preview
