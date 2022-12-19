@@ -133,7 +133,7 @@ const Links = () => {
       </ActionIcon>
       <ActionIcon
         title="Website"
-        onClick={() => openURL("https://dim-stream-deck.netlify.app")}
+        onClick={() => openURL("https://dim-stream-deck.vercel.app")}
         ml="sm"
         color="gray"
         variant="default"
