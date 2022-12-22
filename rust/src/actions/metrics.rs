@@ -29,6 +29,7 @@ enum Metric {
     Trials,
     IronBanner,
     Triumphs,
+    TriumphsActive,
     Gunsmith,
     BattlePass,
 }
@@ -51,6 +52,7 @@ async fn render_action(metric: Metric, metrics: Metrics) -> Option<String> {
         Metric::Trials => metrics.trials,
         Metric::IronBanner => metrics.iron_banner,
         Metric::Triumphs => metrics.triumphs,
+        Metric::TriumphsActive => metrics.triumphs_active.unwrap_or_else(|| 0),
         Metric::Gunsmith => metrics.gunsmith,
         Metric::BattlePass => metrics.battle_pass,
     };

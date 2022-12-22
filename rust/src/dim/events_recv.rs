@@ -65,6 +65,7 @@ pub struct Metrics {
     pub(crate) iron_banner: i32,
     pub(crate) gunsmith: i32,
     pub(crate) triumphs: i32,
+    pub(crate) triumphs_active: Option<i32>,
     pub(crate) battle_pass: i32,
     pub(crate) artifact_icon: Option<String>,
 }
