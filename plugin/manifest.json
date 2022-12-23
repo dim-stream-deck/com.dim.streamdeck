@@ -1,11 +1,11 @@
 {
   "Name": "DIM Stream Deck",
   "Author": "fcannizzaro",
-  "Description": "DIM actions",
+  "Description": "Destiny Item Manager for Stream Deck",
   "Icon": "icons/pluginIcon",
   "Version": "2.0.0",
   "SDKVersion": 2,
-  "URL": "https://dim-stream-deck.vercel.app",
+  "URL": "https://dimstreamdeck.vercel.app",
   "uuid": "com.dim.streamdeck",
   "Software": {
     "MinimumVersion": "5.0"
