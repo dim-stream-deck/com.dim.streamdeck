@@ -133,7 +133,7 @@ const Links = () => {
       </ActionIcon>
       <ActionIcon
         title="Website"
-        onClick={() => openURL("https://dim-stream-deck.vercel.app")}
+        onClick={() => openURL("https://dimstreamdeck.vercel.app")}
         ml="sm"
         color="gray"
         variant="default"
