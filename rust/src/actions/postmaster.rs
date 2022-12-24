@@ -33,12 +33,7 @@ async fn render_action(
     style: Option<String>,
     postmaster: Postmaster,
 ) -> Option<String> {
-    if item.is_none() {
-        return None;
-    }
-
-    let item = item.unwrap();
-
+    let item = item.unwrap_or_else(|| "".to_string());
     let is_total = item == "";
 
     let file_image = match is_total {
@@ -46,7 +41,8 @@ async fn render_action(
         false => format!("./images/postmaster/{}.png", item),
     };
 
-    let is_percentage = is_total && style == Some("percentage".to_string());
+    let is_percentage =
+        is_total && style.unwrap_or_else(|| "percentage".to_string()) == "percentage".to_string();
 
     let mut value = match item.as_str() {
         "spoils" => postmaster.spoils,

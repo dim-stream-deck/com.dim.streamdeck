@@ -54,6 +54,18 @@
   ],
   "Actions": [
     {
+      "Icon": "icons/equipItemIcon",
+      "Name": "Pull/Equip Item",
+      "States": [
+        {
+          "Image": "icons/equipItemState"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Pull or equip a pre-selected item",
+      "UUID": "com.dim.streamdeck.pull-item"
+    },
+    {
       "Icon": "icons/loadoutIcon",
       "Name": "Equip Loadout",
       "States": [
@@ -100,18 +112,6 @@
       "SupportedInMultiActions": true,
       "Tooltip": "Randomize a specific character",
       "UUID": "com.dim.streamdeck.randomize"
-    },
-    {
-      "Icon": "icons/equipItemIcon",
-      "Name": "Pull/Equip Item",
-      "States": [
-        {
-          "Image": "icons/equipItemState"
-        }
-      ],
-      "SupportedInMultiActions": true,
-      "Tooltip": "Pull or equip a pre-selected item",
-      "UUID": "com.dim.streamdeck.pull-item"
     },
     {
       "Icon": "icons/appIcon",

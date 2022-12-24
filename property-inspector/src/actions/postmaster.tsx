@@ -31,7 +31,7 @@ export default () => {
 
   return (
     <div>
-      {settings.postmasterItem === "" && (
+      {!settings.postmasterItem && (
         <>
           <Divider labelPosition="center" label="Style" mb="sm" />
           <SegmentedControl

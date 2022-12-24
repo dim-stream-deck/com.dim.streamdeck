@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use stream_deck_sdk::action::Action;
-use stream_deck_sdk::events::received::{DidReceiveSettingsEvent, KeyEvent};
+use stream_deck_sdk::events::received::{KeyEvent};
 use stream_deck_sdk::get_settings;
 use stream_deck_sdk::stream_deck::StreamDeck;
 
@@ -35,16 +35,14 @@ impl Action for SearchAction {
 
     async fn on_key_down(&self, e: KeyEvent, sd: StreamDeck) {
         let settings = get_settings::<SearchSettings>(e.payload.settings);
-        sd.external(with_action(
-            "search",
-            serde_json::to_string(&settings).unwrap(),
-        ))
-        .await;
-
-        sd.show_ok(e.context).await;
-    }
-
-    async fn on_settings_changed(&self, e: DidReceiveSettingsEvent, sd: StreamDeck) {
-        sd.show_ok(e.context).await;
+        if settings.search.is_some() {
+            sd.external(with_action(
+                "search",
+                serde_json::to_string(&settings).unwrap(),
+            )).await;
+            sd.show_ok(e.context).await;
+        } else {
+            sd.show_alert(e.context).await;
+        }
     }
 }

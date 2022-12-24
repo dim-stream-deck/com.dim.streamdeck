@@ -92,15 +92,11 @@ async fn render_action(metric: Metric, metrics: Metrics) -> Option<String> {
 impl MetricsAction {
     async fn update(&self, context: String, sd: StreamDeck, settings: Option<MetricsSettings>) {
         let metrics = sd.global_settings::<PartialPluginSettings>().await.metrics;
-
-        if settings.is_none() || metrics.is_none() {
-            return;
-        }
-
-        let metrics = metrics.unwrap();
-        let metric = settings.unwrap().metric;
-
-        if let Some(metric) = metric {
+        if let Some(metrics) = metrics {
+            let metric = match settings {
+                Some(settings) => settings.metric.unwrap_or(Metric::Vanguard),
+                None => Metric::Vanguard,
+            };
             let image = render_action(metric, metrics).await;
             if image.is_some() {
                 sd.set_image_b64(context, image).await;

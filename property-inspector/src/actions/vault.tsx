@@ -20,7 +20,7 @@ export default () => {
       <SegmentedControl
         fullWidth
         orientation="vertical"
-        value={settings.item}
+        value={settings.item ?? "vault"}
         onChange={(item) => setSettings({ item })}
         data={resources.map((it) => ({
           value: it.value,

@@ -13,7 +13,7 @@ const resources = [
 
 export default () => {
   const { settings, setSettings } = useStreamDeck();
-  const powerType = settings.powerType || "total";
+  const powerType = settings.powerType || "all";
   return (
     <div>
       <Divider labelPosition="center" label="Power Type" mb="sm" />
