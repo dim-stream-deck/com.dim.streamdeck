@@ -112,7 +112,7 @@ const Links = () => {
     <Group mt="sm" position="center" noWrap>
       <ActionIcon
         title="Donate on Patreon"
-        onClick={() => openURL(process.env.REACT_APP_PATREON)}
+        onClick={() => openURL(import.meta.env.VITE_PATREON)}
         color="gray"
         variant="default"
         radius="xl"
@@ -122,7 +122,7 @@ const Links = () => {
       </ActionIcon>
       <ActionIcon
         title="Discord Server"
-        onClick={() => openURL(process.env.REACT_APP_DISCORD)}
+        onClick={() => openURL(import.meta.env.VITE_DISCORD)}
         ml="sm"
         color="gray"
         variant="default"
