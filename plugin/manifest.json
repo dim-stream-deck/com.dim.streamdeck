@@ -1,7 +1,7 @@
 {
   "Name": "DIM Stream Deck",
   "Author": "fcannizzaro",
-  "Description": "Destiny Item Manager for Stream Deck",
+  "Description": "Use Destiny Item Manager from your Stream Deck! Equip Loadouts, Pull Items, Search and much more",
   "Icon": "icons/pluginIcon",
   "Version": "2.0.0",
   "SDKVersion": 2,
