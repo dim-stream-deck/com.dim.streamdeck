@@ -81,7 +81,7 @@ pub struct UpdateData {
     postmaster: Option<Postmaster>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SelectionItem {
     pub(crate) item: String,
     pub(crate) label: String,
@@ -94,7 +94,7 @@ pub struct SelectionItem {
     pub(crate) is_exotic: Option<bool>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SelectionLoadout {
     pub(crate) loadout: String,
     pub(crate) label: String,
@@ -103,17 +103,17 @@ pub struct SelectionLoadout {
     pub(crate) character: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SelectionLoadoutData {
     pub(crate) selection: SelectionLoadout,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SelectionItemData {
     pub(crate) selection: SelectionItem,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(tag = "selectionType")]
 pub enum SelectionMessage {
     #[serde(rename = "loadout")]
@@ -139,7 +139,7 @@ pub struct ItemUpdate {
     pub(crate) data: ItemUpdateData,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct SelectionMessageData {
     pub(crate) data: SelectionMessage,
 }

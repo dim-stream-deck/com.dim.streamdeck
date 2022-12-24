@@ -161,8 +161,12 @@ async fn client_connected(ws: WebSocket, id: String, clients: Clients, sd: Strea
                             sd.update_global_settings(m.data, Some(true)).await;
                         }
                         FromDimMessage::Selection(selection) => {
+                            let key = match selection.data.clone() {
+                                SelectionMessage::Loadout(_) => "loadout",
+                                SelectionMessage::Item(_) => "item",
+                            };
                             let shared = SHARED.lock().await;
-                            let context = shared.get("loadout").or(shared.get("item"));
+                            let context = shared.get(key);
                             if context.is_none() {
                                 return;
                             }
