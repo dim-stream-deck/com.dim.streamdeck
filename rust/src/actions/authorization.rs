@@ -12,7 +12,7 @@ pub struct AuthorizationAction;
 #[derive(Serialize)]
 pub struct AuthorizationItem {
     id: String,
-    mnemonic: String,
+    code: String,
 }
 
 #[async_trait]
@@ -35,13 +35,7 @@ impl Action for AuthorizationAction {
                     .as_str()
                     .unwrap()
                     .to_string(),
-                mnemonic: e
-                    .payload
-                    .get("mnemonic")
-                    .unwrap()
-                    .as_str()
-                    .unwrap()
-                    .to_string()
+                code: e.payload.get("code").unwrap().as_str().unwrap().to_string()
             }),
         ))
         .await;

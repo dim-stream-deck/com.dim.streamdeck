@@ -80,7 +80,7 @@ const AuthorizationRequired: FC<AuthorizationRequiredProps> = ({ missing }) => {
           missing.forEach((id) => {
             sendToPlugin({
               authorization: id,
-              mnemonic: randomID,
+              code: randomID,
             });
           })
         }
