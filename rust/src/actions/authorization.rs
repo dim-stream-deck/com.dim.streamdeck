@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use serde::Serialize;
 use stream_deck_sdk::action::Action;
-use stream_deck_sdk::events::received::SendToPluginEvent;
+use stream_deck_sdk::events::events::SendToPluginEvent;
 use stream_deck_sdk::stream_deck::StreamDeck;
 
 use crate::dim::with_action;

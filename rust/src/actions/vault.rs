@@ -5,7 +5,7 @@ use separator::Separatable;
 use serde::{Deserialize, Serialize};
 use skia_safe::Point;
 use stream_deck_sdk::action::Action;
-use stream_deck_sdk::events::received::{
+use stream_deck_sdk::events::events::{
     AppearEvent, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent,
 };
 use stream_deck_sdk::get_settings;

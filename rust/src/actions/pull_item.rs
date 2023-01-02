@@ -6,7 +6,7 @@ use skia_safe::color_filters::matrix;
 use skia_safe::image_filters::blur;
 use skia_safe::{Color, Point, Rect};
 use stream_deck_sdk::action::Action;
-use stream_deck_sdk::events::received::{
+use stream_deck_sdk::events::events::{
     AppearEvent, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent, KeyEvent,
     SendToPluginEvent,
 };

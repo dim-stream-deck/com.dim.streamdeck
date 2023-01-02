@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use skia_safe::Point;
 use stream_deck_sdk::action::Action;
-use stream_deck_sdk::events::received::{
+use stream_deck_sdk::events::events::{
     AppearEvent, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent, KeyEvent,
 };
 use stream_deck_sdk::get_settings;

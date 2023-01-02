@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use serde::Deserialize;
 use stream_deck_sdk::action::Action;
-use stream_deck_sdk::events::received::{AppearEvent, DidReceiveGlobalSettingsEvent, KeyEvent};
+use stream_deck_sdk::events::events::{AppearEvent, DidReceiveGlobalSettingsEvent, KeyEvent};
 use stream_deck_sdk::stream_deck::StreamDeck;
 
 use crate::dim::with_action;
