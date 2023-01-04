@@ -2,6 +2,7 @@
 extern crate lazy_static;
 
 use crate::actions::authorization::AuthorizationAction;
+use crate::actions::auto_profile::AutoProfileAction;
 use crate::actions::farming_mode::FarmingModeAction;
 use crate::actions::loadout::LoadoutAction;
 use crate::actions::max_power::MaxPowerAction;
@@ -42,7 +43,8 @@ async fn main() {
         .register(Box::new(PostmasterAction))
         .register(Box::new(RotationAction))
         .register(Box::new(MaxPowerAction))
-        .register(Box::new(AuthorizationAction));
+        .register(Box::new(AuthorizationAction))
+        .register(Box::new(AutoProfileAction));
     let args = init(Some(tx)).await;
     let sd = args.0.clone();
     let stream_deck = connect(args, actions_manager);

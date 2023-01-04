@@ -1,6 +1,6 @@
 [package]
 name = "dim-stream-deck"
-version = "2.0.0"
+version = "2.0.1"
 edition = "2021"
 
 [dependencies]
@@ -12,7 +12,7 @@ futures = "0.3"
 futures-util = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 tokio = { version = "1.21.2", features = ["full"] }
-stream_deck_sdk = { version="1.0.1", features = ["download", "images", "logging"] }
+stream_deck_sdk = { version="1.0.2", features = ["download", "images"] } # path="../../../rust/sdk"
 warp = "0.3.3"
 skia-safe = "0.57.0"
 tokio-stream = "0.1.11"
