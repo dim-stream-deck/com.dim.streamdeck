@@ -16,8 +16,9 @@ use stream_deck_sdk::stream_deck::StreamDeck;
 use crate::actions::search::SearchSettings;
 use crate::dim::events_sent::Selection;
 use crate::dim::with_action;
+use crate::global_settings::PluginSettings;
 use crate::json_string;
-use crate::shared::{has_equipped_items, EXOTIC, GRAYSCALE, LEGENDARY, SHARED};
+use crate::shared::{has_equipped_items, EQUIPPED_MARK, EXOTIC, GRAYSCALE, LEGENDARY, SHARED};
 use crate::util::{
     bungify, bytes_to_skia_image, download_or_cache, prepare_render_empty, surface_to_b64,
 };
@@ -44,7 +45,7 @@ pub struct SendPullItem {
 
 pub struct PullItemAction;
 
-async fn render_action(settings: PullItemSettings) -> Option<String> {
+async fn render_action(settings: PullItemSettings, grayscale_enabled: bool) -> Option<String> {
     if settings.item.is_none() || settings.icon.is_none() {
         return None;
     }
@@ -70,7 +71,7 @@ async fn render_action(settings: PullItemSettings) -> Option<String> {
     let size = 96.0;
     let (mut surface, mut paint, _) = prepare_render_empty(size as i32);
 
-    if !equipped {
+    if !equipped && grayscale_enabled {
         paint.set_color_filter(Some(matrix(&GRAYSCALE)));
     }
 
@@ -92,6 +93,16 @@ async fn render_action(settings: PullItemSettings) -> Option<String> {
             overlay,
             None,
             Rect::new(3.0, 3.0, size - 3.0, size - 3.0),
+            &paint,
+        );
+    }
+
+    if equipped && !grayscale_enabled {
+        let mark = bytes_to_skia_image(EQUIPPED_MARK.to_vec());
+        surface.canvas().draw_image_rect(
+            mark,
+            None,
+            Rect::new(10.0, size - 10.0 - 21.0, 10.0 + 21.0, size - 10.0),
             &paint,
         );
     }
@@ -140,7 +151,9 @@ async fn render_action(settings: PullItemSettings) -> Option<String> {
 
 impl PullItemAction {
     async fn update(&self, context: String, settings: PullItemSettings, sd: StreamDeck) {
-        let image = render_action(settings).await;
+        let global_settings: PluginSettings = sd.global_settings().await;
+        let grayscale_enabled = global_settings.grayscale.unwrap_or(true);
+        let image = render_action(settings, grayscale_enabled).await;
         sd.set_image_b64(context, image).await;
     }
 
