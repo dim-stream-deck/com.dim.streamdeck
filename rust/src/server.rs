@@ -31,7 +31,7 @@ async fn client_token(id: String, sd: StreamDeck) -> Option<String> {
     };
 }
 
-async fn missing_update(id: String, add: bool) -> HashMap<String, Value> {
+pub async fn missing_update(id: String, add: bool) -> HashMap<String, Value> {
     let mut changes: HashMap<String, Value> = HashMap::default();
     let mut missing = MISSING.lock().await;
     if add {
@@ -107,13 +107,7 @@ async fn client_connected(ws: WebSocket, id: String, clients: Clients, sd: Strea
 
                             let mut changes: HashMap<String, Value> = HashMap::default();
                             changes.insert("tokens".to_string(), Value::Object(map));
-
-                            let missing_changes = missing_update(id.clone(), false).await;
-
-                            changes.insert(
-                                "missing".to_string(),
-                                missing_changes.get("missing").unwrap().clone(),
-                            );
+                            changes.insert("missing".to_string(), Value::Array(vec![]));
 
                             // update current token
                             let lock = clients.read().await;

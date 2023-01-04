@@ -87,6 +87,23 @@ const AuthorizationRequired: FC<AuthorizationRequiredProps> = ({ missing }) => {
       >
         AUTHORIZE
       </Button>
+
+        <Text mt="sm" align="center">
+            if you have issues, click below and then on the <strong>"DE-AUTHORIZE"</strong> button (DIM settings).
+        </Text>
+
+        <Button
+          fullWidth
+          mt="sm"
+          variant="outline"
+          color="red"
+          onClick={() => sendToPlugin({
+            resetAll: missing,
+          })}
+      >
+        RESET ALL
+      </Button>
+
     </Alert>
   );
 };
