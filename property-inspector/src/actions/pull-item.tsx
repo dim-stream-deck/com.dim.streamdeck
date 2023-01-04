@@ -1,9 +1,9 @@
-import { Button, Group, Paper, Text, Title } from "@mantine/core";
+import {Button, Divider, Group, Paper, Switch, Text, Title} from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
 
 export default () => {
-  const { settings, sendToPlugin } = useStreamDeck();
-  return (
+  const { settings, sendToPlugin, globalSettings, setGlobalSettings } = useStreamDeck();
+  return (<>
     <Paper radius="md" withBorder p="sm">
       <Title ml={2} color="white" order={5}>
         {settings.label ?? "NO ITEM SELECTED"}
@@ -29,5 +29,14 @@ export default () => {
         )}
       </Group>
     </Paper>
+      <Divider labelPosition="center" label="Accessibility" my="sm" />
+      <Switch
+          label="Grayscale filter for not-equipped items (this setting is global)"
+          checked={globalSettings.grayscale ?? true}
+          onChange={(e) =>
+              setGlobalSettings({ grayscale: e.currentTarget.checked })
+          }
+      />
+      </>
   );
 };

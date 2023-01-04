@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use skia_safe::{Color, Rect};
 use stream_deck_sdk::action::Action;
-use stream_deck_sdk::events::received::{
+use stream_deck_sdk::events::events::{
     AppearEvent, DidReceiveSettingsEvent, KeyEvent, SendToPluginEvent,
 };
 use stream_deck_sdk::get_settings;

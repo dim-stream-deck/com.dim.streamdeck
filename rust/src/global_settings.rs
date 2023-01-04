@@ -12,4 +12,5 @@ pub struct PluginSettings {
     max_power: Option<MaxPower>,
     vault: Option<Vault>,
     farming_mode: Option<bool>,
+    pub(crate) grayscale: Option<bool>,
 }

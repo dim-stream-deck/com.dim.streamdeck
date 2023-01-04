@@ -1,4 +1,5 @@
 pub mod authorization;
+pub mod auto_profile;
 pub mod farming_mode;
 pub mod loadout;
 pub mod max_power;

@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use stream_deck_sdk::action::Action;
-use stream_deck_sdk::events::received::KeyEvent;
+use stream_deck_sdk::events::events::KeyEvent;
 use stream_deck_sdk::get_settings;
 use stream_deck_sdk::stream_deck::StreamDeck;
 
