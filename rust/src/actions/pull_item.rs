@@ -31,6 +31,8 @@ pub struct PullItemSettings {
     pub(crate) icon: Option<String>,
     pub(crate) overlay: Option<String>,
     pub(crate) element: Option<String>,
+    pub(crate) alt_action: Option<String>,
+    pub(crate) alt_action_trigger: Option<String>,
     pub(crate) inventory: Option<bool>,
     #[serde(rename = "isExotic")]
     pub(crate) is_exotic: Option<bool>,
