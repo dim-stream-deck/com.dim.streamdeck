@@ -17,11 +17,12 @@ use crate::util::{auto_margin, prepare_render, prepare_text, surface_to_b64};
 pub struct VaultAction;
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "camelCase")]
 enum ItemType {
     Vault,
     Glimmer,
     Dust,
+    BrightDust,
     Shards,
 }
 
@@ -36,7 +37,11 @@ struct PartialPluginSettings {
 }
 
 fn render_action(item: ItemType, counter: String) -> String {
-    let file_image = format!("./images/vault/{:?}.png", item);
+    let file_image = match item {
+        ItemType::BrightDust => "./images/vault/dust.png".to_string(),
+        _ => format!("./images/vault/{:?}.png", item).to_string(),
+    };
+
     let (mut surface, paint, typeface) = prepare_render(file_image, 144);
     let (label, (w, _)) = prepare_text(&counter, &typeface, 28.0);
 
@@ -63,6 +68,7 @@ impl VaultAction {
             ItemType::Vault => vault.vault,
             ItemType::Glimmer => vault.glimmer,
             ItemType::Dust => vault.bright_dust,
+            ItemType::BrightDust => vault.bright_dust,
             ItemType::Shards => vault.shards,
         };
 
