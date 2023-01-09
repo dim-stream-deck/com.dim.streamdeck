@@ -1,0 +1,65 @@
+name: pr-build
+on:
+  pull_request:
+
+jobs:
+  build-property-inspector:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Build property inspector
+        working-directory: ./property-inspector/
+        run: pnpm install && pnpm build
+
+  build-win-plugin:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./rust/
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1.0.6
+        with:
+          toolchain: stable
+
+      - uses: actions-rs/cargo@v1.0.1
+        with:
+          command: build
+          args: --manifest-path rust/Cargo.toml --release
+
+      - name: Temporary store plugin
+        uses: actions/upload-artifact@v3
+        with:
+          name: com.dim.streamdeck.exe
+          path: ./rust/target/release/plugin.exe
+          retention-days: 10
+
+  build-mac-plugin:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./rust/
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1.0.6
+        with:
+          toolchain: stable
+
+      - uses: actions-rs/cargo@v1.0.1
+        with:
+            command: build
+            args: --manifest-path rust/Cargo.toml --release
+
