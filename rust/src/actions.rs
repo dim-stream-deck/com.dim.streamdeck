@@ -6,6 +6,7 @@ pub mod max_power;
 pub mod metrics;
 pub mod open_dim;
 pub mod postmaster;
+pub mod progress;
 pub mod pull_item;
 pub mod randomize;
 pub mod refresh;

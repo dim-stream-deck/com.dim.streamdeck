@@ -158,6 +158,8 @@ async fn client_connected(ws: WebSocket, id: String, clients: Clients, sd: Strea
                             let key = match selection.data.clone() {
                                 SelectionMessage::Loadout(_) => "loadout",
                                 SelectionMessage::Item(_) => "item",
+                                SelectionMessage::Weapon(_) => "weapon",
+                                SelectionMessage::Record(_) => "record",
                             };
                             let shared = SHARED.lock().await;
                             let context = shared.get(key);
@@ -170,6 +172,12 @@ async fn client_connected(ws: WebSocket, id: String, clients: Clients, sd: Strea
                                     sd.set_settings(context, data.selection).await;
                                 }
                                 SelectionMessage::Item(data) => {
+                                    sd.set_settings(context, data.selection).await;
+                                }
+                                SelectionMessage::Weapon(data) => {
+                                    sd.set_settings(context, data.selection).await;
+                                }
+                                SelectionMessage::Record(data) => {
                                     sd.set_settings(context, data.selection).await;
                                 }
                             }

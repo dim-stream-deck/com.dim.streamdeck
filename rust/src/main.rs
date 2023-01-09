@@ -13,6 +13,7 @@ use tokio::select;
 
 use crate::actions::open_dim::OpenDimAction;
 use crate::actions::postmaster::PostmasterAction;
+use crate::actions::progress::ProgressAction;
 use crate::actions::pull_item::PullItemAction;
 use crate::actions::randomize::RandomizeAction;
 use crate::actions::refresh::RefreshAction;
@@ -43,6 +44,7 @@ async fn main() {
         .register(Box::new(PostmasterAction))
         .register(Box::new(RotationAction))
         .register(Box::new(MaxPowerAction))
+        .register(Box::new(ProgressAction))
         .register(Box::new(AuthorizationAction))
         .register(Box::new(AutoProfileAction));
     let args = init(Some(tx)).await;

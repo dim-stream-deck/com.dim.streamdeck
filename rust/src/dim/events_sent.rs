@@ -1,12 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-pub fn authentication_version() -> String {
-    return r#"{ "action": "authorization:version", "version": 2 }"#.to_string();
-}
-
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Selection {
-    selection: String,
+    pub selection: String,
 }
 
 impl Selection {

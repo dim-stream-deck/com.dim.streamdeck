@@ -82,6 +82,7 @@ pub struct UpdateData {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct SelectionItem {
     pub(crate) item: String,
     pub(crate) label: String,
@@ -89,8 +90,8 @@ pub struct SelectionItem {
     pub(crate) icon: Option<String>,
     pub(crate) element: Option<String>,
     pub(crate) overlay: Option<String>,
+    pub(crate) progress_type: Option<String>,
     pub(crate) inventory: bool,
-    #[serde(rename = "isExotic")]
     pub(crate) is_exotic: Option<bool>,
 }
 
@@ -114,12 +115,21 @@ pub struct SelectionItemData {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SelectionRecordData {
+    pub(crate) selection: SelectionItem,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(tag = "selectionType")]
 pub enum SelectionMessage {
     #[serde(rename = "loadout")]
     Loadout(SelectionLoadoutData),
     #[serde(rename = "item")]
     Item(SelectionItemData),
+    #[serde(rename = "weapon")]
+    Weapon(SelectionItemData),
+    #[serde(rename = "record")]
+    Record(SelectionRecordData),
 }
 
 #[derive(Serialize, Deserialize, Debug)]
