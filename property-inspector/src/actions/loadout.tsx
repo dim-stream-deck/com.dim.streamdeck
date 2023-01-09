@@ -1,4 +1,4 @@
-import { Button, Text, Paper, Title } from "@mantine/core";
+import { Button, Paper, Text, Title } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
 
 export default () => {
