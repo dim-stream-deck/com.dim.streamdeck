@@ -31,8 +31,10 @@ pub struct PullItemSettings {
     pub(crate) icon: Option<String>,
     pub(crate) overlay: Option<String>,
     pub(crate) element: Option<String>,
-    pub(crate) alt_action: Option<String>,
-    pub(crate) alt_action_trigger: Option<String>,
+    #[serde(rename = "altAction")]
+    pub(crate) alt_action: Option<String>, // "hold" | "double"
+    #[serde(rename = "altActionTrigger")]
+    pub(crate) alt_action_trigger: Option<String>, // "equip" for future use
     pub(crate) inventory: Option<bool>,
     #[serde(rename = "isExotic")]
     pub(crate) is_exotic: Option<bool>,
@@ -156,6 +158,7 @@ impl PullItemAction {
         let global_settings: PluginSettings = sd.global_settings().await;
         let grayscale_enabled = global_settings.grayscale.unwrap_or(true);
         let image = render_action(settings, grayscale_enabled).await;
+        
         sd.set_image_b64(context, image).await;
     }
 
@@ -197,13 +200,19 @@ impl Action for PullItemAction {
     }
 
     async fn on_key_up(&self, e: KeyEvent, sd: StreamDeck) {
-        let settings = get_settings(e.payload.settings);
-        self.pull_item(e.context, settings, sd, false).await;
+        let settings: PullItemSettings = get_settings(e.payload.settings);
+        if e.is_double_tap && settings.alt_action_trigger == Some("double".to_owned()) {
+            self.pull_item(e.context, settings, sd, true).await;
+        } else {
+            self.pull_item(e.context, settings, sd, false).await;
+        }
     }
-
+    
     async fn on_long_press(&self, e: KeyEvent, _: f32, sd: StreamDeck) {
-        let settings = get_settings(e.payload.settings);
-        self.pull_item(e.context, settings, sd, true).await;
+        let settings: PullItemSettings = get_settings(e.payload.settings);
+        if settings.alt_action_trigger == Some("hold".to_owned()) {
+            self.pull_item(e.context, settings, sd, true).await;
+        }
     }
 
     async fn on_settings_changed(&self, e: DidReceiveSettingsEvent, sd: StreamDeck) {

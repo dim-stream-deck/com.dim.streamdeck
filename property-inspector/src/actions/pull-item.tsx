@@ -2,13 +2,13 @@ import {Button, Divider, Group, Paper, SegmentedControl, Switch, Tabs, Text, Tit
 import { useStreamDeck } from "../StreamDeck";
 const resources = [
   { value: "equip", label: "Equip" },
-  { value: "vault", label: "Vault" },
+  // { value: "vault", label: "Vault" },
 ];
 
 export default () => {
   const { settings, setSettings, sendToPlugin, globalSettings, setGlobalSettings } = useStreamDeck();
   if (!settings.altActionTrigger) {
-    setSettings({altActionTrigger: "hold"})
+    setSettings({altActionTrigger: "double"})
   }
   if (!settings.altAction) {
     setSettings({altAction: "equip"})
@@ -38,12 +38,11 @@ export default () => {
           </Button>
         )}
       </Group>
-
-      <Paper withBorder mt={12} p={8}>
+      {/* alt action settings */}
+      {settings.item && <Paper withBorder mt={12} p={8}>
         <Title ml={2}  color="white" order={5}>
-          {"Alt Action"}
+          {"Equip"}
         </Title>
-        {settings.item && <div>
           <Tabs
             variant="pills"
             value={settings.altActionTrigger}
@@ -53,25 +52,25 @@ export default () => {
               <Tabs.Tab value="double">Double Press</Tabs.Tab>
               <Tabs.Tab value="hold">Hold</Tabs.Tab>
             </Tabs.List>
-            </Tabs>
-            <Divider mt={2}/>
-            <SegmentedControl
-              fullWidth
-              color="primary"
-              orientation="vertical"
-              value={settings.altAction}
-              onChange={(altAction) => setSettings({ altAction })}
-              data={resources.map((it) => ({
-                value: it.value,
-                label: (
-                  <Group>
-                    <Text ml="sm">{it.label}</Text>
-                  </Group>
-                ),
-              }))}
-            />
-        </div>}
-      </Paper>
+          </Tabs>
+          {/* this section will be useful when theres desire for alternate actions than equip
+          <Divider mt={2}/>
+          <SegmentedControl
+            fullWidth
+            color="primary"
+            orientation="vertical"
+            value={settings.altAction}
+            onChange={(altAction) => setSettings({ altAction })}
+            data={resources.map((it) => ({
+              value: it.value,
+              label: (
+                <Group>
+                  <Text ml="sm">{it.label}</Text>
+                </Group>
+              ),
+            }))}
+          /> */}
+      </Paper>}
     </Paper>
       <Divider labelPosition="center" label="Accessibility" my="sm" />
       <Switch
