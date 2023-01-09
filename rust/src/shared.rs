@@ -5,7 +5,7 @@ use std::collections::{HashMap, HashSet};
 use tokio::sync::Mutex;
 
 lazy_static! {
-    pub static ref SHARED: Mutex<HashMap<&'static str, serde_json::Value>> = {
+    pub static ref SHARED: Mutex<HashMap<String, serde_json::Value>> = {
         let m = HashMap::new();
         Mutex::new(m)
     };

@@ -158,7 +158,7 @@ impl PullItemAction {
         let global_settings: PluginSettings = sd.global_settings().await;
         let grayscale_enabled = global_settings.grayscale.unwrap_or(true);
         let image = render_action(settings, grayscale_enabled).await;
-        
+
         sd.set_image_b64(context, image).await;
     }
 
@@ -207,7 +207,7 @@ impl Action for PullItemAction {
             self.pull_item(e.context, settings, sd, false).await;
         }
     }
-    
+
     async fn on_long_press(&self, e: KeyEvent, _: f32, sd: StreamDeck) {
         let settings: PullItemSettings = get_settings(e.payload.settings);
         if settings.alt_action_trigger == Some("hold".to_owned()) {
@@ -238,7 +238,7 @@ impl Action for PullItemAction {
         match action {
             "select" => {
                 let mut tmp = SHARED.lock().await;
-                tmp.insert("item", json!(e.context.clone()));
+                tmp.insert("item".to_owned(), json!(e.context.clone()));
                 let selection = Selection::new("item");
                 sd.external(with_action("selection", json_string!(&selection)))
                     .await;

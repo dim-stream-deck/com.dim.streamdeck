@@ -135,7 +135,7 @@ impl Action for LoadoutAction {
         match action {
             "select" => {
                 let mut tmp = SHARED.lock().await;
-                tmp.insert("loadout", json!(e.context.clone()));
+                tmp.insert("loadout".to_owned(), json!(e.context.clone()));
                 let selection = Selection::new("loadout");
                 sd.external(with_action("selection", json_string!(&selection)))
                     .await;
