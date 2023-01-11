@@ -6,10 +6,11 @@ use serde::{Deserialize, Serialize};
 use skia_safe::Point;
 use stream_deck_sdk::action::Action;
 use stream_deck_sdk::events::events::{
-    AppearEvent, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent,
+    AppearEvent, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent, KeyEvent,
 };
 use stream_deck_sdk::get_settings;
 use stream_deck_sdk::stream_deck::StreamDeck;
+
 
 use crate::dim::events_recv::Metrics;
 use crate::shared::SHADOW;
@@ -20,20 +21,36 @@ use crate::util::{
 
 pub struct MetricsAction;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug,)]
 #[serde(rename_all = "camelCase")]
 enum Metric {
     Vanguard,
     Gambit,
     Crucible,
-    Trials,
+    Gunsmith,
     IronBanner,
+    Trials,
+    BattlePass,
     Triumphs,
     TriumphsActive,
-    Gunsmith,
-    BattlePass,
 }
 
+impl Metric {
+    fn next_metric(&self) -> Metric {
+        use Metric::*;
+        match *self {
+            Vanguard => Gambit,
+            Gambit => Crucible,
+            Crucible => Gunsmith,
+            Gunsmith => IronBanner,
+            IronBanner => Trials,
+            Trials => BattlePass,
+            BattlePass => Triumphs,
+            Triumphs => TriumphsActive,
+            TriumphsActive => Vanguard,
+        }
+    }
+}
 #[derive(Serialize, Deserialize, Debug)]
 struct MetricsSettings {
     pub(crate) metric: Option<Metric>,
@@ -127,5 +144,17 @@ impl Action for MetricsAction {
             let settings: Option<MetricsSettings> = sd.settings(ctx.clone()).await;
             self.update(ctx.clone(), sd.clone(), settings).await
         }
+    }
+
+    async fn on_key_up(&self, e: KeyEvent, sd: StreamDeck) {
+        let mut current_setting: MetricsSettings = get_settings(e.payload.settings);
+        current_setting.metric = Some(
+            current_setting
+                .metric
+                .unwrap_or(Metric::Vanguard)
+                .next_metric(),
+        );
+
+        sd.set_settings(e.context.clone(), current_setting).await;
     }
 }
