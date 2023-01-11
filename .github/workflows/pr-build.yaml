@@ -40,13 +40,6 @@ jobs:
           command: build
           args: --manifest-path rust/Cargo.toml --release
 
-      - name: Temporary store plugin
-        uses: actions/upload-artifact@v3
-        with:
-          name: com.dim.streamdeck.exe
-          path: ./rust/target/release/plugin.exe
-          retention-days: 10
-
   build-mac-plugin:
     runs-on: macos-latest
     defaults:
