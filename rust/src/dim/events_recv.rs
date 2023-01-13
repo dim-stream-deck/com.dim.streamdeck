@@ -1,5 +1,6 @@
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -32,41 +33,41 @@ pub enum StreamDeckSelectionType {
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct MaxPower {
-    pub(crate) total: String,
-    pub(crate) base: String,
-    pub(crate) artifact: i32,
+    pub(crate) total: Option<String>,
+    pub(crate) base: Option<String>,
+    pub(crate) artifact: Option<i32>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Vault {
-    pub(crate) vault: i32,
-    pub(crate) glimmer: i32,
-    pub(crate) shards: i32,
-    pub(crate) bright_dust: i32,
+    pub(crate) vault: Option<i32>,
+    pub(crate) glimmer: Option<i32>,
+    pub(crate) shards: Option<i32>,
+    pub(crate) bright_dust: Option<i32>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Postmaster {
-    pub(crate) total: i32,
-    pub(crate) ascendant_shards: i32,
-    pub(crate) enhancement_prisms: i32,
-    pub(crate) spoils: i32,
+    pub(crate) total: Option<i32>,
+    pub(crate) ascendant_shards: Option<i32>,
+    pub(crate) enhancement_prisms: Option<i32>,
+    pub(crate) spoils: Option<i32>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct Metrics {
-    pub(crate) vanguard: i32,
-    pub(crate) gambit: i32,
-    pub(crate) crucible: i32,
-    pub(crate) trials: i32,
-    pub(crate) iron_banner: i32,
-    pub(crate) gunsmith: i32,
-    pub(crate) triumphs: i32,
+    pub(crate) vanguard: Option<i32>,
+    pub(crate) gambit: Option<i32>,
+    pub(crate) crucible: Option<i32>,
+    pub(crate) trials: Option<i32>,
+    pub(crate) iron_banner: Option<i32>,
+    pub(crate) gunsmith: Option<i32>,
+    pub(crate) triumphs: Option<i32>,
     pub(crate) triumphs_active: Option<i32>,
-    pub(crate) battle_pass: i32,
+    pub(crate) battle_pass: Option<i32>,
     pub(crate) artifact_icon: Option<String>,
 }
 
@@ -83,21 +84,21 @@ pub struct UpdateData {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SelectionItem {
-    pub(crate) item: String,
-    pub(crate) label: String,
-    pub(crate) subtitle: String,
+    pub(crate) item: Option<String>,
+    pub(crate) label: Option<String>,
+    pub(crate) subtitle: Option<String>,
     pub(crate) icon: Option<String>,
     pub(crate) element: Option<String>,
     pub(crate) overlay: Option<String>,
-    pub(crate) inventory: bool,
+    pub(crate) inventory: Option<bool>,
     #[serde(rename = "isExotic")]
     pub(crate) is_exotic: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SelectionLoadout {
-    pub(crate) loadout: String,
-    pub(crate) label: String,
+    pub(crate) loadout: Option<String>,
+    pub(crate) label: Option<String>,
     pub(crate) subtitle: Option<String>,
     pub(crate) icon: Option<String>,
     pub(crate) character: Option<String>,
@@ -130,7 +131,7 @@ pub struct UpdateMessage {
 #[derive(Deserialize, Debug)]
 pub struct ItemUpdateData {
     pub(crate) context: String,
-    pub(crate) equipped: bool,
+    pub(crate) equipped: Option<bool>,
     pub(crate) element: Option<String>,
 }
 

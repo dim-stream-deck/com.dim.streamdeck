@@ -36,6 +36,12 @@ async fn render_action(
     let item = item.unwrap_or_else(|| "".to_string());
     let is_total = item == "";
 
+    if postmaster.total.is_none() {
+        return None;
+    }
+
+    let total = postmaster.total.unwrap();
+
     let file_image = match is_total {
         true => "./images/postmaster/postmaster.png".to_string(),
         false => format!("./images/postmaster/{}.png", item),
@@ -44,16 +50,20 @@ async fn render_action(
     let is_percentage =
         is_total && style.unwrap_or_else(|| "percentage".to_string()) == "percentage".to_string();
 
-    let mut value = match item.as_str() {
+    let value = match item.as_str() {
         "spoils" => postmaster.spoils,
         "ascendantShards" => postmaster.ascendant_shards,
         "enhancementPrisms" => postmaster.enhancement_prisms,
         _ => match is_percentage {
-            true => ((postmaster.total as f32 / 21.0) * 100.0).ceil() as i32,
-            false => postmaster.total,
+            true => Some(((total as f32 / 21.0) * 100.0).ceil() as i32),
+            false => Some(total),
         },
-    }
-    .to_string();
+    };
+
+    let mut value = match value {
+        Some(v) => v.to_string(),
+        None => "".to_string(),
+    };
 
     if is_percentage {
         value = value + "%";
@@ -77,26 +87,18 @@ async fn render_action(
 
 impl PostmasterAction {
     async fn update(&self, context: String, sd: StreamDeck) {
-        let postmaster = sd
-            .global_settings::<PartialPluginSettings>()
-            .await
-            .postmaster;
-
-        if postmaster.is_none() {
+        let global: Option<PartialPluginSettings> = sd.global_settings().await;
+        if global.is_none() {
             return;
         }
-
-        let settings: Option<PostmasterSettings> = sd.settings(context.clone()).await;
-
-        if let Some(settings) = settings {
-            let image = render_action(
-                settings.postmaster_item,
-                settings.style,
-                postmaster.unwrap(),
-            )
-            .await;
-            if image.is_some() {
-                sd.set_image_b64(context, image).await;
+        if let Some(postmaster) = global.unwrap().postmaster {
+            let settings: Option<PostmasterSettings> = sd.settings(context.clone()).await;
+            if let Some(settings) = settings {
+                let image =
+                    render_action(settings.postmaster_item, settings.style, postmaster).await;
+                if image.is_some() {
+                    sd.set_image_b64(context, image).await;
+                }
             }
         }
     }
@@ -113,14 +115,16 @@ impl Action for PostmasterAction {
     }
 
     async fn on_key_down(&self, e: KeyEvent, sd: StreamDeck) {
-        let settings: PostmasterSettings = get_settings(e.payload.settings);
-        if settings.postmaster_item == Some("".to_string())
-            && settings.collect_postmaster == Some(true)
-        {
-            sd.external(with_action("collectPostmaster", String::new()))
-                .await;
-            sd.show_ok(e.context).await;
-            return;
+        let settings: Option<PostmasterSettings> = get_settings(e.payload.settings);
+        if let Some(settings) = settings {
+            if settings.postmaster_item == Some("".to_string())
+                && settings.collect_postmaster == Some(true)
+            {
+                sd.external(with_action("collectPostmaster", String::new()))
+                    .await;
+                sd.show_ok(e.context).await;
+                return;
+            }
         }
     }
 

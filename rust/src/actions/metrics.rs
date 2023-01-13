@@ -11,7 +11,6 @@ use stream_deck_sdk::events::events::{
 use stream_deck_sdk::get_settings;
 use stream_deck_sdk::stream_deck::StreamDeck;
 
-
 use crate::dim::events_recv::Metrics;
 use crate::shared::SHADOW;
 use crate::util::{
@@ -21,7 +20,7 @@ use crate::util::{
 
 pub struct MetricsAction;
 
-#[derive(Serialize, Deserialize, Debug,)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 enum Metric {
     Vanguard,
@@ -51,6 +50,7 @@ impl Metric {
         }
     }
 }
+
 #[derive(Serialize, Deserialize, Debug)]
 struct MetricsSettings {
     pub(crate) metric: Option<Metric>,
@@ -69,12 +69,16 @@ async fn render_action(metric: Metric, metrics: Metrics) -> Option<String> {
         Metric::Trials => metrics.trials,
         Metric::IronBanner => metrics.iron_banner,
         Metric::Triumphs => metrics.triumphs,
-        Metric::TriumphsActive => metrics.triumphs_active.unwrap_or_else(|| 0),
+        Metric::TriumphsActive => metrics.triumphs_active,
         Metric::Gunsmith => metrics.gunsmith,
         Metric::BattlePass => metrics.battle_pass,
     };
 
-    let value = value.separated_string();
+    if value.is_none() {
+        return None;
+    }
+
+    let value = value.unwrap().separated_string();
 
     let (file_image, bytes) = match metric {
         Metric::BattlePass => (
@@ -108,8 +112,13 @@ async fn render_action(metric: Metric, metrics: Metrics) -> Option<String> {
 
 impl MetricsAction {
     async fn update(&self, context: String, sd: StreamDeck, settings: Option<MetricsSettings>) {
-        let metrics = sd.global_settings::<PartialPluginSettings>().await.metrics;
-        if let Some(metrics) = metrics {
+        let global: Option<PartialPluginSettings> = sd.global_settings().await;
+
+        if global.is_none() {
+            return;
+        }
+
+        if let Some(metrics) = global.unwrap().metrics {
             let metric = match settings {
                 Some(settings) => settings.metric.unwrap_or(Metric::Vanguard),
                 None => Metric::Vanguard,
@@ -129,13 +138,30 @@ impl Action for MetricsAction {
     }
 
     async fn on_appear(&self, e: AppearEvent, sd: StreamDeck) {
-        let settings: MetricsSettings = get_settings(e.payload.settings);
-        self.update(e.context, sd, Some(settings)).await;
+        let settings: Option<MetricsSettings> = get_settings(e.payload.settings);
+        self.update(e.context, sd, settings).await;
+    }
+
+    async fn on_key_up(&self, e: KeyEvent, sd: StreamDeck) {
+        let settings: Option<MetricsSettings> = get_settings(e.payload.settings);
+
+        let mut current_settings = settings.unwrap_or_else(|| MetricsSettings {
+            metric: Some(Metric::Vanguard),
+        });
+
+        current_settings.metric = Some(
+            current_settings
+                .metric
+                .unwrap_or(Metric::Vanguard)
+                .next_metric(),
+        );
+
+        sd.set_settings(e.context.clone(), current_settings).await;
     }
 
     async fn on_settings_changed(&self, e: DidReceiveSettingsEvent, sd: StreamDeck) {
-        let settings: MetricsSettings = get_settings(e.payload.settings);
-        self.update(e.context, sd, Some(settings)).await;
+        let settings: Option<MetricsSettings> = get_settings(e.payload.settings);
+        self.update(e.context, sd, settings).await;
     }
 
     async fn on_global_settings_changed(&self, _e: DidReceiveGlobalSettingsEvent, sd: StreamDeck) {
@@ -144,17 +170,5 @@ impl Action for MetricsAction {
             let settings: Option<MetricsSettings> = sd.settings(ctx.clone()).await;
             self.update(ctx.clone(), sd.clone(), settings).await
         }
-    }
-
-    async fn on_key_up(&self, e: KeyEvent, sd: StreamDeck) {
-        let mut current_setting: MetricsSettings = get_settings(e.payload.settings);
-        current_setting.metric = Some(
-            current_setting
-                .metric
-                .unwrap_or(Metric::Vanguard)
-                .next_metric(),
-        );
-
-        sd.set_settings(e.context.clone(), current_setting).await;
     }
 }

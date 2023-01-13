@@ -1,8 +1,10 @@
-use crate::util::get_file_as_byte_vec;
+use std::collections::{HashMap, HashSet};
+
 use lazy_static::lazy_static;
 use skia_safe::{ColorMatrix, Rect};
-use std::collections::{HashMap, HashSet};
 use tokio::sync::Mutex;
+
+use crate::util::get_file_as_byte_vec;
 
 lazy_static! {
     pub static ref SHARED: Mutex<HashMap<String, serde_json::Value>> = {

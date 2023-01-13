@@ -1,26 +1,34 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use crate::actions::pull_item::PullItemSettings;
 use futures_channel::mpsc::UnboundedReceiver;
 use futures_util::{SinkExt, StreamExt, TryFutureExt};
+use serde::Deserialize;
 use serde_json::{Map, Value};
 use stream_deck_sdk::stream_deck::StreamDeck;
 use tokio::sync::{mpsc, RwLock};
 use tokio_stream::wrappers::UnboundedReceiverStream;
+use warp::Filter;
 use warp::path::FullPath;
 use warp::ws::{Message, WebSocket};
-use warp::Filter;
 
+use crate::actions::pull_item::PullItemSettings;
 use crate::dim::events_recv::{FromDimMessage, SelectionMessage};
-use crate::global_settings::PluginSettings;
 use crate::shared::{EQUIPPED, MISSING, SHARED};
 
 type Clients = Arc<RwLock<HashMap<String, (Option<String>, mpsc::UnboundedSender<Message>)>>>;
 
+#[derive(Deserialize, Debug)]
+struct PartialPluginSettings {
+    pub(crate) tokens: Option<HashMap<String, String>>,
+}
+
 async fn client_token(id: String, sd: StreamDeck) -> Option<String> {
-    let plugin: PluginSettings = sd.global_settings().await;
-    return match plugin.tokens {
+    let plugin: Option<PartialPluginSettings> = sd.global_settings().await;
+    if plugin.is_none() {
+        return None;
+    }
+    return match plugin.unwrap().tokens {
         Some(tokens) => {
             if let Some(token) = tokens.get(&id) {
                 return Some(token.to_string());
@@ -49,6 +57,16 @@ pub async fn missing_update(id: String, add: bool) -> HashMap<String, Value> {
         ),
     );
     changes
+}
+
+async fn load_settings(sd: StreamDeck) -> PartialPluginSettings {
+    let settings: Option<PartialPluginSettings> = sd.global_settings().await;
+    match settings {
+        Some(settings) => settings,
+        None => PartialPluginSettings {
+            tokens: Some(HashMap::default()),
+        },
+    }
 }
 
 async fn client_connected(ws: WebSocket, id: String, clients: Clients, sd: StreamDeck) {
@@ -86,7 +104,17 @@ async fn client_connected(ws: WebSocket, id: String, clients: Clients, sd: Strea
                     match message {
                         FromDimMessage::AuthorizationReset(_) => {
                             let mut changes: HashMap<String, Value> = HashMap::default();
-                            changes.insert("tokens".to_string(), Value::Object(Map::new()));
+                            let settings = load_settings(sd.clone()).await;
+                            let filtered_tokens = Map::from_iter(
+                                settings
+                                    .tokens
+                                    .unwrap_or_default()
+                                    .iter()
+                                    .map(|(k, v)| (k.to_string(), Value::String(v.to_string())))
+                                    .filter(|(k, _)| k != &id),
+                            );
+
+                            changes.insert("tokens".to_string(), Value::Object(filtered_tokens));
                             changes.insert(
                                 "missing".to_string(),
                                 Value::Array(vec![Value::String(id.clone())]),
@@ -95,7 +123,7 @@ async fn client_connected(ws: WebSocket, id: String, clients: Clients, sd: Strea
                         }
 
                         FromDimMessage::AuthorizationConfirm(item) => {
-                            let settings: PluginSettings = sd.global_settings().await;
+                            let settings = load_settings(sd.clone()).await;
                             let mut map =
                                 Map::from_iter(
                                     settings.tokens.unwrap_or_default().iter().map(|(k, v)| {
@@ -124,13 +152,23 @@ async fn client_connected(ws: WebSocket, id: String, clients: Clients, sd: Strea
                         }
                         FromDimMessage::ItemUpdate(item) => {
                             let data = item.data;
-                            let mut settings: PullItemSettings =
-                                sd.settings(data.context.clone()).await.unwrap();
+
+                            let settings: Option<PullItemSettings> =
+                                sd.settings(data.context.clone()).await;
+
+                            let mut settings = match settings {
+                                Some(settings) => settings,
+                                None => {
+                                    sd.log("[UPDATE ITEM] No settings found".to_string()).await;
+                                    return;
+                                }
+                            };
+
                             settings.element = data.element;
                             // Update equip state
                             let mut equipped_items = EQUIPPED.lock().await;
                             let id = settings.item.clone().unwrap();
-                            if data.equipped {
+                            if data.equipped == Some(true) {
                                 equipped_items.insert(id);
                             } else {
                                 equipped_items.remove(&id);
@@ -162,6 +200,7 @@ async fn client_connected(ws: WebSocket, id: String, clients: Clients, sd: Strea
                             let shared = SHARED.lock().await;
                             let context = shared.get(key);
                             if context.is_none() {
+                                sd.log(format!("No context found for {}", key)).await;
                                 return;
                             }
                             let context = context.unwrap().as_str().unwrap().to_string();
@@ -192,7 +231,7 @@ async fn broadcast(msg: String, clients: &Clients) {
                 .replacen("{", r#"{"token": "$token", "#, 1)
                 .replace("$token", token.clone().unwrap().as_str());
         }
-        tx.send(Message::text(send)).expect("TODO: panic message");
+        tx.send(Message::text(send)).expect("websocket send error");
     }
 }
 

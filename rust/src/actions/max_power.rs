@@ -35,15 +35,23 @@ struct PartialPluginSettings {
     pub(crate) max_power: Option<MaxPower>,
 }
 
-fn render_action(power_type: PowerType, max_power: MaxPower) -> String {
+fn render_action(power_type: PowerType, max_power: MaxPower) -> Option<String> {
     let file_image = format!("./images/max-power/{:?}.png", power_type);
     let (mut surface, mut paint, typeface) = prepare_render(file_image, 144);
 
+    if max_power.total.is_none() || max_power.base.is_none() || max_power.artifact.is_none() {
+        return None;
+    }
+
+    let total = max_power.total.unwrap();
+    let base = max_power.base.unwrap();
+    let artifact = max_power.artifact.unwrap();
+
     match power_type {
         PowerType::All => {
-            let (base, _) = prepare_text(&max_power.base, &typeface, 26.0);
-            let (artifact, _) = prepare_text(&max_power.artifact.to_string(), &typeface, 26.0);
-            let (total, (w, _)) = prepare_text(&max_power.total, &typeface, 31.0);
+            let (base, _) = prepare_text(&base, &typeface, 26.0);
+            let (artifact, _) = prepare_text(&artifact.to_string(), &typeface, 26.0);
+            let (total, (w, _)) = prepare_text(&total, &typeface, 31.0);
 
             surface
                 .canvas()
@@ -58,9 +66,9 @@ fn render_action(power_type: PowerType, max_power: MaxPower) -> String {
         }
         _ => {
             let (level, y) = match power_type {
-                PowerType::Total => (max_power.total, 126.0),
-                PowerType::Base => (max_power.base, 128.0),
-                PowerType::Artifact => (max_power.artifact.to_string(), 128.0),
+                PowerType::Total => (total, 126.0),
+                PowerType::Base => (base, 128.0),
+                PowerType::Artifact => (artifact.to_string(), 128.0),
                 _ => unreachable!(),
             };
             let (label, (w, _)) = prepare_text(&level, &typeface, 28.0);
@@ -70,25 +78,20 @@ fn render_action(power_type: PowerType, max_power: MaxPower) -> String {
         }
     }
 
-    surface_to_b64(surface)
+    Some(surface_to_b64(surface))
 }
 
 impl MaxPowerAction {
     async fn update(&self, context: String, sd: StreamDeck, settings: Option<MaxPowerSettings>) {
-        let max_power = sd
-            .global_settings::<PartialPluginSettings>()
-            .await
-            .max_power;
-
-        if settings.is_none() || max_power.is_none() {
-            return;
+        let global = sd.global_settings::<PartialPluginSettings>().await;
+        if let Some(global) = global {
+            if let Some(max_power) = global.max_power {
+                let settings = settings.unwrap();
+                let power_type = settings.power_type.unwrap_or(PowerType::All);
+                let image = render_action(power_type, max_power);
+                sd.set_image_b64(context, image).await;
+            }
         }
-
-        let settings = settings.unwrap();
-        let power_type = settings.power_type.unwrap_or(PowerType::All);
-
-        let image = render_action(power_type, max_power.unwrap());
-        sd.set_image_b64(context, Some(image)).await;
     }
 }
 
@@ -99,8 +102,8 @@ impl Action for MaxPowerAction {
     }
 
     async fn on_appear(&self, e: AppearEvent, sd: StreamDeck) {
-        let settings: MaxPowerSettings = get_settings(e.payload.settings);
-        self.update(e.context, sd, Some(settings)).await;
+        let settings: Option<MaxPowerSettings> = get_settings(e.payload.settings);
+        self.update(e.context, sd, settings).await;
     }
 
     async fn on_key_down(&self, e: KeyEvent, sd: StreamDeck) {
@@ -109,8 +112,8 @@ impl Action for MaxPowerAction {
     }
 
     async fn on_settings_changed(&self, e: DidReceiveSettingsEvent, sd: StreamDeck) {
-        let settings: MaxPowerSettings = get_settings(e.payload.settings);
-        self.update(e.context, sd, Some(settings)).await;
+        let settings: Option<MaxPowerSettings> = get_settings(e.payload.settings);
+        self.update(e.context, sd, settings).await;
     }
 
     async fn on_global_settings_changed(&self, _e: DidReceiveGlobalSettingsEvent, sd: StreamDeck) {
