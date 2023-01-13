@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Divider,
   Group,
@@ -19,7 +20,7 @@ export default () => {
     setGlobalSettings,
   } = useStreamDeck();
   if (!settings.altActionTrigger) {
-    setSettings({ altActionTrigger: "double" });
+    setSettings({ altActionTrigger: "long" });
   }
   if (!settings.altAction) {
     setSettings({ altAction: "equip" });
@@ -52,44 +53,33 @@ export default () => {
             </Button>
           )}
         </Group>
-        {/* alt action settings */}
-        {settings.item && (
-          <Paper withBorder mt={12} p={8}>
-            <Title ml={2} color="white" order={5}>
-              {"Equip"}
-            </Title>
-            <Tabs
-              variant="pills"
-              value={settings.altActionTrigger}
-              onTabChange={(altActionTrigger) =>
-                setSettings({ altActionTrigger })
-              }
-            >
-              <Tabs.List grow mt={8}>
-                <Tabs.Tab value="double">Double Press</Tabs.Tab>
-                <Tabs.Tab value="hold">Hold</Tabs.Tab>
-              </Tabs.List>
-            </Tabs>
-            {/* this section will be useful when theres desire for alternate actions than equip
-          <Divider mt={2}/>
-          <SegmentedControl
-            fullWidth
-            color="primary"
-            orientation="vertical"
-            value={settings.altAction}
-            onChange={(altAction) => setSettings({ altAction })}
-            data={resources.map((it) => ({
-              value: it.value,
-              label: (
-                <Group>
-                  <Text ml="sm">{it.label}</Text>
-                </Group>
-              ),
-            }))}
-          /> */}
-          </Paper>
-        )}
       </Paper>
+      {/* alt action settings */}
+      {settings.item && (
+        <Box p="sm">
+          <Divider labelPosition="center" label="Gestures" mb="sm" />
+          <Group spacing="xs" mb="xs">
+            <Title ml={2} color="white" order={5}>
+              Equip
+            </Title>
+            <Text size="sm" color="dimmed">
+              (Alternative Action)
+            </Text>
+          </Group>
+          <Tabs
+            variant="pills"
+            value={settings.altActionTrigger}
+            onTabChange={(altActionTrigger) =>
+              setSettings({ altActionTrigger })
+            }
+          >
+            <Tabs.List grow mt={8}>
+              <Tabs.Tab value="double">Double Press</Tabs.Tab>
+              <Tabs.Tab value="hold">Hold</Tabs.Tab>
+            </Tabs.List>
+          </Tabs>
+        </Box>
+      )}
       <Divider labelPosition="center" label="Accessibility" my="sm" />
       <Switch
         label="(Global) Grayscale filter for not-equipped items"
