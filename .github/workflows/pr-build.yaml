@@ -40,6 +40,11 @@ jobs:
           command: build
           args: --manifest-path rust/Cargo.toml --release
 
+      - uses: actions-rs/cargo@v1.0.1
+        with:
+          command: build
+          args: --manifest-path solo-mode-service/Cargo.toml --release
+
   build-mac-plugin:
     runs-on: macos-latest
     defaults:

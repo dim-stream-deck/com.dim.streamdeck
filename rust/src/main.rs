@@ -17,6 +17,7 @@ use crate::actions::randomize::RandomizeAction;
 use crate::actions::refresh::RefreshAction;
 use crate::actions::rotation::RotationAction;
 use crate::actions::search::SearchAction;
+use crate::actions::solo_mode::SoloModeAction;
 use crate::actions::vault::VaultAction;
 
 mod actions;
@@ -44,6 +45,7 @@ async fn main() {
         Box::new(MaxPowerAction),
         Box::new(AuthorizationAction),
         Box::new(AutoProfileAction),
+        Box::new(SoloModeAction),
     ]);
     let init = init(actions_manager, Some(tx)).await;
     tokio::spawn(server::server(init.stream_deck.clone(), rx));

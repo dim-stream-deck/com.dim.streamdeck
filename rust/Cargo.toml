@@ -12,7 +12,7 @@ futures = "0.3"
 futures-util = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 tokio = { version = "1.21.2", features = ["full"] }
-stream_deck_sdk = { version="1.0.3", features = ["download", "images"] } # path="../../../rust/sdk"
+stream_deck_sdk = { version="1.0.4", features = ["download", "images"] } # path="../../../rust/sdk"
 warp = "0.3.3"
 skia-safe = "0.57.0"
 tokio-stream = "0.1.11"
@@ -21,13 +21,13 @@ open = "3"
 separator = "0.4.1"
 lazy_static = "1.4.0"
 cacache = "10.0.1"
+runas = "0.2.1"
 
 [profile.release]
 strip = true
 opt-level = "z"
 lto = true
 codegen-units = 1
-panic = "abort"
 
 [[bin]]
 path = "src/main.rs"
