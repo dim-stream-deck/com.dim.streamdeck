@@ -10,7 +10,14 @@ fn main() -> windows_service::Result<()> {
     let service_manager = ServiceManager::local_computer(None::<&str>, manager_access)?;
 
     let service_access = ServiceAccess::QUERY_STATUS | ServiceAccess::STOP | ServiceAccess::DELETE;
-    let service = service_manager.open_service("sd_solo_enabler", service_access)?;
+    let service = service_manager.open_service("sd_solo_enabler", service_access);
+
+    if service.is_err() {
+        println!("Destiny 2 Solo Enabler > the service was already deleted");
+        return Ok(());
+    }
+
+    let service = service.unwrap();
 
     loop {
         let service_status = service.query_status()?;

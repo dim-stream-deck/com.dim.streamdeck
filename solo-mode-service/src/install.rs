@@ -27,14 +27,27 @@ fn main() -> windows_service::Result<()> {
         account_name: None,
         account_password: None,
     };
-    let service = service_manager.create_service(&service_info, ServiceAccess::CHANGE_CONFIG)?;
-    service.set_description("Stream Deck Destiny 2 Solo Enabler")?;
 
-    let manager = ServiceManager::local_computer(None::<&str>, ServiceManagerAccess::CONNECT)?;
-    let my_service = manager.open_service("sd_solo_enabler", ServiceAccess::START)?;
-    my_service.start(&[OsStr::new("")])?;
+    let service = service_manager.open_service("sd_solo_enabler", ServiceAccess::START);
 
-    println!("Destiny 2 Solo Enabler > service installed and start successfully");
+    if service.is_err() {
+        let service =
+            service_manager.create_service(&service_info, ServiceAccess::CHANGE_CONFIG)?;
+        service.set_description(
+            "https://github.com/dim-stream-deck/com.dim.streamdeck/wiki/Solo-Mode-(Action)",
+        )?;
+    }
+
+    let service = service_manager.open_service(
+        "sd_solo_enabler",
+        ServiceAccess::START | ServiceAccess::QUERY_STATUS,
+    )?;
+
+    if service.query_status()?.current_state != windows_service::service::ServiceState::Running {
+        service.start(&[OsStr::new("")])?;
+    }
+
+    println!("Destiny 2 Solo Enabler > service installed and started successfully");
 
     Ok(())
 }

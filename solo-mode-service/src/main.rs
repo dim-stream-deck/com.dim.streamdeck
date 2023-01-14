@@ -34,11 +34,13 @@ fn enable(dir: &str, protocol: &str) -> bool {
     }
 }
 
+fn disable() -> bool {
+    !run_command("netsh advfirewall firewall delete rule name=stream-deck-destiny-solo")
+}
+
 fn toggle() -> bool {
     match are_rules_enabled() {
-        true => {
-            !run_command("netsh advfirewall firewall delete rule name=stream-deck-destiny-solo")
-        }
+        true => disable(),
         false => {
             let commands = vec![
                 enable("IN", "TCP"),
@@ -77,7 +79,7 @@ mod solo_enabler_service {
         service_dispatcher, Result,
     };
 
-    use crate::{are_rules_enabled, toggle};
+    use crate::{are_rules_enabled, disable, toggle};
 
     const SERVICE_NAME: &str = "destiny_solo_enabler";
     const SERVICE_TYPE: ServiceType = ServiceType::OWN_PROCESS;
@@ -98,6 +100,13 @@ mod solo_enabler_service {
         let server = Server::new("localhost:9121", |request| {
             match request.get_param("action").unwrap_or_default().as_str() {
                 "toggle" => Response::text(toggle().to_string()),
+                "disable" => {
+                    if are_rules_enabled() {
+                        Response::text(disable().to_string())
+                    } else {
+                        Response::text("false".to_owned())
+                    }
+                }
                 "status" => Response::text(are_rules_enabled().to_string()),
                 _ => Response::text("stream-deck-destiny-solo"),
             }
