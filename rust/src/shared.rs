@@ -28,6 +28,8 @@ lazy_static! {
     pub static ref EXOTIC: Vec<u8> = get_file_as_byte_vec("./images/item/exotic.png");
     pub static ref EQUIPPED_MARK: Vec<u8> = get_file_as_byte_vec("./images/item/equipped-mark.png");
     pub static ref LEGENDARY: Vec<u8> = get_file_as_byte_vec("./images/item/legendary.png");
+    pub static ref SOLO_MODE_OFF: Vec<u8> = get_file_as_byte_vec("./images/solo-mode/off.png");
+    pub static ref SOLO_MODE_ON: Vec<u8> = get_file_as_byte_vec("./images/solo-mode/on.png");
 }
 
 pub async fn has_equipped_items(id: String) -> bool {

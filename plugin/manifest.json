@@ -203,6 +203,19 @@
       "UUID": "com.dim.streamdeck.rotation"
     },
     {
+      "Icon": "icons/soloIcon",
+      "Name": "Solo Mode",
+      "States": [
+        {
+          "Image": "icons/soloState"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "VisibleInActionsList": true,
+      "Tooltip": "Verify / Turn on/off the Destiny 2 solo mode",
+      "UUID": "com.dim.streamdeck.solo-mode"
+    },
+    {
       "Name": "Tile",
       "States": [
         {

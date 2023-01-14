@@ -11,4 +11,5 @@ pub mod randomize;
 pub mod refresh;
 pub mod rotation;
 pub mod search;
+pub mod solo_mode;
 pub mod vault;

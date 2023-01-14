@@ -20,6 +20,7 @@ import {
   IconWorldWww,
 } from "@tabler/icons";
 import progress from "./actions/progress";
+import soloMode from "./actions/solo-mode";
 
 export interface AppProps {
   action: any;
@@ -39,6 +40,7 @@ const components = {
   power,
   progress,
   "pull-item": pullItem,
+  "solo-mode": soloMode,
 };
 
 type Action = keyof typeof components;

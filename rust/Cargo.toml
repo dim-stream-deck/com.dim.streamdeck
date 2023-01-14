@@ -21,13 +21,13 @@ open = "3"
 separator = "0.4.1"
 lazy_static = "1.4.0"
 cacache = "10.0.1"
+runas = "0.2.1"
 
 [profile.release]
 strip = true
 opt-level = "z"
 lto = true
 codegen-units = 1
-panic = "abort"
 
 [[bin]]
 path = "src/main.rs"
