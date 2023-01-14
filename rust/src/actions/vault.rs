@@ -54,26 +54,28 @@ fn render_action(item: ItemType, counter: String) -> String {
 
 impl VaultAction {
     async fn update(&self, context: String, sd: StreamDeck, settings: Option<VaultSettings>) {
-        let vault = sd.global_settings::<PartialPluginSettings>().await.vault;
+        let global: Option<PartialPluginSettings> = sd.global_settings().await;
 
-        if settings.is_none() || vault.is_none() {
+        if settings.is_none() || global.is_none() {
             return;
         }
 
-        let vault = vault.unwrap();
-        let settings = settings.unwrap();
-        let item = settings.item.unwrap_or(ItemType::Vault);
-
-        let counter = match item {
-            ItemType::Vault => vault.vault,
-            ItemType::Glimmer => vault.glimmer,
-            ItemType::Dust => vault.bright_dust,
-            ItemType::BrightDust => vault.bright_dust,
-            ItemType::Shards => vault.shards,
-        };
-
-        let image = render_action(item, counter.separated_string());
-        sd.set_image_b64(context, Some(image)).await;
+        if let Some(vault) = global.unwrap().vault {
+            let settings = settings.unwrap();
+            let item = settings.item.unwrap_or(ItemType::Vault);
+            let counter = match item {
+                ItemType::Vault => vault.vault,
+                ItemType::Glimmer => vault.glimmer,
+                ItemType::Dust => vault.bright_dust,
+                ItemType::BrightDust => vault.bright_dust,
+                ItemType::Shards => vault.shards,
+            };
+            if counter.is_none() {
+                return;
+            }
+            let image = render_action(item, counter.unwrap().separated_string());
+            sd.set_image_b64(context, Some(image)).await;
+        }
     }
 }
 
@@ -84,13 +86,13 @@ impl Action for VaultAction {
     }
 
     async fn on_appear(&self, e: AppearEvent, sd: StreamDeck) {
-        let settings: VaultSettings = get_settings(e.payload.settings);
-        self.update(e.context, sd, Some(settings)).await;
+        let settings: Option<VaultSettings> = get_settings(e.payload.settings);
+        self.update(e.context, sd, settings).await;
     }
 
     async fn on_settings_changed(&self, e: DidReceiveSettingsEvent, sd: StreamDeck) {
-        let settings: VaultSettings = get_settings(e.payload.settings);
-        self.update(e.context, sd, Some(settings)).await;
+        let settings: Option<VaultSettings> = get_settings(e.payload.settings);
+        self.update(e.context, sd, settings).await;
     }
 
     async fn on_global_settings_changed(&self, _e: DidReceiveGlobalSettingsEvent, sd: StreamDeck) {

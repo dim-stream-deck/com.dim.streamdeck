@@ -2,12 +2,13 @@ use std::fs;
 use std::fs::File;
 use std::io::Read;
 
-use crate::shared::TILE;
 use skia_safe::{
-    scalar, Color, Data, EncodedImageFormat, Font, Image, Paint, Rect, Surface, TextBlob, Typeface,
+    Color, Data, EncodedImageFormat, Font, Image, Paint, Rect, scalar, Surface, TextBlob, Typeface,
 };
 use stream_deck_sdk::download::download_image;
 use stream_deck_sdk::images::image_to_base64;
+
+use crate::shared::TILE;
 
 pub fn get_file_as_byte_vec(filename: &str) -> Vec<u8> {
     let mut f = File::open(&filename).expect("no file found");

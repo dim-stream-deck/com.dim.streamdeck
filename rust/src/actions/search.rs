@@ -35,15 +35,22 @@ impl Action for SearchAction {
 
     async fn on_key_down(&self, e: KeyEvent, sd: StreamDeck) {
         let settings = get_settings::<SearchSettings>(e.payload.settings);
-        if settings.search.is_some() {
-            sd.external(with_action(
-                "search",
-                serde_json::to_string(&settings).unwrap(),
-            ))
-            .await;
-            sd.show_ok(e.context).await;
-        } else {
-            sd.show_alert(e.context).await;
+        match settings {
+            Some(settings) => {
+                if settings.search.is_some() {
+                    sd.external(with_action(
+                        "search",
+                        serde_json::to_string(&settings).unwrap(),
+                    ))
+                        .await;
+                    sd.show_ok(e.context).await;
+                } else {
+                    sd.show_alert(e.context).await;
+                }
+            }
+            None => {
+                sd.show_alert(e.context).await;
+            }
         }
     }
 }

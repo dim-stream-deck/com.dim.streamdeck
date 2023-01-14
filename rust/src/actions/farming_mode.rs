@@ -32,11 +32,10 @@ impl Action for FarmingModeAction {
     }
 
     async fn on_appear(&self, e: AppearEvent, sd: StreamDeck) {
-        let settings = sd
-            .global_settings::<PartialPluginSettings>()
-            .await
-            .farming_mode;
-        self.update(e.context, sd, settings).await;
+        let settings: Option<PartialPluginSettings> = sd.global_settings().await;
+        let farming_mode = settings.and_then(|s| s.farming_mode);
+
+        self.update(e.context, sd, farming_mode).await;
     }
 
     async fn on_key_up(&self, _e: KeyEvent, sd: StreamDeck) {
@@ -46,11 +45,9 @@ impl Action for FarmingModeAction {
     async fn on_global_settings_changed(&self, _e: DidReceiveGlobalSettingsEvent, sd: StreamDeck) {
         let contexts = sd.contexts_of(self.uuid()).await;
         for ctx in contexts {
-            let settings = sd
-                .global_settings::<PartialPluginSettings>()
-                .await
-                .farming_mode;
-            self.update(ctx.clone(), sd.clone(), settings).await;
+            let settings: Option<PartialPluginSettings> = sd.global_settings().await;
+            let farming_mode = settings.and_then(|s| s.farming_mode);
+            self.update(ctx.clone(), sd.clone(), farming_mode).await;
         }
     }
 }

@@ -1,8 +1,9 @@
-use crate::dim::with_action;
 use async_trait::async_trait;
 use stream_deck_sdk::action::Action;
 use stream_deck_sdk::events::events::KeyEvent;
 use stream_deck_sdk::stream_deck::StreamDeck;
+
+use crate::dim::with_action;
 
 pub struct RefreshAction;
 

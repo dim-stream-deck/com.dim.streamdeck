@@ -27,7 +27,7 @@ impl Action for RandomizeAction {
             "randomize",
             serde_json::to_string(&settings).unwrap(),
         ))
-        .await
+            .await
     }
 
     async fn on_key_up(&self, e: KeyEvent, sd: StreamDeck) {

@@ -2,9 +2,9 @@ use async_trait::async_trait;
 use futures_util::future::join3;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
+use skia_safe::{Color, Point, Rect};
 use skia_safe::color_filters::matrix;
 use skia_safe::image_filters::blur;
-use skia_safe::{Color, Point, Rect};
 use stream_deck_sdk::action::Action;
 use stream_deck_sdk::events::events::{
     AppearEvent, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent, KeyEvent,
@@ -16,9 +16,8 @@ use stream_deck_sdk::stream_deck::StreamDeck;
 use crate::actions::search::SearchSettings;
 use crate::dim::events_sent::Selection;
 use crate::dim::with_action;
-use crate::global_settings::PluginSettings;
 use crate::json_string;
-use crate::shared::{has_equipped_items, EQUIPPED_MARK, EXOTIC, GRAYSCALE, LEGENDARY, SHARED};
+use crate::shared::{EQUIPPED_MARK, EXOTIC, GRAYSCALE, has_equipped_items, LEGENDARY, SHARED};
 use crate::util::{
     bungify, bytes_to_skia_image, download_or_cache, prepare_render_empty, surface_to_b64,
 };
@@ -32,9 +31,11 @@ pub struct PullItemSettings {
     pub(crate) overlay: Option<String>,
     pub(crate) element: Option<String>,
     #[serde(rename = "altAction")]
-    pub(crate) alt_action: Option<String>, // "hold" | "double"
+    pub(crate) alt_action: Option<String>,
+    // "hold" | "double"
     #[serde(rename = "altActionTrigger")]
-    pub(crate) alt_action_trigger: Option<String>, // "equip" for future use
+    pub(crate) alt_action_trigger: Option<String>,
+    // "equip" for future use
     pub(crate) inventory: Option<bool>,
     #[serde(rename = "isExotic")]
     pub(crate) is_exotic: Option<bool>,
@@ -45,6 +46,11 @@ pub struct SendPullItem {
     pub(crate) item: String,
     pub(crate) context: String,
     pub(crate) equip: bool,
+}
+
+#[derive(Deserialize, Debug)]
+struct PartialPluginSettings {
+    pub(crate) grayscale: Option<bool>,
 }
 
 pub struct PullItemAction;
@@ -155,10 +161,11 @@ async fn render_action(settings: PullItemSettings, grayscale_enabled: bool) -> O
 
 impl PullItemAction {
     async fn update(&self, context: String, settings: PullItemSettings, sd: StreamDeck) {
-        let global_settings: PluginSettings = sd.global_settings().await;
+        let global_settings = sd.global_settings().await.unwrap_or(PartialPluginSettings {
+            grayscale: Some(true),
+        });
         let grayscale_enabled = global_settings.grayscale.unwrap_or(true);
         let image = render_action(settings, grayscale_enabled).await;
-
         sd.set_image_b64(context, image).await;
     }
 
@@ -195,29 +202,37 @@ impl Action for PullItemAction {
     }
 
     async fn on_appear(&self, e: AppearEvent, sd: StreamDeck) {
-        let settings = get_settings(e.payload.settings);
-        self.update(e.context, settings, sd).await;
+        let settings: Option<PullItemSettings> = get_settings(e.payload.settings);
+        if let Some(settings) = settings {
+            self.update(e.context, settings, sd).await;
+        }
     }
 
     async fn on_key_up(&self, e: KeyEvent, sd: StreamDeck) {
-        let settings: PullItemSettings = get_settings(e.payload.settings);
-        if e.is_double_tap && settings.alt_action_trigger == Some("double".to_owned()) {
-            self.pull_item(e.context, settings, sd, true).await;
-        } else {
-            self.pull_item(e.context, settings, sd, false).await;
+        let settings: Option<PullItemSettings> = get_settings(e.payload.settings);
+        if let Some(settings) = settings {
+            if e.is_double_tap && settings.alt_action_trigger == Some("double".to_owned()) {
+                self.pull_item(e.context, settings, sd, true).await;
+            } else {
+                self.pull_item(e.context, settings, sd, false).await;
+            }
         }
     }
 
     async fn on_long_press(&self, e: KeyEvent, _: f32, sd: StreamDeck) {
-        let settings: PullItemSettings = get_settings(e.payload.settings);
-        if settings.alt_action_trigger == Some("hold".to_owned()) {
-            self.pull_item(e.context, settings, sd, true).await;
+        let settings: Option<PullItemSettings> = get_settings(e.payload.settings);
+        if let Some(settings) = settings {
+            if settings.alt_action_trigger == Some("hold".to_owned()) {
+                self.pull_item(e.context, settings, sd, true).await;
+            }
         }
     }
 
     async fn on_settings_changed(&self, e: DidReceiveSettingsEvent, sd: StreamDeck) {
-        let settings = get_settings(e.payload.settings);
-        self.update(e.context, settings, sd).await;
+        let settings: Option<PullItemSettings> = get_settings(e.payload.settings);
+        if let Some(settings) = settings {
+            self.update(e.context, settings, sd).await
+        }
     }
 
     async fn on_global_settings_changed(&self, _e: DidReceiveGlobalSettingsEvent, sd: StreamDeck) {

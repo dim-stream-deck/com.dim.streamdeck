@@ -20,12 +20,14 @@ impl Action for OpenDimAction {
 
     async fn on_key_down(&self, e: KeyEvent, _sd: StreamDeck) {
         let settings = get_settings::<OpenDimSettings>(e.payload.settings);
-        let beta = settings.beta.unwrap_or(false);
-        let prefix = match beta {
-            true => "beta",
-            false => "app",
-        };
-        open::that(format!("https://{}.destinyitemmanager.com", prefix)).unwrap();
+        if let Some(settings) = settings {
+            let beta = settings.beta.unwrap_or(false);
+            let prefix = match beta {
+                true => "beta",
+                false => "app",
+            };
+            open::that(format!("https://{}.destinyitemmanager.com", prefix)).unwrap();
+        }
     }
 
     async fn on_key_up(&self, e: KeyEvent, sd: StreamDeck) {

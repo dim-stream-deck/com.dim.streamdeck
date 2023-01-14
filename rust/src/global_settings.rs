@@ -7,10 +7,10 @@ use crate::dim::events_recv::{MaxPower, Postmaster, Vault};
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct PluginSettings {
-    pub(crate) tokens: Option<HashMap<String, String>>,
+    tokens: Option<HashMap<String, String>>,
     postmaster: Option<Postmaster>,
     max_power: Option<MaxPower>,
     vault: Option<Vault>,
     farming_mode: Option<bool>,
-    pub(crate) grayscale: Option<bool>,
+    grayscale: Option<bool>,
 }

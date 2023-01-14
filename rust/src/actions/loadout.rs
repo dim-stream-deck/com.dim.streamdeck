@@ -108,23 +108,32 @@ impl Action for LoadoutAction {
 
     async fn on_appear(&self, e: AppearEvent, sd: StreamDeck) {
         let settings = get_settings(e.payload.settings);
-        self.update(e.context, settings, sd).await;
+        if settings.is_some() {
+            self.update(e.context, settings.unwrap(), sd).await;
+        }
     }
 
     async fn on_key_up(&self, e: KeyEvent, sd: StreamDeck) {
-        let settings: LoadoutSettings = get_settings(e.payload.settings);
-        self.equip_loadout(sd, e.context, settings, e.is_double_tap)
-            .await;
+        let settings: Option<LoadoutSettings> = get_settings(e.payload.settings);
+        if settings.is_some() {
+            self.equip_loadout(sd, e.context, settings.unwrap(), e.is_double_tap)
+                .await;
+        }
+    }
+
+    async fn on_long_press(&self, e: KeyEvent, _timeout: f32, sd: StreamDeck) {
+        let settings: Option<LoadoutSettings> = get_settings(e.payload.settings);
+        if settings.is_some() {
+            self.equip_loadout(sd, e.context, settings.unwrap(), true)
+                .await
+        }
     }
 
     async fn on_settings_changed(&self, e: DidReceiveSettingsEvent, sd: StreamDeck) {
         let settings = get_settings(e.payload.settings);
-        self.update(e.context, settings, sd).await;
-    }
-
-    async fn on_long_press(&self, e: KeyEvent, _timeout: f32, sd: StreamDeck) {
-        let settings: LoadoutSettings = get_settings(e.payload.settings);
-        self.equip_loadout(sd, e.context, settings, true).await;
+        if settings.is_some() {
+            self.update(e.context, settings.unwrap(), sd).await;
+        }
     }
 
     async fn on_send_to_plugin(&self, e: SendToPluginEvent, sd: StreamDeck) {
