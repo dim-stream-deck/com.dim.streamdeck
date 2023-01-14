@@ -48,7 +48,11 @@ jobs:
 
       - name: Prepare plugin directory
         run: |
-          move com.dim.streamdeck.exe/plugin.exe plugin/com.dim.streamdeck.exe
+          md plugin/solo-mode
+          move com.dim.streamdeck/plugin.exe plugin/com.dim.streamdeck.exe
+          move com.dim.streamdeck/install-sd-solo-enabler.exe plugin/solo-mode/install-sd-solo-enabler.exe
+          move com.dim.streamdeck/remove-sd-solo-enabler.exe plugin/solo-mode/remove-sd-solo-enabler.exe
+          move com.dim.streamdeck/sd-solo-enabler.exe plugin/solo-mode/sd-solo-enabler.exe
           move com.dim.streamdeck/plugin plugin/com.dim.streamdeck
           ren plugin com.dim.streamdeck.sdPlugin
       - name: Package plugin

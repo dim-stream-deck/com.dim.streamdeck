@@ -3,7 +3,7 @@
   "Author": "fcannizzaro",
   "Description": "Use Destiny Item Manager from your Stream Deck! Equip Loadouts, Pull Items, Search and much more",
   "Icon": "icons/pluginIcon",
-  "Version": "2.0.4",
+  "Version": "2.0.5",
   "SDKVersion": 2,
   "URL": "https://dimstreamdeck.vercel.app",
   "uuid": "com.dim.streamdeck",
