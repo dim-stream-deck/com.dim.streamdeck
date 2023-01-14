@@ -52,6 +52,11 @@
       "DontAutoSwitchWhenInstalled": true
     }
   ],
+  "ApplicationsToMonitor": {
+    "windows": [
+      "destiny2.exe"
+    ]
+  },
   "Actions": [
     {
       "Icon": "icons/equipItemIcon",

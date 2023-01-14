@@ -3,7 +3,7 @@ use runas::Command;
 use serde_json::Value;
 use std::collections::HashMap;
 use stream_deck_sdk::action::Action;
-use stream_deck_sdk::events::events::{AppearEvent, KeyEvent, SendToPluginEvent};
+use stream_deck_sdk::events::events::{AppearEvent, ApplicationEvent, KeyEvent, SendToPluginEvent};
 use stream_deck_sdk::images::image_to_base64;
 use stream_deck_sdk::stream_deck::StreamDeck;
 use tungstenite::http::{Method, Request};
@@ -85,7 +85,7 @@ impl Action for SoloModeAction {
             .await;
     }
 
-    async fn on_key_down(&self, e: KeyEvent, sd: StreamDeck) {
+    async fn on_key_up(&self, e: KeyEvent, sd: StreamDeck) {
         self.update_tile(action_on_service("toggle").await, e.context, sd)
             .await;
     }
@@ -104,6 +104,13 @@ impl Action for SoloModeAction {
                 }
             }
             _ => {}
+        }
+    }
+
+    async fn on_application_terminate(&self, _e: ApplicationEvent, sd: StreamDeck) {
+        for context in sd.contexts_of(self.uuid()).await {
+            self.update_tile(action_on_service("disable").await, context, sd.clone())
+                .await;
         }
     }
 }
