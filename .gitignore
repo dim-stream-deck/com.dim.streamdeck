@@ -253,3 +253,5 @@ Cargo.lock
 **/*.rs.bk
 
 cache
+
+rust/images/
