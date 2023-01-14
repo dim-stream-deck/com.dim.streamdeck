@@ -27,12 +27,29 @@ jobs:
       - name: Temporary store plugin
         uses: actions/upload-artifact@v3
         with:
-          name: com.dim.streamdeck
-          path: |
-            ./rust/target/release/plugin.exe
-            ./solo-mode-service/target/release/install-sd-solo-enabler.exe
-            ./solo-mode-service/target/release/remove-sd-solo-enabler.exe
-            ./solo-mode-service/target/release/sd-solo-enabler.exe
+          name: com.dim.streamdeck.exe
+          path: ./rust/target/release/plugin.exe
+          retention-days: 10
+
+      - name: Temporary store install-sd-solo-enabler.exe
+        uses: actions/upload-artifact@v3
+        with:
+          name: service-installer
+          path: ./solo-mode-service/target/release/install-sd-solo-enabler.exe
+          retention-days: 10
+
+      - name: Temporary store remove-sd-solo-enabler.exe
+        uses: actions/upload-artifact@v3
+        with:
+          name: service-remover
+          path: ./solo-mode-service/target/release/remove-sd-solo-enabler.exe
+          retention-days: 10
+
+      - name: Temporary store sd-solo-enabler.exe
+        uses: actions/upload-artifact@v3
+        with:
+          name: service
+          path: ./solo-mode-service/target/release/sd-solo-enabler.exe
           retention-days: 10
 
   build-mac-plugin:
