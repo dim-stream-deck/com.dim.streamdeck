@@ -215,6 +215,7 @@
           "Image": "icons/soloState"
         }
       ],
+      "DisableCaching": true,
       "SupportedInMultiActions": false,
       "VisibleInActionsList": true,
       "Tooltip": "Verify / Turn on/off the Destiny 2 solo mode",
