@@ -2,10 +2,12 @@ use async_trait::async_trait;
 use runas::Command;
 use serde_json::Value;
 use std::collections::HashMap;
+use std::time::Duration;
 use stream_deck_sdk::action::Action;
 use stream_deck_sdk::events::events::{AppearEvent, ApplicationEvent, KeyEvent, SendToPluginEvent};
 use stream_deck_sdk::images::image_to_base64;
 use stream_deck_sdk::stream_deck::StreamDeck;
+use tokio::time::sleep;
 use tungstenite::http::{Method, Request};
 use warp::hyper;
 use warp::hyper::{body, Client};
@@ -94,11 +96,17 @@ impl Action for SoloModeAction {
         let action = e.payload.get("action");
         match action {
             Some(action) => {
-                let res = service_management(action.as_str().unwrap());
+                let action = action.as_str().unwrap();
+                let res = service_management(action);
                 if res.is_some() {
                     let mut changes: HashMap<String, Value> = HashMap::default();
                     changes.insert("enabledSoloService".to_string(), Value::Bool(res.unwrap()));
                     sd.update_global_settings(changes, Some(true)).await;
+                    if action == "install-service" {
+                        sleep(Duration::from_secs(2)).await;
+                        self.update_tile(action_on_service("status").await, e.context, sd)
+                            .await;
+                    }
                 } else {
                     sd.show_alert(e.context).await;
                 }
