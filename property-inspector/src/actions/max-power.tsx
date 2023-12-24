@@ -5,7 +5,6 @@ import Total from "../assets/max-power/total.png";
 import Base from "../assets/max-power/helmet.png";
 
 const resources = [
-  { value: "all", image: Total, label: "All" },
   { value: "total", image: Total, label: "Total" },
   { value: "base", image: Base, label: "Power" },
   { value: "artifact", image: Artifact, label: "Artifact" },

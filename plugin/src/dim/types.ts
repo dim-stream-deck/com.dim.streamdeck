@@ -3,6 +3,8 @@ export interface DimActions {
 
   toggleFarmingMode: () => void;
 
+  selection: (params: { active: boolean; type?: "item" | "loadout" }) => void;
+
   equipLoadout: (params: {
     loadoutId: string;
     characterId: string | "vault";

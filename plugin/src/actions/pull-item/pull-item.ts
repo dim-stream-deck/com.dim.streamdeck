@@ -2,14 +2,13 @@ import { DIM } from "@/dim/api";
 import { ev } from "@/main";
 import { Gestures } from "@/util/gestures";
 import $, {
-  Action,
-  action,
-  DidReceiveSettingsEvent,
-  KeyDownEvent,
-  KeyUpEvent,
-  SingletonAction,
-  WillAppearEvent,
-  WillDisappearEvent,
+	Action,
+	action,
+	DidReceiveSettingsEvent,
+	KeyDownEvent,
+	KeyUpEvent, SingletonAction,
+	WillAppearEvent,
+	WillDisappearEvent
 } from "@elgato/streamdeck";
 import { ItemIcon } from "./ItemIcon";
 import { GlobalSettings } from "@/settings";
@@ -70,12 +69,12 @@ export class PullItem extends SingletonAction {
     e.setImage(image);
   }
 
-  async onWillAppear(e: WillAppearEvent<PullItemSettings>) {
+  onWillAppear(e: WillAppearEvent<PullItemSettings>) {
     const settings = e.payload.settings;
 
     if (settings.item) {
       ev.on(settings.item, () => this.update(e.action, settings));
-      await this.update(e.action, settings);
+      this.update(e.action, settings);
     }
 
     this.watcher.start(e.action.id, async (data) => {
@@ -115,5 +114,13 @@ export class PullItem extends SingletonAction {
 
   onKeyDown(e: KeyDownEvent<PullItemSettings>) {
     this.gestures.keyDown(e.action.id);
+  }
+
+  onPropertyInspectorDidAppear() {
+    DIM.selection({ active: true, type: "item" });
+  }
+
+  onPropertyInspectorDidDisappear() {
+    DIM.selection({ active: false });
   }
 }

@@ -2,6 +2,9 @@ import { sendToWeb } from "@/main";
 import { DimActions } from "./types";
 
 export const DIM: DimActions = {
+  selection: ({ active, type }) =>
+    sendToWeb({ action: "selection", active, type }),
+
   refresh: () => sendToWeb({ action: "refresh" }),
 
   toggleFarmingMode: () => sendToWeb({ action: "toggleFarmingMode" }),

@@ -1,3 +1,4 @@
+import { DIM } from "@/dim/api";
 import { action, SingletonAction } from "@elgato/streamdeck";
 
 /**
@@ -7,5 +8,13 @@ import { action, SingletonAction } from "@elgato/streamdeck";
 export class Loadout extends SingletonAction {
   async onKeyDown() {
     // DIM.refresh();
+  }
+
+  onPropertyInspectorDidAppear() {
+    DIM.selection({ active: true, type: "loadout" });
+  }
+
+  onPropertyInspectorDidDisappear() {
+    DIM.selection({ active: false });
   }
 }
