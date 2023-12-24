@@ -163,6 +163,20 @@
       "UUID": "com.dim.streamdeck.solo-mode"
     },
     {
+      "Icon": "imgs/actions/checkpoint/icon",
+      "Name": "Checkpoint",
+      "States": [
+        {
+          "Image": "imgs/actions/checkpoint/state",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "VisibleInActionsList": true,
+      "Tooltip": "Copy an activity checkpoint and customize /join command",
+      "UUID": "com.dim.streamdeck.checkpoint"
+    },
+    {
       "Name": "Tile",
       "States": [
         {

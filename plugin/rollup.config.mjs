@@ -2,7 +2,10 @@ import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import path from "node:path";
 import url from "node:url";
+import json from "@rollup/plugin-json";
+import copy from "rollup-plugin-copy";
 import { swc } from "rollup-plugin-swc3";
+import replace from "@rollup/plugin-replace";
 
 const isWatching = !!process.env.ROLLUP_WATCH;
 const sdPlugin = "com.dim.streamdeck.sdPlugin";
@@ -27,6 +30,23 @@ const config = {
     warn(warning);
   },
   plugins: [
+    json(),
+    isWatching &&
+      replace({
+        "process.env.CHECKPOINT_API": JSON.stringify(
+          process.env.CHECKPOINT_API
+        ),
+        preventAssignment: true,
+      }),
+    copy({
+      copyOnce: true,
+      targets: [
+        {
+          src: "./node_modules/clipboardy/fallbacks/windows",
+          dest: `${sdPlugin}/fallbacks/`,
+        },
+      ],
+    }),
     {
       name: "watch-externals",
       buildStart: function () {

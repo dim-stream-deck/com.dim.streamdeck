@@ -7,6 +7,7 @@ import app from "./actions/app";
 import postmaster from "./actions/postmaster";
 import randomize from "./actions/randomize";
 import metrics from "./actions/metrics";
+import checkpoint from "./actions/checkpoint";
 import pullItem from "./actions/pull-item";
 import maxPower from "./actions/max-power";
 import { StreamDeck, useStreamDeck } from "./StreamDeck";
@@ -34,6 +35,7 @@ const components = {
   postmaster,
   randomize,
   metrics,
+  checkpoint,
   "max-power": maxPower,
   "pull-item": pullItem,
   "solo-mode": soloMode,

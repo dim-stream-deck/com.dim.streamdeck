@@ -11,5 +11,5 @@
   "files.exclude": {
     "node_modules": true
   },
-  "cSpell.words": ["bungify", "destinyitemmanager", "onwarn"]
+  "cSpell.words": ["bungify", "clipboardy", "destinyitemmanager", "onwarn"]
 }

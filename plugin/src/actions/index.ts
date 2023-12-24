@@ -11,8 +11,10 @@ import { Randomize } from "./randomize";
 import { PullItem } from "./pull-item/pull-item";
 import { Postmaster } from "./postmaster";
 import { Loadout } from "./loadout";
+import { Checkpoint } from "./checkpoint/checkpoint";
 
 $.actions.registerAction(new App());
+$.actions.registerAction(new Checkpoint());
 $.actions.registerAction(new FarmingMode());
 $.actions.registerAction(new Loadout());
 $.actions.registerAction(new MaxPower());

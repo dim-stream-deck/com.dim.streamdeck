@@ -1,4 +1,8 @@
-const cache = new Map<string, string | ArrayBuffer>();
+import { LRUCache } from "lru-cache";
+
+const cache = new LRUCache<string, string | ArrayBuffer>({
+  max: 50,
+});
 
 export const bungify = (url: string) => `https://www.bungie.net${url}`;
 

@@ -1,6 +1,6 @@
 import fs from "fs";
 
-export const readAsArrayBuffer = (path: string) => {
+const readAsArrayBuffer = (path: string) => {
   const file = fs.readFileSync(path, null);
   return file.buffer.slice(file.byteOffset, file.byteOffset + file.byteLength);
 };

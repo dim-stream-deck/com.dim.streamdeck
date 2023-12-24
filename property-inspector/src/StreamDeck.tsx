@@ -28,6 +28,7 @@ const StreamDeckContext = createContext<StreamDeckContext>({
 type Settings = Record<string, any>;
 
 interface StreamDeckContext {
+  communication?: any;
   settings: Settings;
   setSettings: (settings: Partial<Settings>) => void;
   globalSettings: Settings;
@@ -43,6 +44,7 @@ export const StreamDeck: FC<StreamDeckProps> = ({
   action,
   children,
 }) => {
+  const [communication, setCommunication] = useState<any>();
   const [settings, setSettings] = useState<Settings>({});
   const [globalSettings, setGlobalSettings] = useState<Settings>({});
   const [ready, setReady] = useState(false);
@@ -74,9 +76,14 @@ export const StreamDeck: FC<StreamDeckProps> = ({
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
+      console.log(data);
+
       switch (data.event) {
         case "didReceiveGlobalSettings":
           setGlobalSettings(data.payload.settings);
+          break;
+        case "sendToPropertyInspector":
+          setCommunication(data.payload);
           break;
         case "didReceiveSettings":
           setSettings(data.payload.settings);
@@ -146,6 +153,7 @@ export const StreamDeck: FC<StreamDeckProps> = ({
   return (
     <StreamDeckContext.Provider
       value={{
+        communication,
         settings,
         globalSettings,
         setSettings: setPartialSettings,
