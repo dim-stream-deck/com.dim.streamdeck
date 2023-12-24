@@ -1,6 +1,6 @@
 {
   "Name": "DIM Stream Deck",
-  "Version": "0.1.0",
+  "Version": "2.0.0",
   "Author": "fcannizzaro",
   "URL": "https://dimstreamdeck.vercel.app",
   "PropertyInspectorPath": "pi/index.html",
