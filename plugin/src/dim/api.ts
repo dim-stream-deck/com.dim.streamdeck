@@ -2,8 +2,7 @@ import { sendToWeb } from "@/main";
 import { DimActions } from "./types";
 
 export const DIM: DimActions = {
-  selection: ({ active, type }) =>
-    sendToWeb({ action: "selection", active, type }),
+  selection: ({ type }) => sendToWeb({ action: "selection", type }),
 
   refresh: () => sendToWeb({ action: "refresh" }),
 
