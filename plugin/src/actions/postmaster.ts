@@ -60,7 +60,13 @@ export class Postmaster extends SingletonAction {
     e.setState(state);
   }
 
-  async onWillAppear(e: WillAppearEvent<PostmasterSettings>) {
+  async onDidReceiveSettings(e: DidReceiveSettingsEvent<PostmasterSettings>) {
+    const { settings } = e.payload;
+    const globalSettings = await $.settings.getGlobalSettings<GlobalSettings>();
+    this.update(e.action, settings, globalSettings);
+  }
+
+  onWillAppear(e: WillAppearEvent<PostmasterSettings>) {
     this.watcher.start(e.action.id, async () => {
       const settings = await e.action.getSettings<PostmasterSettings>();
       this.update(
@@ -75,13 +81,7 @@ export class Postmaster extends SingletonAction {
     this.watcher.stop(e.action.id);
   }
 
-  async onDidReceiveSettings(e: DidReceiveSettingsEvent<PostmasterSettings>) {
-    const { settings } = e.payload;
-    const globalSettings = await $.settings.getGlobalSettings<GlobalSettings>();
-    this.update(e.action, settings, globalSettings);
-  }
-
-  async onKeyDown(e: KeyDownEvent<PostmasterSettings>) {
+  onKeyDown(e: KeyDownEvent<PostmasterSettings>) {
     if (e.payload.settings.collectPostmaster ?? true) {
       DIM.collectPostmaster();
     }
