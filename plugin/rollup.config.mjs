@@ -2,7 +2,6 @@ import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import path from "node:path";
 import url from "node:url";
-import json from "@rollup/plugin-json";
 import copy from "rollup-plugin-copy";
 import { swc } from "rollup-plugin-swc3";
 import replace from "@rollup/plugin-replace";
@@ -30,7 +29,6 @@ const config = {
     warn(warning);
   },
   plugins: [
-    json(),
     isWatching &&
       replace({
         "process.env.CHECKPOINT_API": JSON.stringify(
