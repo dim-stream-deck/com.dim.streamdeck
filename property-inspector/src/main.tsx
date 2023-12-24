@@ -8,25 +8,23 @@ import postmaster from "./actions/postmaster";
 import randomize from "./actions/randomize";
 import metrics from "./actions/metrics";
 import pullItem from "./actions/pull-item";
-import rotation from "./actions/rotation";
-import power from "./actions/max-power";
+import maxPower from "./actions/max-power";
 import { StreamDeck, useStreamDeck } from "./StreamDeck";
 import "./index.css";
-import { ActionIcon, Alert, Button, Center, Group, Text } from "@mantine/core";
+import { ActionIcon, Alert, Group, Text } from "@mantine/core";
 import {
   IconBrandDiscord,
   IconBrandPatreon,
-  IconCheck,
   IconWorldWww,
-} from "@tabler/icons";
-import progress from "./actions/progress";
+} from "@tabler/icons-react";
 import soloMode from "./actions/solo-mode";
+import { NoSetting } from "./components/NoSettings";
+import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 
 export interface AppProps {
   action: any;
 }
-
-const randomID = Math.random().toString(36).slice(2, 6).toUpperCase();
 
 const components = {
   search,
@@ -36,9 +34,7 @@ const components = {
   postmaster,
   randomize,
   metrics,
-  rotation,
-  power,
-  progress,
+  "max-power": maxPower,
   "pull-item": pullItem,
   "solo-mode": soloMode,
 };
@@ -50,7 +46,6 @@ interface AuthorizationRequiredProps {
 }
 
 const AuthorizationRequired: FC<AuthorizationRequiredProps> = ({ missing }) => {
-  const { sendToPlugin } = useStreamDeck();
   return (
     <Alert
       radius="sm"
@@ -60,71 +55,6 @@ const AuthorizationRequired: FC<AuthorizationRequiredProps> = ({ missing }) => {
       color="red"
     >
       <Text mt={-4}>Confirm the connection on the DIM app.</Text>
-
-      <Center>
-        <Text
-          mt="xs"
-          px="sm"
-          py="xs"
-          sx={{
-            background: "rgba(0,0,0,.4)",
-            fontSize: 32,
-          }}
-        >
-          {randomID}
-        </Text>
-      </Center>
-
-      <Button
-        fullWidth
-        mt="md"
-        variant="filled"
-        color="red"
-        onClick={() =>
-          missing.forEach((id) => {
-            sendToPlugin({
-              authorization: id,
-              code: randomID,
-            });
-          })
-        }
-      >
-        AUTHORIZE
-      </Button>
-
-      <Text mt="sm" align="center">
-        if you have issues, click below and then on the{" "}
-        <strong>"DE-AUTHORIZE"</strong> button (DIM settings).
-      </Text>
-
-      <Button
-        fullWidth
-        mt="sm"
-        variant="outline"
-        color="red"
-        onClick={() =>
-          sendToPlugin({
-            resetAll: missing,
-          })
-        }
-      >
-        RESET ALL
-      </Button>
-    </Alert>
-  );
-};
-
-const NoSetting = () => {
-  return (
-    <Alert
-      radius="md"
-      icon={<IconCheck size={24} />}
-      title="All done"
-      color="green"
-    >
-      <Text mt={-4} color="dimmed">
-        No setting required for this action
-      </Text>
     </Alert>
   );
 };
@@ -132,7 +62,7 @@ const NoSetting = () => {
 const Links = () => {
   const { openURL } = useStreamDeck();
   return (
-    <Group mt="sm" position="center" noWrap>
+    <Group mt="sm" justify="center" wrap="nowrap">
       <ActionIcon
         title="Donate on Patreon"
         onClick={() => openURL(import.meta.env.VITE_PATREON)}
@@ -171,7 +101,6 @@ const Links = () => {
 
 const App: FC<AppProps> = ({ action }) => {
   const id: Action = action.action.slice("com.dim.streamdeck.".length);
-
   const Component: any = components[id];
   const { globalSettings } = useStreamDeck();
   const authorized = (globalSettings?.missing ?? []).length === 0;

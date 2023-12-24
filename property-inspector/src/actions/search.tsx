@@ -5,7 +5,7 @@ import {
   Divider,
   SegmentedControl,
 } from "@mantine/core";
-import { IconHandGrab, IconSearch } from "@tabler/icons";
+import { IconHandGrab, IconSearch } from "@tabler/icons-react";
 import { useStreamDeck } from "../StreamDeck";
 
 export default () => {
@@ -17,13 +17,13 @@ export default () => {
       <Autocomplete
         radius="xs"
         data={[]}
-        defaultValue={settings.search}
+        defaultValue={settings.query ?? settings.search ?? ""}
         placeholder="Search item/perk"
         onChange={(value) => setSettings({ search: value })}
       />
       <Divider labelPosition="center" my="sm" label="Page" />
       <SegmentedControl
-        color="primary"
+        color="dim"
         size="xs"
         transitionDuration={300}
         radius="xs"
@@ -43,7 +43,7 @@ export default () => {
         fullWidth
         radius="xs"
         size="xs"
-        color="primary"
+        color="dim"
         transitionDuration={300}
         transitionTimingFunction="linear"
         value={settings.pullItems ? "pull" : "search"}

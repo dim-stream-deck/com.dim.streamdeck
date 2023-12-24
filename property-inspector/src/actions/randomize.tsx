@@ -12,13 +12,13 @@ export default () => {
       <SegmentedControl
         fullWidth
         onChange={(value) => setSettings({ weaponsOnly: value === "weapons" })}
-        color="primary"
+        color="dim"
         data={[
           {
             value: "weapons",
             label: (
               <Group>
-                <Icon size={24} color="white" icon="weapons" />
+                <Icon size={20} color="white" icon="weapons" />
                 <Title ml="sm" order={6}>
                   Weapons
                 </Title>
@@ -29,7 +29,7 @@ export default () => {
             value: "all",
             label: (
               <Group>
-                <Icon size={24} color="white" icon="ghost" />
+                <Icon size={20} color="white" icon="ghost" />
                 <Title ml="sm" order={6}>
                   All
                 </Title>

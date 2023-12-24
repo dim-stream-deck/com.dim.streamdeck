@@ -1,0 +1,197 @@
+{
+  "Name": "DIM Stream Deck",
+  "Version": "0.1.0",
+  "Author": "fcannizzaro",
+  "URL": "https://dimstreamdeck.vercel.app",
+  "PropertyInspectorPath": "pi/index.html",
+  "Actions": [
+    {
+      "Icon": "imgs/actions/equip/icon",
+      "Name": "Pull/Equip Item",
+      "States": [
+        {
+          "Image": "imgs/actions/equip/state"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Pull or equip a pre-selected item",
+      "UUID": "com.dim.streamdeck.pull-item"
+    },
+    {
+      "Icon": "imgs/actions/loadout/icon",
+      "Name": "Equip Loadout",
+      "States": [
+        {
+          "Image": "imgs/actions/loadout/state"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Allow to switch Destiny 2 Loadout",
+      "UUID": "com.dim.streamdeck.loadout"
+    },
+    {
+      "Icon": "imgs/actions/search/icon",
+      "Name": "Search",
+      "States": [
+        {
+          "Image": "imgs/actions/search/state"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Search with a specific query",
+      "UUID": "com.dim.streamdeck.search"
+    },
+    {
+      "Icon": "imgs/actions/refresh/icon",
+      "Name": "Refresh DIM",
+      "States": [
+        {
+          "Image": "imgs/actions/refresh/state"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Refresh DIM",
+      "UUID": "com.dim.streamdeck.refresh"
+    },
+    {
+      "Icon": "imgs/actions/randomize/icon",
+      "Name": "Randomize Character",
+      "States": [
+        {
+          "Image": "imgs/actions/randomize/state"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Randomize a specific character",
+      "UUID": "com.dim.streamdeck.randomize"
+    },
+    {
+      "Icon": "imgs/actions/app/icon",
+      "Name": "Open DIM",
+      "States": [
+        {
+          "Image": "imgs/actions/app/state"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Open DIM on the browser",
+      "UUID": "com.dim.streamdeck.app"
+    },
+    {
+      "Icon": "imgs/actions/vault/icon",
+      "Name": "Vault",
+      "States": [
+        {
+          "Image": "imgs/actions/vault/state",
+          "TitleAlignment": "bottom"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Show a specific param from the vault",
+      "UUID": "com.dim.streamdeck.vault"
+    },
+    {
+      "Icon": "imgs/actions/postmaster/icon",
+      "Name": "Postmaster",
+      "States": [
+        {
+          "Image": "imgs/actions/postmaster/state"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Show the used percentage of the current character postmaster",
+      "UUID": "com.dim.streamdeck.postmaster"
+    },
+    {
+      "Icon": "imgs/actions/metrics/icon",
+      "Name": "Metrics",
+      "States": [
+        {
+          "Image": "imgs/actions/metrics/state",
+          "TitleAlignment": "bottom"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Show a specific game metric",
+      "UUID": "com.dim.streamdeck.metrics"
+    },
+    {
+      "Icon": "imgs/actions/max-power/icon",
+      "Name": "Max Power",
+      "States": [
+        {
+          "Image": "imgs/actions/max-power/state"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Show the current character Max Power and tap to apply",
+      "UUID": "com.dim.streamdeck.max-power"
+    },
+    {
+      "Icon": "imgs/actions/farming-mode/icon",
+      "Name": "Farming Mode",
+      "States": [
+        {
+          "Image": "imgs/actions/farming-mode/state-off"
+        },
+        {
+          "Image": "imgs/actions/farming-mode/state-on"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Turn on/off the DIM Farming mode",
+      "UUID": "com.dim.streamdeck.farming-mode"
+    },
+    {
+      "Icon": "imgs/actions/solo-mode/icon",
+      "Name": "Solo Mode",
+      "States": [
+        {
+          "Image": "imgs/actions/solo-mode/state"
+        }
+      ],
+      "DisableCaching": true,
+      "SupportedInMultiActions": false,
+      "VisibleInActionsList": true,
+      "Tooltip": "Verify / Turn on/off the Destiny 2 solo mode",
+      "UUID": "com.dim.streamdeck.solo-mode"
+    },
+    {
+      "Name": "Tile",
+      "States": [
+        {
+          "Image": "imgs/actions/page/state",
+          "TitleAlignment": "middle",
+          "FontSize": "16"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "VisibleInActionsList": false,
+      "UUID": "com.dim.streamdeck.page"
+    }
+  ],
+  "Category": "DIM Stream Deck",
+  "CategoryIcon": "imgs/plugin/category",
+  "CodePath": "bin/plugin.js",
+  "Description": "Use Destiny Item Manager from your Stream Deck! Equip Loadouts, Pull Items, Search and much more",
+  "Icon": "imgs/plugin/marketplace",
+  "SDKVersion": 2,
+  "Software": {
+    "MinimumVersion": "6.5"
+  },
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.15"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Nodejs": {
+    "Version": "20",
+    "Debug": "enabled"
+  },
+  "UUID": "com.dim.streamdeck"
+}

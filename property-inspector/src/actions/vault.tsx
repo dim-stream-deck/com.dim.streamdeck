@@ -7,7 +7,7 @@ import vault from "../assets/vault/vault.png";
 
 const resources = [
   { value: "shards", image: shards, label: "Legendary Shards" },
-  { value: "dust", image: dust, label: "Bright Dust" },
+  { value: "brightDust", image: dust, label: "Bright Dust" },
   { value: "glimmer", image: glimmer, label: "Glimmer" },
   { value: "vault", image: vault, label: "Vault Items" },
 ];

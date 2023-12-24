@@ -1,15 +1,15 @@
 import { Container, MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import ReactDOM from "react-dom/client";
+
 import "./index.css";
 
 export const render = (component: any) =>
   ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <MantineProvider
-      withGlobalStyles
-      withNormalizeCSS
+      defaultColorScheme="dark"
       theme={{
         primaryColor: "dim",
-        colorScheme: "dark",
         defaultGradient: {
           deg: 140,
           from: "#f37625",
@@ -17,6 +17,11 @@ export const render = (component: any) =>
         },
         primaryShade: { light: 5, dark: 5 },
         components: {
+          Button: {
+            defaultProps: {
+              radius: "md",
+            },
+          },
           Autocomplete: {
             styles: {
               input: {
@@ -28,13 +33,6 @@ export const render = (component: any) =>
             styles: {
               label: {
                 color: "#969696",
-              },
-            },
-          },
-          Alert: {
-            styles: {
-              root: {
-                background: "#222222",
               },
             },
           },
@@ -69,6 +67,7 @@ export const render = (component: any) =>
         },
       }}
     >
+      <Notifications />
       <Container fluid ml={50} mt={16}>
         {component}
       </Container>

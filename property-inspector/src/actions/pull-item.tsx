@@ -1,15 +1,18 @@
 import {
-  Box,
-  Button,
+  Collapse,
   Divider,
   Group,
-  Paper,
+  Image,
+  SegmentedControl,
+  Stack,
   Switch,
-  Tabs,
   Text,
-  Title,
+  ThemeIcon,
 } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
+import { Droppable } from "../components/Droppable";
+import { useEffect } from "react";
+import { IconX } from "@tabler/icons-react";
 
 export default () => {
   const {
@@ -19,75 +22,101 @@ export default () => {
     globalSettings,
     setGlobalSettings,
   } = useStreamDeck();
-  if (!settings.altActionTrigger) {
-    setSettings({ altActionTrigger: "long" });
+
+  useEffect(() => {
+    if (!settings.altActionTrigger) {
+      setSettings({ altActionTrigger: "hold" });
+    }
+  }, [settings]);
+
+  useEffect(() => {
+    sendToPlugin({ action: "prompt-selection", type: "item" });
+  }, []);
+
+  if (!settings || !globalSettings) {
+    return;
   }
-  if (!settings.altAction) {
-    setSettings({ altAction: "equip" });
-  }
+
+  console.log(settings);
+
   return (
-    <>
-      <Paper radius="md" withBorder p="sm">
-        <Title ml={2} color="white" order={5}>
-          {settings.label ?? "NO ITEM SELECTED"}
-        </Title>
-        <Text ml={2} color="dimmed">
-          {settings["subtitle"] ?? "Item type"}
-        </Text>
-        <Group grow mt={8}>
-          <Button
-            onClick={() => sendToPlugin({ action: "select" })}
-            variant="gradient"
-          >
-            {settings.item ? "CHANGE" : "PICK ON DIM"}
-          </Button>
-          {settings.item && (
-            <Button
-              onClick={() =>
-                sendToPlugin({ action: "show", id: settings.item })
-              }
-              ml={12}
-              variant="default"
-            >
-              SHOW
-            </Button>
-          )}
-        </Group>
-      </Paper>
-      {/* alt action settings */}
-      {settings.item && (
-        <Box p="sm">
-          <Divider labelPosition="center" label="Gestures" mb="sm" />
-          <Group spacing="xs" mb="xs">
-            <Title ml={2} color="white" order={5}>
-              Equip
-            </Title>
-            <Text size="sm" color="dimmed">
-              (Alternative Action)
-            </Text>
-          </Group>
-          <Tabs
-            variant="pills"
-            value={settings.altActionTrigger}
-            onTabChange={(altActionTrigger) =>
-              setSettings({ altActionTrigger })
-            }
-          >
-            <Tabs.List grow mt={8}>
-              <Tabs.Tab value="double">Double Press</Tabs.Tab>
-              <Tabs.Tab value="hold">Hold</Tabs.Tab>
-            </Tabs.List>
-          </Tabs>
-        </Box>
-      )}
-      <Divider labelPosition="center" label="Accessibility" my="sm" />
-      <Switch
-        label="(Global) Grayscale filter for not-equipped items"
-        checked={globalSettings.grayscale ?? true}
-        onChange={(e) =>
-          setGlobalSettings({ grayscale: e.currentTarget.checked })
+    <Stack gap="sm">
+      <Droppable
+        type="item"
+        onSelect={(data) =>
+          setSettings({ ...data, element: data.element ?? null })
         }
-      />
-    </>
+      >
+        <Group gap="sm">
+          {settings?.icon ? (
+            <Image
+              radius="md"
+              width={64}
+              height={64}
+              src={`https://bungie.net${settings.icon}`}
+            />
+          ) : (
+            <ThemeIcon variant="light" style={{ width: 64, height: 64 }}>
+              <IconX />
+            </ThemeIcon>
+          )}
+          <Stack gap={0} style={{ flex: 1 }}>
+            {settings.label && (
+              <Text
+                fw="bold"
+                c="white"
+                style={{
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                  maxWidth: 160,
+                }}
+              >
+                {settings.label}
+              </Text>
+            )}
+            <Text
+              size="sm"
+              c="dimmed"
+              style={{ textAlign: settings.label ? "left" : "center" }}
+            >
+              Drop here to
+              {settings.label ? " " : <br />}
+              <strong>select</strong> or <strong>change item</strong>
+            </Text>
+          </Stack>
+        </Group>
+      </Droppable>
+      {/* alt action settings */}
+      <Collapse in={settings.item}>
+        <Divider
+          labelPosition="center"
+          label="Equip (Alternative Action)"
+          mb="sm"
+        />
+        <SegmentedControl
+          w="100%"
+          data={[
+            { value: "double", label: "Double Press" },
+            { value: "hold", label: "Hold" },
+          ]}
+          size="sm"
+          color="dim"
+          value={settings.altActionTrigger}
+          onChange={(altActionTrigger) => setSettings({ altActionTrigger })}
+        />
+      </Collapse>
+      <div>
+        <Divider labelPosition="center" label="Accessibility" mb="sm" />
+        <Switch
+          mb="xs"
+          label="(Global) Grayscale filter for not-equipped items"
+          checked={globalSettings.equipmentGrayscale ?? true}
+          onChange={(e) =>
+            setGlobalSettings({ equipmentGrayscale: e.currentTarget.checked })
+          }
+        />
+      </div>
+    </Stack>
   );
 };

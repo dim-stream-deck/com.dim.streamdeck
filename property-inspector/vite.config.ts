@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [react(), viteSingleFile()],
   build: {
     emptyOutDir: true,
-    outDir: "../plugin/pi",
+    outDir: "../plugin/com.dim.streamdeck.sdPlugin/pi",
   },
 });

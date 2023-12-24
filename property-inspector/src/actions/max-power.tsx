@@ -19,7 +19,7 @@ export default () => {
       <Divider labelPosition="center" label="Power Type" mb="sm" />
       <SegmentedControl
         fullWidth
-        color="primary"
+        color="dim"
         orientation="vertical"
         value={powerType}
         onChange={(powerType) => setSettings({ powerType })}
