@@ -4,7 +4,7 @@ import $ from "@elgato/streamdeck";
 import { GlobalSettings } from "./settings";
 import { z } from "zod";
 import { WebSocket } from "ws";
-import { mergeDeepRight, omit } from "ramda";
+import { mergeDeepRight } from "ramda";
 import { Equipment, toggleEquipment } from "./util/equipment";
 
 export const ev = new EventEmitter();
@@ -70,7 +70,9 @@ server.on("connection", (socket: WebSocket, req) => {
         await setGlobalSettings(data);
         break;
       case "equipmentStatus":
-        await toggleEquipment(data.itemId, data.equipped);
+        setGlobalSettings({
+          equippedItems: toggleEquipment(data.itemId, data.equipped),
+        });
         break;
     }
   });

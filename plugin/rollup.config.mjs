@@ -22,6 +22,10 @@ const config = {
       ).href;
     },
   },
+  onwarn: (warning, warn) => {
+    if (warning.code === "THIS_IS_UNDEFINED") return;
+    warn(warning);
+  },
   plugins: [
     {
       name: "watch-externals",

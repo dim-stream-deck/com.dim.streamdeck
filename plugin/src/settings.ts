@@ -45,7 +45,7 @@ type Vault = {
 
 export interface Postmaster {
   ascendantShards: number;
-  enhancedPrisms: number;
+  enhancementPrisms: number;
   spoils: number;
   total: number;
 }
@@ -54,6 +54,7 @@ export interface Postmaster {
 
 export interface GlobalSettings {
   equipmentGrayscale?: boolean;
+  checkpointJoinPrefix?: string;
   farmingMode?: boolean;
   authentication?: Record<string, string>;
   equippedItems: string[];

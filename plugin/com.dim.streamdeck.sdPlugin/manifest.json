@@ -95,7 +95,12 @@
       "Name": "Postmaster",
       "States": [
         {
-          "Image": "imgs/actions/postmaster/state"
+          "Image": "imgs/actions/postmaster/state",
+          "TitleAlignment": "bottom"
+        },
+        {
+          "Image": "imgs/actions/postmaster/state",
+          "TitleAlignment": "middle"
         }
       ],
       "SupportedInMultiActions": false,
@@ -120,7 +125,8 @@
       "Name": "Max Power",
       "States": [
         {
-          "Image": "imgs/actions/max-power/state"
+          "Image": "imgs/actions/max-power/state",
+          "TitleAlignment": "bottom"
         }
       ],
       "SupportedInMultiActions": false,

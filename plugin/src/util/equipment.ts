@@ -1,5 +1,3 @@
-import { setGlobalSettings } from "@/main";
-
 export const Equipment = new Set<string>();
 
 export const toggleEquipment = (item: string, equipped: boolean) => {
@@ -8,7 +6,5 @@ export const toggleEquipment = (item: string, equipped: boolean) => {
   } else {
     Equipment.delete(item);
   }
-  return setGlobalSettings({
-    equippedItems: Array.from(Equipment),
-  });
+  return Array.from(Equipment);
 };

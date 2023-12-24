@@ -15,7 +15,7 @@ import Percent from "../assets/postmaster/percent.png";
 import Count from "../assets/postmaster/count.png";
 
 const resources = [
-  { value: "", image: PostmasterIcon, label: "Counter" },
+  { value: "total", image: PostmasterIcon, label: "Counter" },
   { value: "enhancementPrisms", image: Prism, label: "Enhancement Prisms" },
   { value: "ascendantShards", image: Shard, label: "Ascendant Shards" },
   { value: "spoils", image: Spoils, label: "Spoils of Conquest" },
@@ -31,7 +31,7 @@ export default () => {
 
   return (
     <div>
-      {!settings.postmasterItem && (
+      {settings.postmasterItem === "total" && (
         <>
           <Divider labelPosition="center" label="Style" mb="sm" />
           <SegmentedControl
@@ -60,7 +60,7 @@ export default () => {
           />
         </>
       )}
-      <Divider labelPosition="center" label="Item" mb="sm" />
+      <Divider labelPosition="center" label="Item" my="sm" />
       <SegmentedControl
         fullWidth
         orientation="vertical"

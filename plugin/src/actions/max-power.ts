@@ -2,15 +2,12 @@ import { DIM } from "@/dim/api";
 import { GlobalSettings, MaxPowerType } from "@/settings";
 import { Watcher } from "@/util/watcher";
 import $, {
-  Action,
-  action,
-  DidReceiveSettingsEvent,
-  KeyDownEvent,
-  SingletonAction,
-  WillAppearEvent,
-  WillDisappearEvent,
+	Action,
+	action,
+	DidReceiveSettingsEvent, SingletonAction,
+	WillAppearEvent,
+	WillDisappearEvent
 } from "@elgato/streamdeck";
-import { set } from "ramda";
 
 interface MaxPowerSettings {
   powerType?: MaxPowerType | "all";
