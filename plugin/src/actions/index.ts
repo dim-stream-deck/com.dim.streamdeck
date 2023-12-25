@@ -1,0 +1,28 @@
+import $ from "@elgato/streamdeck";
+import { Search } from "./search";
+import { FarmingMode } from "./farming-mode";
+import { Refresh } from "./refresh";
+import { SoloMode } from "./solo-mode/solo-mode";
+import { App } from "./app";
+import { Vault } from "./vault";
+import { Metrics } from "./metrics/metrics";
+import { MaxPower } from "./max-power";
+import { Randomize } from "./randomize";
+import { PullItem } from "./pull-item/pull-item";
+import { Postmaster } from "./postmaster";
+import { Loadout } from "./loadout/loadout";
+import { Checkpoint } from "./checkpoint/checkpoint";
+
+$.actions.registerAction(new App());
+$.actions.registerAction(new Checkpoint());
+$.actions.registerAction(new FarmingMode());
+$.actions.registerAction(new Loadout());
+$.actions.registerAction(new MaxPower());
+$.actions.registerAction(new Metrics());
+$.actions.registerAction(new Postmaster());
+$.actions.registerAction(new PullItem());
+$.actions.registerAction(new Randomize());
+$.actions.registerAction(new Refresh());
+$.actions.registerAction(new Search());
+$.actions.registerAction(new SoloMode());
+$.actions.registerAction(new Vault());

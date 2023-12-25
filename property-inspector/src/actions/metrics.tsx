@@ -32,7 +32,7 @@ export default () => {
       <Divider labelPosition="center" label="Metric" mb="sm" />
       <SegmentedControl
         fullWidth
-        color="primary"
+        color="dim"
         orientation="vertical"
         value={settings.metric}
         onChange={(metric) => setSettings({ metric })}

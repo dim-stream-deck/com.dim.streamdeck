@@ -11,7 +11,7 @@ export default () => {
       <SegmentedControl
         fullWidth
         onChange={(value) => setSettings({ beta: value === "beta" })}
-        color={isBeta ? "cyan" : "primary"}
+        color={isBeta ? "cyan" : "dim"}
         data={[
           {
             value: "dim",

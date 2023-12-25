@@ -1,24 +1,60 @@
-import { Button, Paper, Text, Title } from "@mantine/core";
+import { Group, Image, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
+import { Droppable } from "../components/Droppable";
+import { DropText } from "../components/DropText";
+import { IconX } from "@tabler/icons-react";
 
 export default () => {
-  const { settings, sendToPlugin } = useStreamDeck();
+  const { settings, setSettings } = useStreamDeck();
   return (
-    <Paper radius="md" withBorder p="sm">
-      <Title ml={2} color="white" order={5}>
-        {settings.label ?? "NO LOADOUT SELECTED"}
-      </Title>
-      <Text ml={2} color="dimmed">
-        {settings["subtitle"] ?? "Class"}
-      </Text>
-      <Button
-        onClick={() => sendToPlugin({ action: "select" })}
-        variant="gradient"
-        fullWidth
-        mt={8}
-      >
-        {settings.item ? "CHANGE" : "PICK"} ON DIM
-      </Button>
-    </Paper>
+    <Droppable
+      type="loadout"
+      onSelect={(data) =>
+        setSettings(data, {
+          replace: true,
+        })
+      }
+    >
+      <Stack gap="sm">
+        <Group wrap="nowrap">
+          {settings?.icon ? (
+            <Image
+              radius="md"
+              width={64}
+              height={64}
+              src={`https://bungie.net${settings.icon}`}
+            />
+          ) : settings.inGameIcon ? (
+            <Image
+              style={{
+                background: `url("https://bungie.net${settings.inGameIcon.background}")`,
+              }}
+              radius="md"
+              draggable={false}
+              width={64}
+              height={64}
+              src={`https://bungie.net${settings.inGameIcon.icon}`}
+            />
+          ) : (
+            <ThemeIcon variant="light" style={{ width: 64, height: 64 }}>
+              <IconX />
+            </ThemeIcon>
+          )}
+          <Stack gap="sm">
+            {settings.label && (
+              <Group gap={4}>
+                <Text fw="bold" c="white" size="sm">
+                  {settings.label}
+                </Text>
+                <Text inline size="xs" c="dimmed">
+                  ({settings.subtitle || "in-game"})
+                </Text>
+              </Group>
+            )}
+            <DropText type="loadout" selected={settings.label} />
+          </Stack>
+        </Group>
+      </Stack>
+    </Droppable>
   );
 };

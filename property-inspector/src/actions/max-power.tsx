@@ -5,7 +5,6 @@ import Total from "../assets/max-power/total.png";
 import Base from "../assets/max-power/helmet.png";
 
 const resources = [
-  { value: "all", image: Total, label: "All" },
   { value: "total", image: Total, label: "Total" },
   { value: "base", image: Base, label: "Power" },
   { value: "artifact", image: Artifact, label: "Artifact" },
@@ -19,7 +18,7 @@ export default () => {
       <Divider labelPosition="center" label="Power Type" mb="sm" />
       <SegmentedControl
         fullWidth
-        color="primary"
+        color="dim"
         orientation="vertical"
         value={powerType}
         onChange={(powerType) => setSettings({ powerType })}

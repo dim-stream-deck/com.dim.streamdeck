@@ -1,0 +1,41 @@
+name: build-plugin
+on:
+  workflow_dispatch:
+
+jobs:
+  build-solo-mode:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./rust/
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1.0.6
+        with:
+          toolchain: stable
+
+      - uses: actions-rs/cargo@v1.0.1
+        with:
+          command: build
+          args: --manifest-path solo-mode/Cargo.toml --release
+
+      - name: Temporary store install-sd-solo-enabler.exe
+        uses: actions/upload-artifact@v3
+        with:
+          name: service-installer
+          path: ./solo-mode/target/release/install-sd-solo-enabler.exe
+          retention-days: 10
+
+      - name: Temporary store remove-sd-solo-enabler.exe
+        uses: actions/upload-artifact@v3
+        with:
+          name: service-remover
+          path: ./solo-mode/target/release/remove-sd-solo-enabler.exe
+          retention-days: 10
+
+      - name: Temporary store sd-solo-enabler.exe
+        uses: actions/upload-artifact@v3
+        with:
+          name: service
+          path: ./solo-mode/target/release/sd-solo-enabler.exe
+          retention-days: 10

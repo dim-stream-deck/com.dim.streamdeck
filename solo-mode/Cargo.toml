@@ -1,0 +1,27 @@
+[package]
+name = "solo-mode"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+rouille = "3.6.1"
+windows-service = "0.6.0"
+
+[profile.release]
+strip = true
+opt-level = "z"
+lto = true
+codegen-units = 1
+
+[[bin]]
+name = "sd-solo-enabler"
+path = "src/main.rs"
+
+
+[[bin]]
+name = "install-sd-solo-enabler"
+path = "src/install.rs"
+
+[[bin]]
+name = "remove-sd-solo-enabler"
+path = "src/remove.rs"
