@@ -1,11 +1,11 @@
 import $, {
-	Action,
-	action,
-	DidReceiveSettingsEvent,
-	KeyDownEvent,
-	SingletonAction,
-	WillAppearEvent,
-	WillDisappearEvent,
+  Action,
+  action,
+  DidReceiveSettingsEvent,
+  KeyDownEvent,
+  SingletonAction,
+  WillAppearEvent,
+  WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { CheckpointManager } from "./manager";
 import { splitEvery } from "ramda";
@@ -55,7 +55,7 @@ export class Checkpoint extends SingletonAction {
     });
   }
 
-  onWillDisappear(e: WillDisappearEvent<CheckpointSettings>) {
+  async onWillDisappear(e: WillDisappearEvent<CheckpointSettings>) {
     this.watcher.stop(e.action.id);
   }
 
@@ -73,7 +73,7 @@ export class Checkpoint extends SingletonAction {
     }
   }
 
-  onDidReceiveSettings(ev: DidReceiveSettingsEvent<CheckpointSettings>) {
+  async onDidReceiveSettings(ev: DidReceiveSettingsEvent<CheckpointSettings>) {
     this.update(ev.action, ev.payload.settings);
   }
 }
