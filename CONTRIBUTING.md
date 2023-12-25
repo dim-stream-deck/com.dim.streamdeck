@@ -1,3 +1,5 @@
+# Contributing
+
 First, thank you for contributing to DIM Stream Deck!
 
 > Outdated (to be updated after the conversion to Rust)
@@ -6,25 +8,22 @@ First, thank you for contributing to DIM Stream Deck!
 
 1. [Install Pre-requisites](#pre-requisites)
 2. [Clone](#clone-the-repo)
-3. [Install the stream-deck cli](#install-the-stream-deck-cli)
+3. [Install the streamdeck cli](#install-the-stream-deck-cli)
 4. [Run and Develop](#run-and-develop)
 5. [Build](#build)
 
 ### Pre-requisites
 
-* Install [Git](https://git-scm.com/downloads)
+* Install [Git](https://git-scm.com/downloads).
 * Install [NodeJS](https://nodejs.org/).
-* Install [Yarn](https://yarnpkg.com/en/docs/install). If you're used to NPM,
-  see "[Migrating from NPM](https://yarnpkg.com/lang/en/docs/migrating-from-npm/)".
-* Windows-based developers will need to install `windows-build-tools` (`yarn global add windows-build-tools`) globally
-  prior to build the plugin package.
+* Install [pnpm](https://pnpm.io/installation).
 
 ### Clone the repo
 
 To work with this plugin you can simply clone the code repository:
 
 ```sh
-git clone https://github.com/fcannizzaro/com.dim.streamdeck
+git clone https://github.com/dim-stream-deck/com.dim.streamdeck
 ```
 
 To **contribute changes to the project**, you'll want to:
@@ -41,35 +40,18 @@ is [here](https://docs.github.com/en/get-started/quickstart/contributing-to-proj
 
 This CLI will simplify your development
 
-* Run `yarn global add @stream-deck-for-node/cli`
+* Run `npm i -g @elgato/cli`
 
 ### Run and Develop
 
-Enter the stream-deck-plugin directory and
+Enter the `./plugin/com.dim.streamdeck` directory and
 
-These operations should be done only one time until reverted
-
-* Run `stream-deck link`
+* Run `streamdeck link`
   > this will link your local project to the Elgato's plugins directory to live develop the plugin (symlink)
-* Run `stream-deck dev`
-  > this will download a develop-plugin
-  executable ([more info](https://github.com/stream-deck-for-node/development-plugin)) that allows the Stream Deck
-  application to use the latest code without building and restarting for every change.
+* Run `streamdeck dev`
 
-You're ready, you can now test your changes using only `yarn start`.
-
-### Notice
-
-If you edit the `manifest.json` to add new actions, or something else you'll need to **restart** the Stream Deck
-application
+You're ready, you can now test your changes using only `cd .. && pnpm dev`.
 
 ### Build
 
-The plugin must be linked before the building process
-
-* Remember to change the CodePath to original executable
-  paths [check here](https://github.com/fcannizzaro/com.dim.streamdeck/blob/main/stream-deck-plugin/plugin/manifest.json#L25-L27)
-* Run `yarn build` / `yarn build:win` / `yarn build:mac`
-  > according to your platform
-* Run `cd plugin && stream-deck package`
-  > this will create a `.streamDeckPlugin` file in the current directory
+* Run `pnpm build`
