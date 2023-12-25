@@ -15,11 +15,11 @@ export const DIM: DimActions = {
 
   toggleFarmingMode: () => sendToWeb({ action: "toggleFarmingMode" }),
 
-  equipLoadout: ({ loadoutId, characterId }) =>
+  equipLoadout: ({ loadout, character }) =>
     sendToWeb({
       action: "equipLoadout",
-      loadoutId,
-      characterId,
+      loadout,
+      character,
     }),
 
   equipMaxPower: () => sendToWeb({ action: "equipMaxPower" }),

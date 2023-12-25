@@ -9,6 +9,7 @@ import {
   WillAppearEvent,
 } from "@elgato/streamdeck";
 import { LoadoutIcon } from "./loadout-icon";
+import { splitEvery } from "ramda";
 
 interface LoadoutSettings {
   loadout?: string;
@@ -28,7 +29,7 @@ interface LoadoutSettings {
 @action({ UUID: "com.dim.streamdeck.loadout" })
 export class Loadout extends SingletonAction {
   private async update(e: Action, settings: LoadoutSettings) {
-    e.setTitle(settings.label);
+    e.setTitle(splitEvery(6, settings.label ?? "").join("\n"));
     e.setImage(
       settings.inGameIcon && settings.loadout
         ? await Cache.canvas(settings.loadout, () =>
@@ -50,8 +51,8 @@ export class Loadout extends SingletonAction {
       return e.action.showAlert();
     }
     DIM.equipLoadout({
-      loadoutId: settings.loadout,
-      characterId: settings.character,
+      loadout: settings.loadout,
+      character: settings.character,
     });
   }
 

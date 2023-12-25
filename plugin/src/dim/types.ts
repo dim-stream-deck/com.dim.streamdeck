@@ -6,8 +6,8 @@ export interface DimActions {
   selection: (params?: { type?: "item" | "loadout" }) => void;
 
   equipLoadout: (params: {
-    loadoutId: string;
-    characterId: string | "vault";
+    loadout: string;
+    character: string | "vault";
   }) => void;
 
   equipMaxPower: () => void;
