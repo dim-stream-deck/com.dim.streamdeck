@@ -5,6 +5,7 @@ import url from "node:url";
 import copy from "rollup-plugin-copy";
 import { swc } from "rollup-plugin-swc3";
 import replace from "@rollup/plugin-replace";
+import distributionTool from "@fcannizzaro/rollup-stream-deck-package";
 
 const isWatching = !!process.env.ROLLUP_WATCH;
 const sdPlugin = "com.dim.streamdeck.sdPlugin";
@@ -29,23 +30,32 @@ const config = {
     warn(warning);
   },
   plugins: [
-    isWatching &&
+    ...(!isWatching && [
+      distributionTool({
+        plugin: sdPlugin,
+      }),
       replace({
         "process.env.CHECKPOINT_API": JSON.stringify(
           process.env.CHECKPOINT_API
         ),
         preventAssignment: true,
       }),
+    ]),
     copy({
       copyOnce: true,
+      hook: "buildStart",
       targets: [
         {
           src: "./node_modules/clipboardy/fallbacks/windows",
           dest: `${sdPlugin}/fallbacks/`,
         },
+        {
+          src: "./node_modules/canvaskit-wasm/bin/canvaskit.wasm",
+          dest: sdPlugin,
+        },
       ],
     }),
-    {
+    isWatching && {
       name: "watch-externals",
       buildStart: function () {
         this.addWatchFile(`${sdPlugin}/manifest.json`);

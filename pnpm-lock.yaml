@@ -39,6 +39,9 @@ importers:
       '@elgato/cli':
         specifier: ^0.2.0
         version: 0.2.0
+      '@fcannizzaro/rollup-stream-deck-package':
+        specifier: ^1.0.1
+        version: 1.0.1
       '@rollup/plugin-commonjs':
         specifier: ^25.0.5
         version: 25.0.7(rollup@4.9.1)
@@ -386,6 +389,10 @@ packages:
 
   /@fastify/deepmerge@1.3.0:
     resolution: {integrity: sha512-J8TOSBq3SoZbDhM9+R/u77hP93gz/rajSA+K2kGyijPpORPWUXHUpTaleoj+92As0S9uPRP7Oi8IqMf0u+ro6A==}
+    dev: true
+
+  /@fcannizzaro/rollup-stream-deck-package@1.0.1:
+    resolution: {integrity: sha512-9KTn6X31djt6n0WQb3sohIT2qUZk1vKmxeKV9G99GwALez8ysHNC4EREJZuuGK+Vxh4lwwPP+Qs2FXBGgjtuow==}
     dev: true
 
   /@floating-ui/core@1.5.2:
