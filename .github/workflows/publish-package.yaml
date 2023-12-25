@@ -41,12 +41,18 @@ jobs:
         working-directory: ./plugin
         run: pnpm build
 
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+        with:
+          path: plugin/
+
       - name: Publish package
         uses: marvinpinto/action-automatic-releases@latest
         with:
             repo_token: "${{ secrets.SECRET_TOKEN }}"
-            automatic_release_tag: "${{  steps.plugin.outputs.version  }}"
+            automatic_release_tag: "${{ steps.package-version.outputs.current-version  }}"
             prerelease: true
-            title: "${{  steps.plugin.outputs.version  }}"
+            title: "${{  steps.package-version.outputs.current-version  }}"
             files: |
-              ./com.dim.streamdeck.streamDeckPlugin
+              ./plugin/com.dim.streamdeck.streamDeckPlugin
