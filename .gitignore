@@ -166,3 +166,5 @@ logs/
 dist/
 build/
 plugin/*/bin
+
+canvaskit.wasm
