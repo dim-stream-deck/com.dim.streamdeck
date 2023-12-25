@@ -1,4 +1,5 @@
 import {
+	Anchor,
 	Card,
 	Divider,
 	Grid,
@@ -64,7 +65,7 @@ export default () => {
   const steps = checkpoint?.steps ?? [];
 
   return (
-    <Stack gap="sm">
+    <Stack gap="sm" mb="sm">
       <Divider labelPosition="center" label="Activity" mb="sm" />
       <Card withBorder radius="md">
         <Grid align="center" gutter="sm">
@@ -142,6 +143,18 @@ export default () => {
           Checkpoint#1111
         </Text>
       </Group>
+      <Divider labelPosition="center" label="Credits" />
+      <Text c="dimmed">
+        Checkpoints are provided by{" "}
+        <Anchor
+          td="underline"
+          href={`https://${import.meta.env.VITE_CHECKPOINTS}`}
+          target="_blank"
+        >
+          {import.meta.env.VITE_CHECKPOINTS}
+        </Anchor>
+        , <strong>donate</strong> to them if you can!
+      </Text>
     </Stack>
   );
 };
