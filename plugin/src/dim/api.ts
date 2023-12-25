@@ -1,8 +1,15 @@
 import { sendToWeb } from "@/main";
 import { DimActions } from "./types";
 
+let latestSelection = Date.now();
+
 export const DIM: DimActions = {
-  selection: ({ type } = {}) => sendToWeb({ action: "selection", type }),
+  selection: ({ type } = {}) => {
+    // This is a hack to prevent the selection reset from being sent to client after an item/loadout selection
+    if (!type && Date.now() - latestSelection < 1000) return;
+    latestSelection = Date.now();
+    return sendToWeb({ action: "selection", type });
+  },
 
   refresh: () => sendToWeb({ action: "refresh" }),
 

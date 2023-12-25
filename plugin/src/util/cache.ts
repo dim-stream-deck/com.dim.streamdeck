@@ -42,14 +42,10 @@ async function imageFromUrl(
   }
 }
 
-const canvas = async <T>(
+const canvas = async (
   key: string,
-  source: T | undefined,
   fn: () => Promise<string | undefined> | undefined
 ) => {
-  if (!source) {
-    return undefined;
-  }
   const k = `canvas:${key}`;
   if (cache.has(key)) {
     return cache.get(k) as string;

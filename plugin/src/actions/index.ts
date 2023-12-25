@@ -10,7 +10,7 @@ import { MaxPower } from "./max-power";
 import { Randomize } from "./randomize";
 import { PullItem } from "./pull-item/pull-item";
 import { Postmaster } from "./postmaster";
-import { Loadout } from "./loadout";
+import { Loadout } from "./loadout/loadout";
 import { Checkpoint } from "./checkpoint/checkpoint";
 
 $.actions.registerAction(new App());

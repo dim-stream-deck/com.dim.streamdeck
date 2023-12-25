@@ -3,13 +3,13 @@ import { Cache } from "@/util/cache";
 import { next } from "@/util/cyclic";
 import { Watcher } from "@/util/watcher";
 import $, {
-	Action,
-	action,
-	DidReceiveSettingsEvent,
-	KeyDownEvent,
-	SingletonAction,
-	WillAppearEvent,
-	WillDisappearEvent,
+  Action,
+  action,
+  DidReceiveSettingsEvent,
+  KeyDownEvent,
+  SingletonAction,
+  WillAppearEvent,
+  WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { ArtifactIcon } from "./artifact-icon";
 
@@ -37,7 +37,7 @@ export class Metrics extends SingletonAction {
         : undefined;
 
     const image = icon
-      ? await Cache.canvas(icon, icon, () => ArtifactIcon(icon))
+      ? await Cache.canvas(icon, () => ArtifactIcon(icon))
       : `./imgs/canvas/metrics/${metric}.png`;
 
     if (image) {

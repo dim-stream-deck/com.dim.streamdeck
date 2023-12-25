@@ -7,7 +7,14 @@ import { IconX } from "@tabler/icons-react";
 export default () => {
   const { settings, setSettings } = useStreamDeck();
   return (
-    <Droppable type="loadout" onSelect={(data) => setSettings(data)}>
+    <Droppable
+      type="loadout"
+      onSelect={(data) =>
+        setSettings(data, {
+          replace: true,
+        })
+      }
+    >
       <Stack gap="sm">
         <Group wrap="nowrap">
           {settings?.icon ? (

@@ -49,7 +49,6 @@ export class PullItem extends SingletonAction {
 
     const image = await Cache.canvas(
       `${settings.item}/${equipped}/${equipmentGrayscale}`,
-      settings,
       () =>
         settings.icon && settings.item
           ? ItemIcon(

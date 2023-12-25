@@ -1,4 +1,5 @@
 import { DIM } from "@/dim/api";
+import { Cache } from "@/util/cache";
 import {
   Action,
   action,
@@ -7,6 +8,7 @@ import {
   SingletonAction,
   WillAppearEvent,
 } from "@elgato/streamdeck";
+import { LoadoutIcon } from "./loadout-icon";
 
 interface LoadoutSettings {
   loadout?: string;
@@ -21,13 +23,21 @@ interface LoadoutSettings {
 }
 
 /**
- * Trigger the refresh action on DIM.
+ * Equip a loadout
  */
 @action({ UUID: "com.dim.streamdeck.loadout" })
 export class Loadout extends SingletonAction {
-  private update(e: Action, settings: LoadoutSettings) {
+  private async update(e: Action, settings: LoadoutSettings) {
     e.setTitle(settings.label);
-    e.setImage(settings.icon);
+    e.setImage(
+      settings.inGameIcon && settings.loadout
+        ? await Cache.canvas(settings.loadout, () =>
+            settings.inGameIcon ? LoadoutIcon(settings.inGameIcon) : undefined
+          )
+        : settings.icon
+          ? await Cache.imageFromUrl(settings.icon)
+          : undefined
+    );
   }
 
   onWillAppear(e: WillAppearEvent<LoadoutSettings>) {

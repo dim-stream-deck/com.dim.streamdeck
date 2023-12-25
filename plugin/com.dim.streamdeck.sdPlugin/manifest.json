@@ -50,7 +50,8 @@
       "Name": "Equip Loadout",
       "States": [
         {
-          "Image": "imgs/actions/loadout/state"
+          "Image": "imgs/actions/loadout/state",
+          "TitleAlignment": "middle"
         }
       ],
       "SupportedInMultiActions": true,
