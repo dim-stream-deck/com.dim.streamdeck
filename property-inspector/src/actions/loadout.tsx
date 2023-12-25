@@ -1,24 +1,21 @@
-import { Button, Paper, Text, Title } from "@mantine/core";
+import { Stack, Text } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
+import { Droppable } from "../components/Droppable";
+import { DropText } from "../components/DropText";
 
 export default () => {
-  const { settings, sendToPlugin } = useStreamDeck();
+  const { settings, setSettings } = useStreamDeck();
   return (
-    <Paper radius="md" withBorder p="sm">
-      <Title ml={2} c="white" order={5}>
-        {settings.label ?? "NO LOADOUT SELECTED"}
-      </Title>
-      <Text ml={2} color="dimmed">
-        {settings["subtitle"] ?? "Class"}
-      </Text>
-      <Button
-        onClick={() => sendToPlugin({ action: "select" })}
-        variant="gradient"
-        fullWidth
-        mt={8}
-      >
-        {settings.item ? "CHANGE" : "PICK"} ON DIM
-      </Button>
-    </Paper>
+    <Droppable type="loadout" onSelect={(data) => setSettings(data)}>
+      <Stack>
+        {settings.label && (
+          <Text fw="bold" c="white">
+            {settings.label}
+          </Text>
+        )}
+        {settings.subtitle && <Text c="dimmed">{settings.subtitle}</Text>}
+        <DropText type="loadout" selected={settings.label} />
+      </Stack>
+    </Droppable>
   );
 };

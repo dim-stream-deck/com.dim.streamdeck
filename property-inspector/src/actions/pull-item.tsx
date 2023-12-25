@@ -13,6 +13,7 @@ import { useStreamDeck } from "../StreamDeck";
 import { Droppable } from "../components/Droppable";
 import { useEffect } from "react";
 import { IconX } from "@tabler/icons-react";
+import { DropText } from "../components/DropText";
 
 export default () => {
   const {
@@ -73,15 +74,7 @@ export default () => {
                 {settings.label}
               </Text>
             )}
-            <Text
-              size="sm"
-              c="dimmed"
-              style={{ textAlign: settings.label ? "left" : "center" }}
-            >
-              Drop here to
-              {settings.label ? " " : <br />}
-              <strong>select</strong> or <strong>change item</strong>
-            </Text>
+            <DropText type="item" selected={settings.label} />
           </Stack>
         </Group>
       </Droppable>
