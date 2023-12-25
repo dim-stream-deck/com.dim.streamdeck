@@ -6,6 +6,34 @@
   "PropertyInspectorPath": "pi/index.html",
   "Actions": [
     {
+      "Icon": "imgs/actions/solo-mode/icon",
+      "Name": "Solo Mode",
+      "States": [
+        {
+          "Image": "imgs/actions/solo-mode/state"
+        }
+      ],
+      "DisableCaching": true,
+      "SupportedInMultiActions": false,
+      "VisibleInActionsList": true,
+      "Tooltip": "Verify / Turn on/off the Destiny 2 solo mode",
+      "UUID": "com.dim.streamdeck.solo-mode"
+    },
+    {
+      "Icon": "imgs/actions/checkpoint/icon",
+      "Name": "Checkpoint",
+      "States": [
+        {
+          "Image": "imgs/actions/checkpoint/state",
+          "TitleAlignment": "middle"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "VisibleInActionsList": true,
+      "Tooltip": "Copy an activity checkpoint and customize /join command",
+      "UUID": "com.dim.streamdeck.checkpoint"
+    },
+    {
       "Icon": "imgs/actions/equip/icon",
       "Name": "Pull/Equip Item",
       "States": [
@@ -147,47 +175,6 @@
       "SupportedInMultiActions": false,
       "Tooltip": "Turn on/off the DIM Farming mode",
       "UUID": "com.dim.streamdeck.farming-mode"
-    },
-    {
-      "Icon": "imgs/actions/solo-mode/icon",
-      "Name": "Solo Mode",
-      "States": [
-        {
-          "Image": "imgs/actions/solo-mode/state"
-        }
-      ],
-      "DisableCaching": true,
-      "SupportedInMultiActions": false,
-      "VisibleInActionsList": true,
-      "Tooltip": "Verify / Turn on/off the Destiny 2 solo mode",
-      "UUID": "com.dim.streamdeck.solo-mode"
-    },
-    {
-      "Icon": "imgs/actions/checkpoint/icon",
-      "Name": "Checkpoint",
-      "States": [
-        {
-          "Image": "imgs/actions/checkpoint/state",
-          "TitleAlignment": "middle"
-        }
-      ],
-      "SupportedInMultiActions": false,
-      "VisibleInActionsList": true,
-      "Tooltip": "Copy an activity checkpoint and customize /join command",
-      "UUID": "com.dim.streamdeck.checkpoint"
-    },
-    {
-      "Name": "Tile",
-      "States": [
-        {
-          "Image": "imgs/actions/page/state",
-          "TitleAlignment": "middle",
-          "FontSize": "16"
-        }
-      ],
-      "SupportedInMultiActions": false,
-      "VisibleInActionsList": false,
-      "UUID": "com.dim.streamdeck.page"
     }
   ],
   "Category": "DIM Stream Deck",
