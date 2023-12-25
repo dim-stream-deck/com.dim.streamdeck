@@ -5,6 +5,7 @@ import $, {
 	KeyDownEvent,
 	SingletonAction,
 	WillAppearEvent,
+	WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { CheckpointManager } from "./manager";
 import { splitEvery } from "ramda";
@@ -52,6 +53,10 @@ export class Checkpoint extends SingletonAction {
       const settings = await e.action.getSettings<CheckpointSettings>();
       this.update(e.action, settings);
     });
+  }
+
+  onWillDisappear(e: WillDisappearEvent<CheckpointSettings>) {
+    this.watcher.stop(e.action.id);
   }
 
   async onKeyDown(e: KeyDownEvent<CheckpointSettings>) {
