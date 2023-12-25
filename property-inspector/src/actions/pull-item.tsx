@@ -16,23 +16,14 @@ import { IconX } from "@tabler/icons-react";
 import { DropText } from "../components/DropText";
 
 export default () => {
-  const {
-    settings,
-    setSettings,
-    sendToPlugin,
-    globalSettings,
-    setGlobalSettings,
-  } = useStreamDeck();
+  const { settings, setSettings, globalSettings, setGlobalSettings } =
+    useStreamDeck();
 
   useEffect(() => {
     if (!settings.altActionTrigger) {
       setSettings({ altActionTrigger: "hold" });
     }
   }, [settings]);
-
-  useEffect(() => {
-    sendToPlugin({ action: "prompt-selection", type: "item" });
-  }, []);
 
   if (!settings || !globalSettings) {
     return;
@@ -52,6 +43,7 @@ export default () => {
               radius="md"
               width={64}
               height={64}
+              draggable={false}
               src={`https://bungie.net${settings.icon}`}
             />
           ) : (
@@ -59,11 +51,12 @@ export default () => {
               <IconX />
             </ThemeIcon>
           )}
-          <Stack gap={0} style={{ flex: 1 }}>
+          <Stack gap="sm" style={{ flex: 1 }}>
             {settings.label && (
               <Text
                 fw="bold"
                 c="white"
+                size="sm"
                 style={{
                   overflow: "hidden",
                   whiteSpace: "nowrap",

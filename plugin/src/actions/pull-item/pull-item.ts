@@ -2,13 +2,14 @@ import { DIM } from "@/dim/api";
 import { ev } from "@/main";
 import { Gestures } from "@/util/gestures";
 import $, {
-	Action,
-	action,
-	DidReceiveSettingsEvent,
-	KeyDownEvent,
-	KeyUpEvent, SingletonAction,
-	WillAppearEvent,
-	WillDisappearEvent
+  Action,
+  action,
+  DidReceiveSettingsEvent,
+  KeyDownEvent,
+  KeyUpEvent,
+  SingletonAction,
+  WillAppearEvent,
+  WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { ItemIcon } from "./ItemIcon";
 import { GlobalSettings } from "@/settings";
@@ -117,10 +118,10 @@ export class PullItem extends SingletonAction {
   }
 
   onPropertyInspectorDidAppear() {
-    DIM.selection({ active: true, type: "item" });
+    DIM.selection({ type: "item" });
   }
 
   onPropertyInspectorDidDisappear() {
-    DIM.selection({ active: false });
+    DIM.selection();
   }
 }
