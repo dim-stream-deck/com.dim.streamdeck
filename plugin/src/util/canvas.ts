@@ -1,4 +1,7 @@
-import CanvasKitInit, { Image } from "canvaskit-wasm/bin/canvaskit.js";
+import CanvasKitInit, {
+	EmulatedCanvas2DContext,
+	Image,
+} from "canvaskit-wasm/bin/canvaskit.js";
 import { Cache } from "./cache";
 
 export const CanvasKit = CanvasKitInit({
@@ -28,4 +31,16 @@ export const loadImageFromUrl = async (
   if (image) {
     return loadImage(kit, url, image);
   }
+};
+
+export const grayscale = (ctx: EmulatedCanvas2DContext) => {
+  const imageData = ctx.getImageData(0, 0, 144, 144);
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+    data[i] = avg; // red
+    data[i + 1] = avg; // green
+    data[i + 2] = avg; // blue
+  }
+  ctx.putImageData(imageData, 0, 0);
 };

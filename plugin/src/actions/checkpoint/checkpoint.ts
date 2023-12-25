@@ -18,7 +18,6 @@ export interface CheckpointSettings {
   step?: string;
   image?: string;
   difficulty?: "normal" | "master";
-  cyclic?: boolean;
 }
 
 /**
@@ -27,15 +26,20 @@ export interface CheckpointSettings {
 @action({ UUID: "com.dim.streamdeck.checkpoint" })
 export class Checkpoint extends SingletonAction {
   private async update(e: Action, settings: CheckpointSettings) {
-    if (settings.step) {
-      const title = splitEvery(8, settings.step).join("\n");
-      e.setTitle(title);
-    }
+    // update the step title
+    e.setTitle(splitEvery(8, settings.step ?? "").join("\n"));
+    // update the image
     if (settings.image) {
-      const image = await Cache.canvas(settings.image, settings.image, () =>
-        settings.image ? CheckpointIcon(settings.image) : undefined
+      const enabled = Boolean(CheckpointManager.search(settings));
+      const image = await Cache.canvas(
+        `${settings.activity}/${enabled}`,
+        settings.image,
+        () =>
+          settings.image ? CheckpointIcon(settings.image, enabled) : undefined
       );
       e.setImage(image);
+    } else {
+      e.setImage(undefined);
     }
   }
 

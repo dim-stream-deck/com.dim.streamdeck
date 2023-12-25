@@ -1,17 +1,15 @@
 import {
-  Card,
-  Collapse,
-  Divider,
-  Grid,
-  Group,
-  SegmentedControl,
-  Select,
-  Stack,
-  Text,
-  TextInput,
+	Card,
+	Divider,
+	Grid,
+	Group,
+	SegmentedControl,
+	Select,
+	Stack,
+	Text,
+	TextInput,
 } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
-import { Icon360, IconFlag3Filled } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { useMemo } from "react";
@@ -65,114 +63,70 @@ export default () => {
 
   const steps = checkpoint?.steps ?? [];
 
-  const type = settings.cyclic ? "cyclic" : "activity";
-
-  const types = [
-    {
-      label: "Activity",
-      icon: <IconFlag3Filled />,
-      value: "activity",
-    },
-    {
-      label: "Cyclic",
-      icon: <Icon360 />,
-      value: "cyclic",
-    },
-  ].map((it) => ({
-    label: (
-      <Group gap="xs" justify="center" align="center">
-        {it.icon}
-        <Text size="xs">{it.label}</Text>
-      </Group>
-    ),
-    value: it.value,
-  }));
-
   return (
     <Stack gap="sm">
-      <SegmentedControl
-        w="100%"
-        color="dim"
-        value={type}
-        onChange={(type) => {
-          setSettings({
-            cyclic: type === "cyclic",
-          });
-        }}
-        data={types}
-      />
-      <Text
-        size="xs"
-        c="dimmed"
-        dangerouslySetInnerHTML={{
-          __html:
-            type === "cyclic"
-              ? "You can <strong><u>tap</u></strong> the button to cycle through all activities and <strong><u>hold</u></strong> it to copy the join command to your clipboard"
-              : "You can <strong><u>tap</u></strong> the button to copy the join command to your clipboard",
-        }}
-      />
-      <Collapse in={type === "activity"}>
-        <Divider labelPosition="center" label="Activity" mb="sm" />
-        <Card withBorder radius="md">
-          <Grid align="center" gutter="sm">
-            <Grid.Col span={4}>
-              <Text size="sm" fw="bold">
-                Activity
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={8}>
-              <Select
-                data={activities}
-                value={settings.activity}
-                onChange={(activity) => {
-                  if (activity) {
-                    setSettings({
-                      activity,
-                      image: data.get(activity)?.image,
-                      step: null,
-                      difficulty: null,
-                    });
-                  }
-                }}
-              />
-            </Grid.Col>
-            {steps.length > 0 && (
-              <>
-                <Grid.Col span={4}>
-                  <Text size="sm" fw="bold">
-                    Step
-                  </Text>
-                </Grid.Col>
-                <Grid.Col span={8}>
-                  <Select
-                    style={{ flex: 1 }}
-                    data={steps}
-                    value={settings.step}
-                    onChange={(step) => setSettings({ step })}
-                  />
-                </Grid.Col>
-              </>
-            )}
-            {difficulties.length > 0 && (
-              <>
-                <Grid.Col span={4}>
-                  <Text size="sm" fw="bold">
-                    Difficulty
-                  </Text>
-                </Grid.Col>
-                <Grid.Col span={8}>
-                  <Select
-                    style={{ flex: 1 }}
-                    data={difficulties}
-                    value={settings.difficulty ?? "normal"}
-                    onChange={(difficulty) => setSettings({ difficulty })}
-                  />
-                </Grid.Col>
-              </>
-            )}
-          </Grid>
-        </Card>
-      </Collapse>
+      <Divider labelPosition="center" label="Activity" mb="sm" />
+      <Card withBorder radius="md">
+        <Grid align="center" gutter="sm">
+          <Grid.Col span={4}>
+            <Text size="sm" fw="bold">
+              Activity
+            </Text>
+          </Grid.Col>
+          <Grid.Col span={8}>
+            <Select
+              data={activities}
+              value={settings.activity}
+              onChange={(activity) => {
+                if (activity) {
+                  setSettings({
+                    activity,
+                    image: data.get(activity)?.image,
+                    step: null,
+                    difficulty: null,
+                  });
+                }
+              }}
+            />
+          </Grid.Col>
+          {steps.length > 0 && (
+            <>
+              <Grid.Col span={4}>
+                <Text size="sm" fw="bold">
+                  Step
+                </Text>
+              </Grid.Col>
+              <Grid.Col span={8}>
+                <Select
+                  style={{ flex: 1 }}
+                  data={steps}
+                  value={settings.step}
+                  onChange={(step) => setSettings({ step })}
+                />
+              </Grid.Col>
+            </>
+          )}
+          {difficulties.length > 0 && (
+            <>
+              <Grid.Col span={4}>
+                <Text size="sm" fw="bold">
+                  Difficulty
+                </Text>
+              </Grid.Col>
+              <Grid.Col span={8}>
+                <SegmentedControl
+                  color="dim"
+                  size="sm"
+                  w="100%"
+                  data={difficulties}
+                  value={settings.difficulty}
+                  onChange={(difficulty) => setSettings({ difficulty })}
+                />
+              </Grid.Col>
+            </>
+          )}
+        </Grid>
+      </Card>
       <Divider labelPosition="center" label="Chat command" />
       <Group gap="xs" wrap="nowrap">
         <TextInput

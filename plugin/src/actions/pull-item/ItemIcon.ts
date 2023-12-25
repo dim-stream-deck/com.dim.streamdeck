@@ -1,5 +1,10 @@
 import { Cache } from "@/util/cache";
-import { CanvasKit, loadImage, loadImageFromUrl } from "@/util/canvas";
+import {
+  CanvasKit,
+  grayscale,
+  loadImage,
+  loadImageFromUrl,
+} from "@/util/canvas";
 import { equippedMark, exotic, legendary } from "@/util/images";
 import { EmulatedCanvas2DContext } from "canvaskit-wasm";
 
@@ -68,15 +73,7 @@ export const ItemIcon = async (item: ItemIcon, options: ItemIconOptions) => {
 
   // convert to grayscale
   if (!item.equipped && options.grayscale) {
-    const imageData = ctx.getImageData(0, 0, 144, 144);
-    const data = imageData.data;
-    for (let i = 0; i < data.length; i += 4) {
-      const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-      data[i] = avg; // red
-      data[i + 1] = avg; // green
-      data[i + 2] = avg; // blue
-    }
-    ctx.putImageData(imageData, 0, 0);
+    grayscale(ctx);
   }
 
   if (item.equipped && !options.grayscale) {
