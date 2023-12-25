@@ -1,8 +1,6 @@
 # Contributing
 
-First, thank you for contributing to DIM Stream Deck!
-
-> Outdated (to be updated after the conversion to Rust)
+First, thank you for contributing to **DIM Stream Deck**!
 
 ## Developer Quick start
 
@@ -33,12 +31,11 @@ To **contribute changes to the project**, you'll want to:
 3. Commit and push your code changes to your fork
 4. Create a Pull Request
 
-More detailed information on these steps
-is [here](https://docs.github.com/en/get-started/quickstart/contributing-to-projects).
+More detailed information on these steps are [here](https://docs.github.com/en/get-started/quickstart/contributing-to-projects).
 
 ### Install the stream-deck cli
 
-This CLI will simplify your development
+This CLI is required to develop plugins for the Elgato Stream Deck.
 
 * Run `npm i -g @elgato/cli`
 
