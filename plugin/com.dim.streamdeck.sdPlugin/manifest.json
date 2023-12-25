@@ -47,7 +47,7 @@
     },
     {
       "Icon": "imgs/actions/loadout/icon",
-      "Name": "Equip Loadout",
+      "Name": "Loadout",
       "States": [
         {
           "Image": "imgs/actions/loadout/state",
@@ -84,7 +84,7 @@
     },
     {
       "Icon": "imgs/actions/randomize/icon",
-      "Name": "Randomize Character",
+      "Name": "Randomize",
       "States": [
         {
           "Image": "imgs/actions/randomize/state"
