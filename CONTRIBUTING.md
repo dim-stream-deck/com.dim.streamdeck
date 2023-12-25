@@ -6,8 +6,8 @@ First, thank you for contributing to **DIM Stream Deck**!
 
 1. [Install Pre-requisites](#pre-requisites)
 2. [Clone](#clone-the-repo)
-3. [Install the streamdeck cli](#install-the-stream-deck-cli)
-4. [Run and Develop](#run-and-develop)
+3. [Install the streamdeck cli](#install-the-cli)
+4. [Develop](#develop)
 5. [Build](#build)
 
 ### Pre-requisites
@@ -33,13 +33,13 @@ To **contribute changes to the project**, you'll want to:
 
 More detailed information on these steps are [here](https://docs.github.com/en/get-started/quickstart/contributing-to-projects).
 
-### Install the stream-deck cli
+### Install the cli
 
 This CLI is required to develop plugins for the Elgato Stream Deck.
 
 * Run `npm i -g @elgato/cli`
 
-### Run and Develop
+### Develop
 
 Enter the `./plugin/com.dim.streamdeck` directory and
 
