@@ -37,8 +37,6 @@ export default () => {
     return;
   }
 
-  console.log(settings);
-
   return (
     <Stack gap="sm">
       <Droppable

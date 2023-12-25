@@ -1,4 +1,5 @@
 import { setGlobalSettings } from "@/main";
+import $ from "@elgato/streamdeck";
 
 // check if the service is installed (local service should be fast to respond)
 const checkEndpoint = async () => {
@@ -11,7 +12,8 @@ const checkEndpoint = async () => {
     clearTimeout(id);
     return response.status === 200;
   } catch (e) {
-    console.log(e);
+    console.error(e);
+    $.logger.error("Check solo mode", e);
     return false;
   }
 };
