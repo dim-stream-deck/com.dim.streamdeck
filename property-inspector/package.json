@@ -14,9 +14,11 @@
     "@mantine/hooks": "^7.3.2",
     "@mantine/notifications": "^7.3.2",
     "@tabler/icons-react": "^2.44.0",
+    "@tanstack/react-query": "^5.14.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icomoon": "^2.5.4"
+    "react-icomoon": "^2.5.4",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@swc/core": "^1.3.25",

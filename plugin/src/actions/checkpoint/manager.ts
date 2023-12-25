@@ -1,16 +1,16 @@
 import { load } from "cheerio";
-import md5 from "md5";
-
-let lastQuery: number;
+import { CheckpointSettings } from "./checkpoint";
 
 interface Checkpoint {
-  id: string;
   activity: string;
   image?: string;
   difficulty?: "normal" | "master";
   step: string;
   copyId: string;
 }
+
+let lastQuery: number;
+let items: Checkpoint[] = [];
 
 const queryCheckpoints = async () => {
   if (lastQuery && Date.now() - lastQuery < 1000 * 60) {
@@ -19,7 +19,7 @@ const queryCheckpoints = async () => {
   const body = await fetch(process.env.CHECKPOINT_API!);
   const text = await body.text();
   const $ = load(text);
-  CheckpointManager.items = Array.from(
+  items = Array.from(
     $(".col .card").map((_, el) => {
       const $el = $(el);
       const [activity, difficulty] = $el
@@ -35,15 +35,16 @@ const queryCheckpoints = async () => {
         copyId: $el.find(".card-text").text().trim(),
       };
     })
-  ).map((it) => ({
-    ...it,
-    id: md5(`${it.activity}:${it.difficulty || "normal"}:${it.step}`),
-  }));
-  console.log(CheckpointManager.items);
+  );
   lastQuery = Date.now();
 };
 
 export const CheckpointManager = {
   refresh: () => queryCheckpoints(),
-  items: [] as Checkpoint[],
+  search: (settings: CheckpointSettings) =>
+    items.find(
+      (it) =>
+        it.step === settings.step &&
+        (!it.difficulty || it.difficulty === settings.difficulty)
+    ),
 };

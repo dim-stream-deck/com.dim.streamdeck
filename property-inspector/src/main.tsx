@@ -14,14 +14,20 @@ import { StreamDeck, useStreamDeck } from "./StreamDeck";
 import "./index.css";
 import { ActionIcon, Alert, Group, Text } from "@mantine/core";
 import {
-  IconBrandDiscord,
-  IconBrandPatreon,
-  IconWorldWww,
+	IconBrandDiscord,
+	IconBrandPatreon,
+	IconWorldWww,
 } from "@tabler/icons-react";
 import soloMode from "./actions/solo-mode";
 import { NoSetting } from "./components/NoSettings";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
+import {
+	QueryClient,
+	QueryClientProvider
+} from "@tanstack/react-query";
+
+const client = new QueryClient();
 
 export interface AppProps {
   action: any;
@@ -139,7 +145,9 @@ window.connectElgatoStreamDeckSocket = (
         info: JSON.parse(info),
       }}
     >
-      <App action={action} />
+      <QueryClientProvider client={client}>
+        <App action={action} />
+      </QueryClientProvider>
     </StreamDeck>
   );
 };

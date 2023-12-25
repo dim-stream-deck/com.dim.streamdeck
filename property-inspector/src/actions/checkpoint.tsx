@@ -11,52 +11,61 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
-import { Icon360, IconActivity, IconFlag3Filled } from "@tabler/icons-react";
-import { useEffect } from "react";
+import { Icon360, IconFlag3Filled } from "@tabler/icons-react";
+import { useQuery } from "@tanstack/react-query";
+import { z } from "zod";
+import { useMemo } from "react";
 
-interface Checkpoint {
-  activity: string;
-  step: string;
-  difficulty: string;
-}
+const CheckpointsSchema = z
+  .object({
+    activity: z.string(),
+    image: z.string(),
+    group: z.string(),
+    steps: z.string().array(),
+    difficulties: z.string().array(),
+  })
+  .array();
+
+type Checkpoint = z.infer<typeof CheckpointsSchema>[number];
+
+const checkpointDefinitions = async () => {
+  const res = await fetch(import.meta.env.VITE_CHECKPOINTS_GIST);
+  return CheckpointsSchema.parse(await res.json()).reduce((acc, checkpoint) => {
+    acc.set(checkpoint.activity, checkpoint);
+    return acc;
+  }, new Map<string, Checkpoint>());
+};
 
 export default () => {
-  const {
-    communication,
-    globalSettings,
-    setGlobalSettings,
-    settings,
-    setSettings,
-  } = useStreamDeck();
+  const { globalSettings, setGlobalSettings, settings, setSettings } =
+    useStreamDeck();
 
-  const checkpoints = (communication?.items ?? {}) as Record<
-    string,
-    Checkpoint[]
-  >;
+  const { data = new Map<string, Checkpoint>() } = useQuery({
+    queryKey: ["checkpoints"],
+    queryFn: checkpointDefinitions,
+    staleTime: Infinity,
+  });
 
-  const activities = Object.keys(checkpoints);
+  const checkpoint = data.get(settings.activity);
 
-  const difficulties = (checkpoints[settings.activity] ?? []).some(
-    (checkpoint) => checkpoint.difficulty
-  )
-    ? ["normal", "master"]
-    : [];
+  const activities = useMemo(() => {
+    const groups = new Map<string, string[]>();
+    data.forEach((checkpoint) => {
+      const group = groups.get(checkpoint.group) ?? [];
+      group.push(checkpoint.activity);
+      groups.set(checkpoint.group, group);
+    });
+    return Array.from(groups.entries()).map(([group, items]) => ({
+      group,
+      items,
+    }));
+  }, [data]);
 
-  const steps = Array.from(
-    new Set(
-      (checkpoints[settings.activity] ?? [])
-        .map((checkpoint) => checkpoint.step)
-        .filter(Boolean)
-    )
-  );
+  const difficulties = checkpoint?.difficulties ?? [];
+
+  const steps = checkpoint?.steps ?? [];
 
   const type = settings.cyclic ? "cyclic" : "activity";
-
-  useEffect(() => {
-    if (difficulties.length == 0) {
-      setSettings({ difficulty: null });
-    }
-  }, [difficulties]);
 
   const types = [
     {
@@ -115,13 +124,16 @@ export default () => {
               <Select
                 data={activities}
                 value={settings.activity}
-                onChange={(activity) =>
-                  setSettings({
-                    activity,
-                    step: null,
-                    difficulty: null,
-                  })
-                }
+                onChange={(activity) => {
+                  if (activity) {
+                    setSettings({
+                      activity,
+                      image: data.get(activity)?.image,
+                      step: null,
+                      difficulty: null,
+                    });
+                  }
+                }}
               />
             </Grid.Col>
             {steps.length > 0 && (
