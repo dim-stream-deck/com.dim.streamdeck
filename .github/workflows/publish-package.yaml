@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  package-plugin:
+  release-plugin:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
