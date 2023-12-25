@@ -16,7 +16,7 @@
       "DisableCaching": true,
       "SupportedInMultiActions": false,
       "VisibleInActionsList": true,
-      "Tooltip": "Verify / Turn on/off the Destiny 2 solo mode",
+      "Tooltip": "Toggle the Destiny 2 solo mode",
       "UUID": "com.dim.streamdeck.solo-mode"
     },
     {
@@ -30,7 +30,7 @@
       ],
       "SupportedInMultiActions": false,
       "VisibleInActionsList": true,
-      "Tooltip": "Copy an activity checkpoint and customize /join command",
+      "Tooltip": "Copy an activity checkpoint and customize chat command",
       "UUID": "com.dim.streamdeck.checkpoint"
     },
     {
