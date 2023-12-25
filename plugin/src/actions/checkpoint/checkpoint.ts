@@ -1,10 +1,10 @@
 import $, {
-  Action,
-  action,
-  DidReceiveSettingsEvent,
-  KeyDownEvent,
-  SingletonAction,
-  WillAppearEvent,
+	Action,
+	action,
+	DidReceiveSettingsEvent,
+	KeyDownEvent,
+	SingletonAction,
+	WillAppearEvent,
 } from "@elgato/streamdeck";
 import { CheckpointManager } from "./manager";
 import { splitEvery } from "ramda";
@@ -12,6 +12,7 @@ import { Cache } from "@/util/cache";
 import { CheckpointIcon } from "./checkpoint-icon";
 import clipboard from "clipboardy";
 import { GlobalSettings } from "@/settings";
+import { Watcher } from "@/util/watcher";
 
 export interface CheckpointSettings {
   activity?: string;
@@ -25,6 +26,8 @@ export interface CheckpointSettings {
  */
 @action({ UUID: "com.dim.streamdeck.checkpoint" })
 export class Checkpoint extends SingletonAction {
+  private watcher = Watcher("checkpoints");
+
   private async update(e: Action, settings: CheckpointSettings) {
     // update the step title
     e.setTitle(splitEvery(8, settings.step ?? "").join("\n"));
@@ -45,7 +48,10 @@ export class Checkpoint extends SingletonAction {
 
   async onWillAppear(e: WillAppearEvent<CheckpointSettings>) {
     await CheckpointManager.refresh();
-    this.update(e.action, e.payload.settings);
+    this.watcher.start(e.action.id, async () => {
+      const settings = await e.action.getSettings<CheckpointSettings>();
+      this.update(e.action, settings);
+    });
   }
 
   async onKeyDown(e: KeyDownEvent<CheckpointSettings>) {
