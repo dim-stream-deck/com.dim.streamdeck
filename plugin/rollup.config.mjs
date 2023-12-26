@@ -30,17 +30,19 @@ const config = {
     warn(warning);
   },
   plugins: [
-    ...(!isWatching && [
-      distributionTool({
-        plugin: sdPlugin,
-      }),
-      replace({
-        "process.env.CHECKPOINT_API": JSON.stringify(
-          process.env.CHECKPOINT_API
-        ),
-        preventAssignment: true,
-      }),
-    ]),
+    ...(!isWatching
+      ? [
+          distributionTool({
+            plugin: sdPlugin,
+          }),
+          replace({
+            "process.env.CHECKPOINT_API": JSON.stringify(
+              process.env.CHECKPOINT_API
+            ),
+            preventAssignment: true,
+          }),
+        ]
+      : []),
     copy({
       copyOnce: true,
       hook: "buildStart",
