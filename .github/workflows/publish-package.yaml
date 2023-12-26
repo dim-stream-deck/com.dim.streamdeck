@@ -2,6 +2,9 @@ name: publish-package
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   release-plugin:
     runs-on: macos-latest
