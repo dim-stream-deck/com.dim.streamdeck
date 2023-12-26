@@ -49,7 +49,7 @@ jobs:
       - name: Publish package
         uses: marvinpinto/action-automatic-releases@latest
         with:
-            repo_token: "${{ secrets.SECRET_TOKEN }}"
+            repo_token: "${{ secrets.SECRET_RELEASE_TOKEN }}"
             automatic_release_tag: "${{ env.PLUGIN_VERSION }}"
             prerelease: true
             title: "${{ env.PLUGIN_VERSION }}"
