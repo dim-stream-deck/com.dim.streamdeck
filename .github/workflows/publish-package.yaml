@@ -35,7 +35,7 @@ jobs:
           VITE_DISCORD: ${{secrets.VITE_DISCORD}}
           VITE_PATREON: ${{secrets.VITE_PATREON}}
           VITE_CHECKPOINTS_GIST: ${{secrets.VITE_CHECKPOINTS_GIST}}
-          VITE_CHECKPOINTS: ${{secrets.CHECKPOINTS}}
+          VITE_CHECKPOINTS: ${{secrets.VITE_CHECKPOINTS}}
 
       - name: Download artifacts
         uses: dawidd6/action-download-artifact@v2
@@ -54,7 +54,7 @@ jobs:
         working-directory: ./plugin
         run: pnpm build
         env:
-          CHECKPOINTS_API: ${{secrets.CHECKPOINTS_API}}
+          CHECKPOINT_API: ${{secrets.CHECKPOINT_API}}
 
       - name: Publish package
         uses: ncipollo/release-action@v1.13.0
