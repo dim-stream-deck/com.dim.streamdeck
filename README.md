@@ -17,13 +17,13 @@ or from below:
 Go to [dimstreamdeck.vercel.app](https://dimstreamdeck.vercel.app) to see the available actions.
 
 ## Preview
-![actions1](https://github.com/dim-stream-deck/com.dim.streamdeck/blob/main/plugin/previews/1-preview.png?raw=true)
-![actions2](https://github.com/dim-stream-deck/com.dim.streamdeck/blob/main/plugin/previews/2-preview.png?raw=true)
+
+![actions1](https://github.com/dim-stream-deck/com.dim.streamdeck/blob/main/plugin/com.dim.streamdeck.sdPlugin/previews/1-preview.png?raw=true)
+![actions2](https://github.com/dim-stream-deck/com.dim.streamdeck/blob/main/plugin/com.dim.streamdeck.sdPlugin/previews/2-preview.png?raw=true)
 
 ## Contributing
-See [contributing.md](https://github.com/DIM-Stream-Deck/com.dim.streamdeck/blob/main/CONTRIBUTING.md) for information
-on how to Contribute to the development of DIM Stream Deck.
-> to be updated
+
+See [contributing.md](https://github.com/DIM-Stream-Deck/com.dim.streamdeck/blob/main/CONTRIBUTING.md) for information on how to Contribute to the development of DIM Stream Deck.
 
 ## Author
 
