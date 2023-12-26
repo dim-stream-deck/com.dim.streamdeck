@@ -16,7 +16,7 @@ jobs:
       - name: Build plugin
         id: version
         working-directory: ./plugin
-        run: brew install jq && echo "VERSION=$(jq .version plugin/package.json -r)"   
+        run: brew install jq && echo "VERSION=$(jq .version package.json -r)"   
 
       - uses: pnpm/action-setup@v2
         name: Install pnpm
