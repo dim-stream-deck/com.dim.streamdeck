@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build plugin
+      - name: Extract version
         id: version
         working-directory: ./plugin
         run: brew install jq && echo "VERSION=$(jq .version package.json -r)"   
