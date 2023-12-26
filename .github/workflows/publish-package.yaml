@@ -16,7 +16,7 @@ jobs:
       - name: Extract version
         id: version
         working-directory: ./plugin
-        run: brew install jq && echo "VERSION=$(jq .version package.json -r)"   
+        run: echo "VERSION=$(jq .version package.json -r)"   
 
       - uses: pnpm/action-setup@v2
         name: Install pnpm
