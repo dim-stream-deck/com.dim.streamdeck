@@ -134,7 +134,7 @@ dist
 
 # built using GitHub workflow
 *.exe
-.streamDeckPlugin
+*.streamDeckPlugin
 pi/
 
 # debug executable
