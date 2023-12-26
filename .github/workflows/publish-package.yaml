@@ -56,5 +56,5 @@ jobs:
             prerelease: true
             allowUpdates: true
             tag: "${{ env.PLUGIN_VERSION }}"
-            token: "${{ secrets.SECRET_RELEASE_TOKEN }}"
+            token: "${{ secrets.GITHUB_TOKEN }}"
             artifacts: "./plugin/com.dim.streamdeck.streamDeckPlugin"
