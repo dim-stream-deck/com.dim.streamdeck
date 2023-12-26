@@ -47,11 +47,10 @@ jobs:
         run: pnpm build
 
       - name: Publish package
-        uses: marvinpinto/action-automatic-releases@latest
+        uses: ncipollo/release-action@v1.13.0
         with:
-            repo_token: "${{ secrets.SECRET_RELEASE_TOKEN }}"
-            automatic_release_tag: "${{ env.PLUGIN_VERSION }}"
+            name: "${{ env.PLUGIN_VERSION }}"
             prerelease: true
-            title: "${{ env.PLUGIN_VERSION }}"
-            files: |
-              ./plugin/com.dim.streamdeck.streamDeckPlugin
+            allowUpdates: true
+            token: "${{ secrets.SECRET_RELEASE_TOKEN }}"
+            artifacts: "./plugin/com.dim.streamdeck.streamDeckPlugin"
