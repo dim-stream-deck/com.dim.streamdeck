@@ -134,9 +134,7 @@ dist
 
 # built using GitHub workflow
 *.exe
-com.dim.streamdeck
-com.dim.streamdeck.exe
-com.dim.streamdeck.streamDeckPlugin
+.streamDeckPlugin
 pi/
 
 # debug executable
