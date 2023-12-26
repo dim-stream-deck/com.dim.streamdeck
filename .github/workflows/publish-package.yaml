@@ -16,7 +16,7 @@ jobs:
       - name: Extract version
         id: version
         working-directory: ./plugin
-        run: echo "VERSION=$(jq .version package.json -r)"   
+        run: echo "PLUGIN_VERSION=$(jq .version package.json -r)" >> $GITHUB_ENV
 
       - uses: pnpm/action-setup@v2
         name: Install pnpm
@@ -50,8 +50,8 @@ jobs:
         uses: marvinpinto/action-automatic-releases@latest
         with:
             repo_token: "${{ secrets.SECRET_TOKEN }}"
-            automatic_release_tag: "${{ steps.version.outputs.VERSION }}"
+            automatic_release_tag: "${{ env.PLUGIN_VERSION }}"
             prerelease: true
-            title: "${{  steps.version.outputs.VERSION }}"
+            title: "${{ env.PLUGIN_VERSION }}"
             files: |
               ./plugin/com.dim.streamdeck.streamDeckPlugin
