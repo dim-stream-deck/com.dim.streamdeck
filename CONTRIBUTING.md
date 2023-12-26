@@ -41,14 +41,17 @@ This CLI is required to develop plugins for the Elgato Stream Deck.
 
 ### Develop
 
-Enter the `./plugin/com.dim.streamdeck` directory and
+Enter the `./plugin/com.dim.streamdeck.sdPlugin` directory and
 
-* Run `streamdeck link`
-  > this will link your local project to the Elgato's plugins directory to live develop the plugin (symlink)
-* Run `streamdeck dev`
+* run `streamdeck link`
+* run `streamdeck dev`
 
 You're ready, you can now test your changes using only `cd .. && pnpm dev`.
 
+Usually actions on the plugin have a relative code also on [DIM](https://github.com/DestinyItemManager/DIM), follow their [contributing guidelines](https://github.com/DestinyItemManager/DIM/blob/master/docs/CONTRIBUTING.md) to setup your local instance.
+
 ### Build
+
+This step will build the plugin and generate the .streamDeckPackage file.
 
 * Run `pnpm build`
