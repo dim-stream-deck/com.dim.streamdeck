@@ -13,12 +13,18 @@ ev.setMaxListeners(30);
 // In-memory storage of tokens
 const tokens = new Map<string, string>();
 
+// Load equipped items from the global settings
+const loadEquippedItems = (settings: GlobalSettings) => {
+  settings.equippedItems?.forEach((item) => Equipment.add(item));
+  ev.emit("equipmentStatus");
+};
+
 // Load tokens from the global settings
 $.settings.getGlobalSettings<GlobalSettings>().then((settings) => {
   Object.entries(settings.authentication ?? {}).forEach(([instance, token]) => {
     tokens.set(instance, token);
   });
-  settings.equippedItems?.forEach((item) => Equipment.add(item));
+  loadEquippedItems(settings);
 });
 
 const server = new WebSocketServer({
@@ -68,6 +74,7 @@ server.on("connection", (socket: WebSocket, req) => {
         break;
       case "state":
         await setGlobalSettings(data);
+        loadEquippedItems(data as GlobalSettings);
         break;
       case "equipmentStatus":
         setGlobalSettings({
