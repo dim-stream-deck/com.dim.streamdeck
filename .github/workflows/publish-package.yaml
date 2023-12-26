@@ -13,6 +13,12 @@ jobs:
         with:
           node-version: 20
 
+      - name: Extract version from package.json
+        uses: sergeysova/jq-action@v2
+        id: version
+        with:
+          cmd: 'jq .version plugin/package.json -r'          
+
       - uses: pnpm/action-setup@v2
         name: Install pnpm
         id: pnpm-install
@@ -51,8 +57,8 @@ jobs:
         uses: marvinpinto/action-automatic-releases@latest
         with:
             repo_token: "${{ secrets.SECRET_TOKEN }}"
-            automatic_release_tag: "${{ steps.package-version.outputs.current-version  }}"
+            automatic_release_tag: "${{ steps.version.outputs.value }}"
             prerelease: true
-            title: "${{  steps.package-version.outputs.current-version  }}"
+            title: "${{  steps.version.outputs.value }}"
             files: |
               ./plugin/com.dim.streamdeck.streamDeckPlugin
