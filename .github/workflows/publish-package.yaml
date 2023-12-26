@@ -31,6 +31,11 @@ jobs:
       - name: Build property inspector
         working-directory: ./property-inspector/
         run: pnpm build
+        env:
+          VITE_DISCORD: ${{secrets.VITE_DISCORD}}
+          VITE_PATREON: ${{secrets.VITE_PATREON}}
+          VITE_CHECKPOINTS_GIST: ${{secrets.VITE_CHECKPOINTS_GIST}}
+          VITE_CHECKPOINTS: ${{secrets.CHECKPOINTS}}
 
       - name: Download artifacts
         uses: dawidd6/action-download-artifact@v2
@@ -48,6 +53,8 @@ jobs:
       - name: Build plugin
         working-directory: ./plugin
         run: pnpm build
+        env:
+          CHECKPOINTS_API: ${{secrets.CHECKPOINTS_API}}
 
       - name: Publish package
         uses: ncipollo/release-action@v1.13.0
