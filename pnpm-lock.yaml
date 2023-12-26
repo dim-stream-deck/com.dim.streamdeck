@@ -40,8 +40,8 @@ importers:
         specifier: ^0.2.0
         version: 0.2.0
       '@fcannizzaro/rollup-stream-deck-package':
-        specifier: ^1.0.2
-        version: 1.0.2
+        specifier: ^1.0.3
+        version: 1.0.3
       '@rollup/plugin-commonjs':
         specifier: ^25.0.5
         version: 25.0.7(rollup@4.9.1)
@@ -391,8 +391,8 @@ packages:
     resolution: {integrity: sha512-J8TOSBq3SoZbDhM9+R/u77hP93gz/rajSA+K2kGyijPpORPWUXHUpTaleoj+92As0S9uPRP7Oi8IqMf0u+ro6A==}
     dev: true
 
-  /@fcannizzaro/rollup-stream-deck-package@1.0.2:
-    resolution: {integrity: sha512-uoNZxebGGivs4P+zhskv19uqGle4HMSAdgut7CMJUTAlzaMg/5neV+aj0u51J2XtMlKBPepgK3JmTWDjQCIBag==}
+  /@fcannizzaro/rollup-stream-deck-package@1.0.3:
+    resolution: {integrity: sha512-0YAXRLuuW/pR7ITG1h7mXARRF37vQuVXpn8TZXB4eTQbILm/LfBEHnm96M0VmmrjSimRDXv/12iq9z1+H+ToUg==}
     dev: true
 
   /@floating-ui/core@1.5.2:
