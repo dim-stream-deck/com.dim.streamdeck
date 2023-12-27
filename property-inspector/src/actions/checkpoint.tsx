@@ -1,14 +1,16 @@
 import {
-	Anchor,
-	Card,
-	Divider,
-	Grid,
-	Group,
-	SegmentedControl,
-	Select,
-	Stack,
-	Text,
-	TextInput,
+  Anchor,
+  Card,
+  CardSection,
+  Divider,
+  Grid,
+  Group,
+  Image,
+  SegmentedControl,
+  Select,
+  Stack,
+  Text,
+  TextInput,
 } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
 import { useQuery } from "@tanstack/react-query";
@@ -18,9 +20,13 @@ import { useMemo } from "react";
 const CheckpointsSchema = z
   .object({
     activity: z.string(),
-    image: z.string(),
     group: z.string(),
-    steps: z.string().array(),
+    steps: z
+      .object({
+        title: z.string(),
+        image: z.string(),
+      })
+      .array(),
     difficulties: z.string().array(),
   })
   .array();
@@ -64,10 +70,26 @@ export default () => {
 
   const steps = checkpoint?.steps ?? [];
 
+  const stepTitles = steps.map((step) => step.title);
+
+  const stepImagesByTitle = steps.reduce((acc, step) => {
+    acc.set(step.title, step.image);
+    return acc;
+  }, new Map<string, string>());
+
   return (
     <Stack gap="sm" mb="sm">
       <Divider labelPosition="center" label="Activity" mb="sm" />
       <Card withBorder radius="md">
+        <CardSection pb="md">
+          <Image
+            draggable={false}
+            alt="Step image"
+            src={settings.image}
+            width="100%"
+            height="auto"
+          />
+        </CardSection>
         <Grid align="center" gutter="sm">
           <Grid.Col span={4}>
             <Text size="sm" fw="bold">
@@ -80,10 +102,18 @@ export default () => {
               value={settings.activity}
               onChange={(activity) => {
                 if (activity) {
+                  const [step] = data.get(activity)?.steps ?? [];
                   setSettings({
                     activity,
-                    image: data.get(activity)?.image,
-                    step: null,
+                    ...(step
+                      ? {
+                          step: step.title,
+                          image: step.image,
+                        }
+                      : {
+                          step: null,
+                          image: null,
+                        }),
                     difficulty: null,
                   });
                 }
@@ -100,9 +130,14 @@ export default () => {
               <Grid.Col span={8}>
                 <Select
                   style={{ flex: 1 }}
-                  data={steps}
+                  data={stepTitles}
                   value={settings.step}
-                  onChange={(step) => setSettings({ step })}
+                  onChange={(step) => {
+                    if (step) {
+                      const image = stepImagesByTitle.get(step);
+                      setSettings({ step, image });
+                    }
+                  }}
                 />
               </Grid.Col>
             </>
