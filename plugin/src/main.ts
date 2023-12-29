@@ -6,6 +6,17 @@ import { z } from "zod";
 import { WebSocket } from "ws";
 import { mergeDeepRight } from "ramda";
 import { Equipment, toggleEquipment } from "./util/equipment";
+import http from "http";
+import { manifest } from "./util/version";
+
+const server = http.createServer();
+
+server.on("request", (req, res) => {
+  if (req.url === "/version") {
+    res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
+    res.end(manifest.Version);
+  }
+});
 
 export const ev = new EventEmitter();
 ev.setMaxListeners(30);
@@ -27,9 +38,11 @@ $.settings.getGlobalSettings<GlobalSettings>().then((settings) => {
   loadEquippedItems(settings);
 });
 
-const server = new WebSocketServer({
-  port: 9120,
+const ws = new WebSocketServer({
+  server,
 });
+
+server.listen(9120);
 
 const DimMessage = z.discriminatedUnion("action", [
   z.object({
@@ -57,7 +70,7 @@ export const setGlobalSettings = async (update: Partial<GlobalSettings>) => {
 };
 
 // Handle new connections and messages from the client
-server.on("connection", (socket: WebSocket, req) => {
+ws.on("connection", (socket: WebSocket, req) => {
   // set the instance id on the socket
   socket.instance = req.url?.split("/").pop();
   // watch for messages from the client
@@ -87,7 +100,7 @@ server.on("connection", (socket: WebSocket, req) => {
 
 // Enhance the data sent to the client with the token and broadcast it to all clients
 ev.on("send-to-client", (data = {}) => {
-  server.clients.forEach((client: WebSocket) => {
+  ws.clients.forEach((client: WebSocket) => {
     if (client.readyState === 1 && client.instance) {
       const token = tokens.get(client.instance);
       client.send(
