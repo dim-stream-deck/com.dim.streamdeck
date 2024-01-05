@@ -132,6 +132,7 @@
           "TitleAlignment": "middle"
         }
       ],
+      "DisableAutomaticStates": true,
       "SupportedInMultiActions": false,
       "Tooltip": "Show the used percentage of the current character postmaster",
       "UUID": "com.dim.streamdeck.postmaster"
@@ -173,6 +174,7 @@
           "Image": "imgs/actions/farming-mode/state-on"
         }
       ],
+      "DisableAutomaticStates": true,
       "SupportedInMultiActions": false,
       "Tooltip": "Turn on/off the DIM Farming mode",
       "UUID": "com.dim.streamdeck.farming-mode"

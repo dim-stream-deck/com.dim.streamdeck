@@ -78,6 +78,8 @@ ws.on("connection", (socket: WebSocket, req) => {
     const { action, data } = DimMessage.parse(JSON.parse(msg.toString()));
     // emit the action to the event emitter
     ev.emit(action, data);
+    // log the action
+    $.logger.info(`Received ${action} from ${socket.instance}`);
     // update global settings
     switch (action) {
       case "farmingMode":

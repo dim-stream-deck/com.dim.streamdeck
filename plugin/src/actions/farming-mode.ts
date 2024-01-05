@@ -3,7 +3,6 @@ import { ev } from "@/main";
 import { GlobalSettings, NoSettings } from "@/settings";
 import $, {
   action,
-  KeyUpEvent,
   SingletonAction,
   WillAppearEvent,
 } from "@elgato/streamdeck";
@@ -26,8 +25,7 @@ export class FarmingMode extends SingletonAction {
     ev.off("farmingMode", this.listener);
   }
 
-  onKeyUp(e: KeyUpEvent<NoSettings>) {
-    e.action.setState(e.payload.state ? 1 : 0);
+  onKeyUp() {
     DIM.toggleFarmingMode();
   }
 }

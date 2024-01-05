@@ -1,6 +1,7 @@
 import { load } from "cheerio";
 import { CheckpointSettings } from "./checkpoint";
 import { ev } from "@/main";
+import $ from "@elgato/streamdeck";
 
 interface Checkpoint {
   activity: string;
@@ -24,10 +25,10 @@ const queryCheckpoints = async () => {
   }
   const body = await fetch(process.env.CHECKPOINT_API!);
   const text = await body.text();
-  const $ = load(text);
+  const dom = load(text);
   items = Array.from(
-    $(".col .card").map((_, el) => {
-      const $el = $(el);
+    dom(".col .card").map((_, el) => {
+      const $el = dom(el);
       const [activity, difficulty] = $el
         .find(".card-title")
         .text()
@@ -43,6 +44,9 @@ const queryCheckpoints = async () => {
     })
   );
   lastQuery = Date.now();
+  // log the number of checkpoints loaded
+  $.logger.info(`Loaded ${items.length} checkpoints`);
+  //   // emit the checkpoints to the event emitter
   ev.emit("checkpoints");
 };
 
