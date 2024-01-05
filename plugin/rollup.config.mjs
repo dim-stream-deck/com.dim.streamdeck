@@ -7,8 +7,9 @@ import { swc } from "rollup-plugin-swc3";
 import replace from "@rollup/plugin-replace";
 import distributionTool from "@fcannizzaro/rollup-stream-deck-package";
 
+const uuid = "com.dim.streamdeck";
 const isWatching = !!process.env.ROLLUP_WATCH;
-const sdPlugin = "com.dim.streamdeck.sdPlugin";
+const sdPlugin = `${uuid}.sdPlugin`;
 
 /**
  * @type {import('rollup').RollupOptions}
@@ -83,7 +84,9 @@ const config = {
       generateBundle() {
         this.emitFile({
           fileName: "package.json",
-          source: `{ "main": "plugin.js" }`,
+          source: JSON.stringify({
+            main: "plugin.js",
+          }),
           type: "asset",
         });
       },

@@ -1,5 +1,4 @@
 {
-  "version": "3.0.0",
   "scripts": {
     "build": "tsc --noEmit && rollup -c",
     "dev": "rollup -c -w --watch.onEnd=\"streamdeck restart com.dim.streamdeck\""
