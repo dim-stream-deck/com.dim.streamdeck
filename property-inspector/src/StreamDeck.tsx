@@ -114,7 +114,7 @@ export const StreamDeck: FC<StreamDeckProps> = ({
   const setPartialSettings = useCallback(
     (update: Partial<Settings>, options?: { replace?: boolean }) => {
       const payload = options?.replace
-        ? updateS
+        ? update
         : {
             ...settings,
             ...update,

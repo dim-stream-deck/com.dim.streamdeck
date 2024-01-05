@@ -20,6 +20,7 @@ export const useDroppable = (
         }
         onSelect(data);
       } catch (e) {
+        console.log(e);
         notifications.show({
           color: "red",
           title: "Error",
@@ -27,7 +28,7 @@ export const useDroppable = (
         });
       }
     },
-    [type]
+    [type, onSelect]
   );
 
   const onDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
