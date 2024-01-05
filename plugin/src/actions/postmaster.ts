@@ -82,7 +82,9 @@ export class Postmaster extends SingletonAction {
   }
 
   onKeyDown(e: KeyDownEvent<PostmasterSettings>) {
-    if (e.payload.settings.collectPostmaster ?? true) {
+    const { postmasterItem, collectPostmaster } = e.payload.settings;
+    const canCollect = collectPostmaster ?? true;
+    if (canCollect && process(postmasterItem) === "total") {
       DIM.collectPostmaster();
     }
   }
