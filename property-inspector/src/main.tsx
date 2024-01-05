@@ -12,20 +12,17 @@ import pullItem from "./actions/pull-item";
 import maxPower from "./actions/max-power";
 import { StreamDeck, useStreamDeck } from "./StreamDeck";
 import "./index.css";
-import { ActionIcon, Alert, Group, Text } from "@mantine/core";
+import { ActionIcon, Group } from "@mantine/core";
 import {
-	IconBrandDiscord,
-	IconBrandPatreon,
-	IconWorldWww,
+  IconBrandDiscord,
+  IconBrandPatreon,
+  IconWorldWww,
 } from "@tabler/icons-react";
 import soloMode from "./actions/solo-mode";
 import { NoSetting } from "./components/NoSettings";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
-import {
-	QueryClient,
-	QueryClientProvider
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const client = new QueryClient();
 
@@ -48,24 +45,6 @@ const components = {
 };
 
 type Action = keyof typeof components;
-
-interface AuthorizationRequiredProps {
-  missing: string[];
-}
-
-const AuthorizationRequired: FC<AuthorizationRequiredProps> = ({ missing }) => {
-  return (
-    <Alert
-      radius="sm"
-      mb="md"
-      variant="outline"
-      title="Authorization"
-      color="red"
-    >
-      <Text mt={-4}>Confirm the connection on the DIM app.</Text>
-    </Alert>
-  );
-};
 
 const Links = () => {
   const { openURL } = useStreamDeck();
@@ -110,18 +89,10 @@ const Links = () => {
 const App: FC<AppProps> = ({ action }) => {
   const id: Action = action.action.slice("com.dim.streamdeck.".length);
   const Component: any = components[id];
-  const { globalSettings } = useStreamDeck();
-  const authorized = (globalSettings?.missing ?? []).length === 0;
 
   return (
     <>
-      {!Component ? (
-        <NoSetting />
-      ) : authorized ? (
-        <Component />
-      ) : (
-        <AuthorizationRequired missing={globalSettings.missing ?? []} />
-      )}
+      {!Component ? <NoSetting /> : <Component />}
       <Links />
     </>
   );
