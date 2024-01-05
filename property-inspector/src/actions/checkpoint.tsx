@@ -81,15 +81,17 @@ export default () => {
     <Stack gap="sm" mb="sm">
       <Divider labelPosition="center" label="Activity" mb="sm" />
       <Card withBorder radius="md">
-        <CardSection pb="md">
-          <Image
-            draggable={false}
-            alt="Step image"
-            src={settings.image}
-            width="100%"
-            height="auto"
-          />
-        </CardSection>
+        {settings.image && (
+          <CardSection pb="md">
+            <Image
+              draggable={false}
+              alt="Step image"
+              src={settings.image}
+              width="100%"
+              height="auto"
+            />
+          </CardSection>
+        )}
         <Grid align="center" gutter="sm">
           <Grid.Col span={4}>
             <Text size="sm" fw="bold">
