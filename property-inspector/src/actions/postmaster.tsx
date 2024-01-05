@@ -28,10 +28,10 @@ const styles = [
 
 export default () => {
   const { settings, setSettings } = useStreamDeck();
-
+  const item = settings.postmasterItem ?? "total";
   return (
     <div>
-      {settings.postmasterItem === "total" && (
+      {item === "total" && (
         <>
           <Divider labelPosition="center" label="Style" mb="sm" />
           <SegmentedControl
