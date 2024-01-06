@@ -20,9 +20,6 @@ importers:
       clipboardy:
         specifier: ^4.0.0
         version: 4.0.0
-      copy-paste:
-        specifier: ^1.5.3
-        version: 1.5.3
       lru-cache:
         specifier: ^10.1.0
         version: 10.1.0
@@ -57,9 +54,6 @@ importers:
       '@tsconfig/node20':
         specifier: ^20.1.2
         version: 20.1.2
-      '@types/copy-paste':
-        specifier: ^1.1.33
-        version: 1.1.33
       '@types/md5':
         specifier: ^2.3.5
         version: 2.3.5
@@ -836,10 +830,6 @@ packages:
     resolution: {integrity: sha512-madaWq2k+LYMEhmcp0fs+OGaLFk0OenpHa4gmI4VEmCKX4PJntQ6fnnGADVFrVkBj0wIdAlQnK/MrlYTHsa1gQ==}
     dev: true
 
-  /@types/copy-paste@1.1.33:
-    resolution: {integrity: sha512-vhDsD3A+WPfme1SW56fZCPvgEQ6ELYC0Jzgomldg+ExpMyQ1xDcIcuzao6O5l43cttbhepo16zz54Y16+GtpKw==}
-    dev: true
-
   /@types/estree@1.0.5:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
     dev: true
@@ -1026,12 +1016,6 @@ packages:
   /concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
     dev: true
-
-  /copy-paste@1.5.3:
-    resolution: {integrity: sha512-qOnFo+8l8vemGmdcoCiD7gPTefkXEg2rivYE+EBtuKOj754eFivkGhGAM9e/xqShrpuVE11evSxGnHwVAUK1Iw==}
-    dependencies:
-      iconv-lite: 0.4.24
-    dev: false
 
   /cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
@@ -1302,13 +1286,6 @@ packages:
   /human-signals@5.0.0:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
     engines: {node: '>=16.17.0'}
-    dev: false
-
-  /iconv-lite@0.4.24:
-    resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      safer-buffer: 2.1.2
     dev: false
 
   /ignore@5.3.0:
@@ -1856,10 +1833,6 @@ packages:
     dependencies:
       queue-microtask: 1.2.3
     dev: true
-
-  /safer-buffer@2.1.2:
-    resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
-    dev: false
 
   /scheduler@0.23.0:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
