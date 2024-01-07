@@ -99,6 +99,17 @@ export default () => {
         />
       </Collapse>
       <div>
+        <Divider labelPosition="center" label="Gestures" mb="sm" />
+        <Switch
+          mb="xs"
+          label="(Global) Equip item on single press"
+          checked={globalSettings.pullItemSinglePress ?? true}
+          onChange={(e) =>
+            setGlobalSettings({ pullItemSinglePress: e.currentTarget.checked })
+          }
+        />
+      </div>
+      <div>
         <Divider labelPosition="center" label="Accessibility" mb="sm" />
         <Switch
           mb="xs"
@@ -106,14 +117,6 @@ export default () => {
           checked={globalSettings.equipmentGrayscale ?? true}
           onChange={(e) =>
             setGlobalSettings({ equipmentGrayscale: e.currentTarget.checked })
-          }
-        />
-        <Switch
-          mb="xs"
-          label="(Global) Equip item on single press"
-          checked={globalSettings.pullItemSinglePress ?? true}
-          onChange={(e) =>
-            setGlobalSettings({ pullItemSinglePress: e.currentTarget.checked })
           }
         />
       </div>
