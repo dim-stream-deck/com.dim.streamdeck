@@ -15,23 +15,19 @@ export const DIM: DimActions = {
 
   toggleFarmingMode: () => sendToWeb({ action: "toggleFarmingMode" }),
 
-  equipLoadout: ({ loadout, character }) =>
+  equipLoadout: (args) =>
     sendToWeb({
       action: "equipLoadout",
-      loadout,
-      character,
+      ...args,
     }),
 
   equipMaxPower: () => sendToWeb({ action: "equipMaxPower" }),
 
   collectPostmaster: () => sendToWeb({ action: "collectPostmaster" }),
 
-  pullItem: ({ itemId, equip }) =>
-    sendToWeb({ action: "pullItem", itemId, equip }),
+  pullItem: (args) => sendToWeb({ action: "pullItem", ...args }),
 
-  search: ({ query, page, pullItems }) =>
-    sendToWeb({ action: "search", query, page, pullItems }),
+  search: (args) => sendToWeb({ action: "search", ...args }),
 
-  randomize: ({ weaponsOnly }) =>
-    sendToWeb({ action: "randomize", weaponsOnly }),
+  randomize: (args) => sendToWeb({ action: "randomize", ...args }),
 };
