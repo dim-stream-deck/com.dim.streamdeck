@@ -14,7 +14,7 @@ interface AppSettings {
 const Mapping = {
   "app-browser": "https://app.destinyitemmanager.com",
   "beta-browser": "https://beta.destinyitemmanager.com",
-  "app-chrome": "enmhfhfpkdkdgbhjafjkkfdmeopcfiig",
+  "app-chrome": "aeeidfelonceeehdppacnjlimhoneige",
   "beta-chrome": "enmhfhfpkdkdgbhjafjkkfdmeopcfiig",
   "app-windows":
     "2464DIMDestinyItemManager.DestinyItemManagerDIM_2jn1m2rfzb8fg!App",
