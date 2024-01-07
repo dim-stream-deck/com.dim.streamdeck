@@ -10,13 +10,13 @@ interface SearchSettings {
   search?: string;
   query: string;
   page: string;
-  pullItems: boolean;
+  behavior?: "search" | "pull" | "send-to-vault";
 }
 
 // default search settings
 const defaultSettings = {
   page: "inventory",
-  pullItems: false,
+  behavior: "search",
 };
 
 /**
@@ -25,14 +25,15 @@ const defaultSettings = {
 @action({ UUID: "com.dim.streamdeck.search" })
 export class Search extends SingletonAction<SearchSettings> {
   async onKeyDown(e: KeyDownEvent<SearchSettings>) {
-    const { query, search, page, pullItems } = mergeRight(
+    const { query, search, page, behavior } = mergeRight(
       defaultSettings,
       e.payload.settings ?? {}
     );
     DIM.search({
       query: query ?? search ?? "",
       page,
-      pullItems,
+      pullItems: behavior === "pull",
+      sendToVault: behavior === "send-to-vault",
     });
   }
 }

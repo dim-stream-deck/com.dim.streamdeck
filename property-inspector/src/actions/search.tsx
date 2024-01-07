@@ -3,13 +3,40 @@ import {
   Box,
   Center,
   Divider,
+  Group,
   SegmentedControl,
 } from "@mantine/core";
-import { IconHandGrab, IconSearch } from "@tabler/icons-react";
+import { IconArrowBackUp, IconHandGrab, IconSearch } from "@tabler/icons-react";
 import { useStreamDeck } from "../StreamDeck";
 
 export default () => {
   const { settings, setSettings } = useStreamDeck();
+
+  const behavior = [
+    {
+      label: "Search Only",
+      icon: <IconSearch />,
+      value: "search",
+    },
+    {
+      label: "Pull Items",
+      icon: <IconHandGrab />,
+      value: "pull",
+    },
+    {
+      label: "Send to Vault",
+      icon: <IconArrowBackUp />,
+      value: "send-to-vault",
+    },
+  ].map((it) => ({
+    ...it,
+    label: (
+      <Group>
+        {it.icon}
+        {it.label}
+      </Group>
+    ),
+  }));
 
   return (
     <div>
@@ -42,32 +69,13 @@ export default () => {
       <SegmentedControl
         fullWidth
         radius="xs"
-        size="xs"
         color="dim"
+        orientation="vertical"
         transitionDuration={300}
         transitionTimingFunction="linear"
-        value={settings.pullItems ? "pull" : "search"}
-        onChange={(value) => setSettings({ pullItems: value === "pull" })}
-        data={[
-          {
-            label: (
-              <Center>
-                <IconSearch size={16} />
-                <Box ml={10}>Search Only</Box>
-              </Center>
-            ),
-            value: "search",
-          },
-          {
-            label: (
-              <Center>
-                <IconHandGrab size={16} />
-                <Box ml={10}>Pull Items</Box>
-              </Center>
-            ),
-            value: "pull",
-          },
-        ]}
+        value={settings.behavior}
+        onChange={(behavior) => setSettings({ behavior })}
+        data={behavior}
       />
     </div>
   );

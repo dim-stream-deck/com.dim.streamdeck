@@ -16,7 +16,12 @@ export interface DimActions {
 
   pullItem: (params: { itemId: string; equip: boolean }) => void;
 
-  search: (params: { query: string; page: string; pullItems: boolean }) => void;
+  search: (params: {
+    query: string;
+    page: string;
+    pullItems: boolean;
+    sendToVault: boolean;
+  }) => void;
 
   randomize: (params: { weaponsOnly: boolean }) => void;
 }
