@@ -14,6 +14,7 @@ import { CheckpointIcon } from "./checkpoint-icon";
 import clipboard from "clipboardy";
 import { GlobalSettings } from "@/settings";
 import { Watcher } from "@/util/watcher";
+import { exec, spawn } from "child_process";
 
 export interface CheckpointSettings {
   activity?: string;
@@ -21,6 +22,33 @@ export interface CheckpointSettings {
   image?: string;
   difficulty?: "normal" | "master";
 }
+
+/**
+ * Generate the command to join the checkpoint
+ * @param id user handle
+ * @returns
+ */
+const joinCommand = async (id: string) => {
+  const settings = await $.settings.getGlobalSettings<GlobalSettings>();
+  return {
+    command: `${settings.checkpointJoinPrefix || "/join"} ${id}`,
+    paste: settings.checkpointPaste,
+  };
+};
+
+/**
+ * Type the command in the game/window
+ * @param command the string to paste
+ */
+const sendCommand = (command: string) => {
+  if ($.info.application.platform === "mac") {
+    exec(
+      `osascript -e 'tell application "System Events" to keystroke "v" using command down`
+    );
+  } else {
+    spawn(`./paster/paster.exe`, [command]);
+  }
+};
 
 /**
  * Allow to copy the user handle to the clipboard (of specific checkpoint)
@@ -58,12 +86,11 @@ export class Checkpoint extends SingletonAction {
 
   async onKeyDown(e: KeyDownEvent<CheckpointSettings>) {
     await CheckpointManager.refresh();
-    const checkpoint = CheckpointManager.search(e.payload.settings);
-    const globalSettings = await $.settings.getGlobalSettings<GlobalSettings>();
-    if (checkpoint?.copyId) {
-      clipboard.writeSync(
-        `${globalSettings.checkpointJoinPrefix || "/join"} ${checkpoint.copyId}`
-      );
+    const cp = CheckpointManager.search(e.payload.settings);
+    if (cp?.copyId) {
+      const { command, paste } = await joinCommand(cp.copyId);
+      await clipboard.write(command);
+      paste && sendCommand(command);
       e.action.showOk();
     } else {
       e.action.showAlert();

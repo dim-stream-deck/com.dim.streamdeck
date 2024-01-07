@@ -46,12 +46,11 @@ jobs:
       - name: Prepare plugin directory
         run: |
           mkdir -p plugin/com.dim.streamdeck.sdPlugin/solo-mode
-          mkdir -p plugin/com.dim.streamdeck.sdPlugin/typer
+          mkdir -p plugin/com.dim.streamdeck.sdPlugin/paster
           mv service-installer/install-sd-solo-enabler.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
           mv service-remover/remove-sd-solo-enabler.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
           mv service/sd-solo-enabler.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
-          mv typer-windows/typer.exe plugin/com.dim.streamdeck.sdPlugin/typer/typer.exe
-          mv typer-macos/typer plugin/com.dim.streamdeck.sdPlugin/typer/typer
+          mv paster/paster.exe plugin/com.dim.streamdeck.sdPlugin/paster/paster.exe
       
       - name: Build plugin
         working-directory: ./plugin

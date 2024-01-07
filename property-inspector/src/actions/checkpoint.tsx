@@ -9,6 +9,7 @@ import {
   SegmentedControl,
   Select,
   Stack,
+  Switch,
   Text,
   TextInput,
 } from "@mantine/core";
@@ -180,6 +181,18 @@ export default () => {
           Checkpoint#1111
         </Text>
       </Group>
+      <Divider labelPosition="center" label="Type in chat" />
+      <Switch
+        label="Paste the command"
+        checked={globalSettings.checkpointPaste}
+        onChange={(e) =>
+          setGlobalSettings({ checkpointPaste: e.target.checked })
+        }
+      />
+      <Text size="sm" c="dimmed">
+        If enabled, you can press this button to write the join command. Just
+        remember to open the game chat 🤣.
+      </Text>
       <Divider labelPosition="center" label="Credits" />
       <Text c="dimmed">
         Checkpoints are provided by{" "}

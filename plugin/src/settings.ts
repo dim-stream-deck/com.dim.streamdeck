@@ -55,6 +55,7 @@ export interface Postmaster {
 export interface GlobalSettings {
   equipmentGrayscale?: boolean;
   checkpointJoinPrefix?: string;
+  checkpointPaste?: boolean;
   farmingMode?: boolean;
   authentication?: Record<string, string>;
   equippedItems: string[];
