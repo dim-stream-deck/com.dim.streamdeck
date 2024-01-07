@@ -17,7 +17,9 @@ import { Equipment } from "@/util/equipment";
 import { Cache } from "@/util/cache";
 import { Watcher } from "@/util/watcher";
 
-interface PullItemSettings {
+export type AltAction = "hold" | "double" | undefined;
+
+export interface PullItemSettings {
   item?: string;
   icon?: string;
   inventory?: boolean;
@@ -26,7 +28,7 @@ interface PullItemSettings {
   overlay?: string;
   subtitle?: string;
   element?: string;
-  altActionTrigger?: "hold" | "double";
+  altActionTrigger?: AltAction;
 }
 
 /**
@@ -85,8 +87,12 @@ export class PullItem extends SingletonAction {
     });
 
     this.gestures.start(e.action.id, async (type) => {
+      const global = await $.settings.getGlobalSettings<GlobalSettings>();
       const settings = await e.action.getSettings<PullItemSettings>();
-      const equip = type === settings.altActionTrigger;
+      const equip =
+        type === "single"
+          ? global.pullItemSinglePress ?? false
+          : type === settings.altActionTrigger;
       if (settings.item) {
         DIM.pullItem({
           itemId: settings.item,

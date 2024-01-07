@@ -14,10 +14,14 @@ import { Droppable } from "../components/Droppable";
 import { useEffect } from "react";
 import { IconX } from "@tabler/icons-react";
 import { DropText } from "../components/DropText";
+import {
+  AltAction,
+  PullItemSettings,
+} from "@plugin/actions/pull-item/pull-item";
 
 export default () => {
   const { settings, setSettings, globalSettings, setGlobalSettings } =
-    useStreamDeck();
+    useStreamDeck<PullItemSettings>();
 
   useEffect(() => {
     if (!settings.altActionTrigger) {
@@ -67,12 +71,12 @@ export default () => {
                 {settings.label}
               </Text>
             )}
-            <DropText type="item" selected={settings.label} />
+            <DropText type="item" selected={Boolean(settings.label)} />
           </Stack>
         </Group>
       </Droppable>
       {/* alt action settings */}
-      <Collapse in={settings.item}>
+      <Collapse in={Boolean(settings.item)}>
         <Divider
           labelPosition="center"
           label="Equip (Alternative Action)"
@@ -87,7 +91,11 @@ export default () => {
           size="sm"
           color="dim"
           value={settings.altActionTrigger}
-          onChange={(altActionTrigger) => setSettings({ altActionTrigger })}
+          onChange={(altActionTrigger) =>
+            setSettings({
+              altActionTrigger: altActionTrigger as AltAction,
+            })
+          }
         />
       </Collapse>
       <div>
@@ -98,6 +106,14 @@ export default () => {
           checked={globalSettings.equipmentGrayscale ?? true}
           onChange={(e) =>
             setGlobalSettings({ equipmentGrayscale: e.currentTarget.checked })
+          }
+        />
+        <Switch
+          mb="xs"
+          label="(Global) Equip item on single press"
+          checked={globalSettings.pullItemSinglePress ?? true}
+          onChange={(e) =>
+            setGlobalSettings({ pullItemSinglePress: e.currentTarget.checked })
           }
         />
       </div>

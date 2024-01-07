@@ -53,17 +53,24 @@ export interface Postmaster {
 // Global Settings
 
 export interface GlobalSettings {
+  // pull item
   equipmentGrayscale?: boolean;
+  pullItemSinglePress?: boolean;
+  equippedItems: string[];
+  // checkpoint
   checkpointJoinPrefix?: string;
   checkpointPaste?: boolean;
+  // farming mode
   farmingMode?: boolean;
-  authentication?: Record<string, string>;
-  equippedItems: string[];
+  // solo mode
   enabledSoloService?: boolean;
+  // state
   maxPower?: MaxPower;
   metrics?: Metrics;
   postmaster?: Postmaster;
   vault?: Vault;
+  // authentication
+  authentication?: Record<string, string>;
 }
 
 export type NoSettings = {};
