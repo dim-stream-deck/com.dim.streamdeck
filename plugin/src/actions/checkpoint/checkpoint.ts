@@ -38,15 +38,17 @@ const joinCommand = async (id: string) => {
 
 /**
  * Type the command in the game/window
+ * mac: use osascript to type the command (cmd+v, enter)
+ * windows: use a macro executable (rust compiled) to run the command (ctrl+v, enter)
  * @param command the string to paste
  */
-const sendCommand = (command: string) => {
+const sendCommand = () => {
   if ($.info.application.platform === "mac") {
     exec(
-      `osascript -e 'tell application "System Events" to keystroke "v" using command down`
+      `osascript -e 'tell application "System Events"' -e 'keystroke "v" using command down' -e 'key code 36' -e 'end tell'`
     );
   } else {
-    spawn(`./macro/macro.exe`, [command]);
+    spawn(`./macro/macro.exe`);
   }
 };
 
