@@ -46,7 +46,7 @@ const sendCommand = (command: string) => {
       `osascript -e 'tell application "System Events" to keystroke "v" using command down`
     );
   } else {
-    spawn(`./paster/paster.exe`, [command]);
+    spawn(`./macro/macro.exe`, [command]);
   }
 };
 

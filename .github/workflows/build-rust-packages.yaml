@@ -37,7 +37,7 @@ jobs:
           path: ./solo-mode/target/release/sd-solo-enabler.exe
           retention-days: 365
 
-  build-paster-windows:
+  build-macro-windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -48,11 +48,11 @@ jobs:
       - uses: actions-rs/cargo@v1.0.1
         with:
           command: build
-          args: --manifest-path paster/Cargo.toml --release
+          args: --manifest-path macro/Cargo.toml --release
 
-      - name: Temporary store paster.exe
+      - name: Temporary store macro.exe
         uses: actions/upload-artifact@v3
         with:
-          name: paster
-          path: ./paster/target/release/paster.exe
+          name: macro
+          path: ./macro/target/release/macro.exe
           retention-days: 365
