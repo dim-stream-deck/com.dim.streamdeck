@@ -3,11 +3,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-service:
+  build-solo-mode:
     runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: ./rust/
     steps:
       - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1.0.6
@@ -38,4 +35,44 @@ jobs:
         with:
           name: service
           path: ./solo-mode/target/release/sd-solo-enabler.exe
+          retention-days: 365
+
+  build-typer-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1.0.6
+        with:
+          toolchain: stable
+
+      - uses: actions-rs/cargo@v1.0.1
+        with:
+          command: build
+          args: --manifest-path typer/Cargo.toml --release
+
+      - name: Temporary store typer.exe
+        uses: actions/upload-artifact@v3
+        with:
+          name: typer-windows
+          path: ./typer/target/release/typer.exe
+          retention-days: 365
+
+  build-typer-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1.0.6
+        with:
+          toolchain: stable
+
+      - uses: actions-rs/cargo@v1.0.1
+        with:
+          command: build
+          args: --manifest-path typer/Cargo.toml --release
+
+      - name: Temporary store typer.exe
+        uses: actions/upload-artifact@v3
+        with:
+          name: typer-macos
+          path: ./typer/target/release/typer
           retention-days: 365

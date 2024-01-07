@@ -37,18 +37,21 @@ jobs:
           VITE_CHECKPOINTS_GIST: ${{secrets.VITE_CHECKPOINTS_GIST}}
           VITE_CHECKPOINTS: ${{secrets.VITE_CHECKPOINTS}}
 
-      - name: Download artifacts
+      - name: Download rust artifacts
         uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{secrets.SECRET_TOKEN}}
-          workflow: build-solo-mode.yaml
+          workflow: build-rust-packages.yaml
 
       - name: Prepare plugin directory
         run: |
           mkdir -p plugin/com.dim.streamdeck.sdPlugin/solo-mode
+          mkdir -p plugin/com.dim.streamdeck.sdPlugin/typer
           mv service-installer/install-sd-solo-enabler.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
           mv service-remover/remove-sd-solo-enabler.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
           mv service/sd-solo-enabler.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
+          mv typer-windows/typer.exe plugin/com.dim.streamdeck.sdPlugin/typer/typer.exe
+          mv typer-macos/typer plugin/com.dim.streamdeck.sdPlugin/typer/typer
       
       - name: Build plugin
         working-directory: ./plugin
