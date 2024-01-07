@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { GlobalSettings } from "@plugin/settings";
 
 interface StreamDeckProps {
   children: any;
@@ -18,20 +19,20 @@ interface StreamDeckProps {
 
 type Settings = Record<string, any>;
 
-interface StreamDeckContext<TSettings, TGlobalSettings> {
+interface StreamDeckContext<TSettings> {
   communication?: any;
   settings: TSettings;
   setSettings: (
     settings: Partial<TSettings>,
     options?: { replace?: boolean }
   ) => void;
-  globalSettings: TGlobalSettings;
-  setGlobalSettings: (settings: Partial<TGlobalSettings>) => void;
+  globalSettings: Partial<GlobalSettings>;
+  setGlobalSettings: (settings: Partial<GlobalSettings>) => void;
   openURL: (url?: string) => void;
   sendToPlugin: (payload: Record<string, any>) => void;
 }
 
-const StreamDeckContext = createContext<StreamDeckContext<Settings, Settings>>({
+const StreamDeckContext = createContext<StreamDeckContext<Settings>>({
   settings: {},
   globalSettings: {},
   setSettings: () => {},
@@ -174,12 +175,6 @@ export const StreamDeck: FC<StreamDeckProps> = ({
 
 type BaseSettings = Record<string, any>;
 
-export const useStreamDeck = <
-  TSettings = BaseSettings,
-  TGlobalSettings = BaseSettings,
->() => {
-  return useContext(StreamDeckContext) as StreamDeckContext<
-    TSettings,
-    TGlobalSettings
-  >;
+export const useStreamDeck = <TSettings = BaseSettings,>() => {
+  return useContext(StreamDeckContext) as StreamDeckContext<TSettings>;
 };
