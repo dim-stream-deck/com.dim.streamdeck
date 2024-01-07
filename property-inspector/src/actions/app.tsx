@@ -1,25 +1,56 @@
-import { Divider, SegmentedControl } from "@mantine/core";
+import { Divider, Group, SegmentedControl } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
+import {
+  IconAppWindow,
+  IconBrandChrome,
+  IconBrandWindows,
+  IconBrowser,
+} from "@tabler/icons-react";
 
 export default () => {
   const { settings, setSettings } = useStreamDeck();
-  const isBeta = settings.beta === true;
+  const type =
+    settings.beta === true ? "beta-browser" : settings.type ?? "app-browser";
+  const color = settings.type?.startsWith("beta") ? "cyan" : "dim";
+
+  const data = [
+    {
+      value: "app-browser",
+      label: "app.destinyitemmanager.com",
+      icon: <IconBrowser />,
+    },
+    {
+      value: "beta-browser",
+      label: "beta.destinyitemmanager.com",
+      icon: <IconBrowser />,
+    },
+    { value: "app-chrome", label: "Chrome PWA", icon: <IconBrandChrome /> },
+    {
+      value: "beta-chrome",
+      label: "Chrome PWA (Beta)",
+      icon: <IconBrandChrome />,
+    },
+    { value: "app-windows", label: "Windows App", icon: <IconBrandWindows /> },
+  ].map((it) => ({
+    ...it,
+    label: (
+      <Group>
+        {it.icon}
+        {it.label}
+      </Group>
+    ),
+  }));
 
   return (
     <div>
       <Divider labelPosition="center" label="Flavor" mb="sm" />
       <SegmentedControl
         fullWidth
-        onChange={(value) => setSettings({ beta: value === "beta" })}
-        color={isBeta ? "cyan" : "dim"}
-        data={[
-          {
-            value: "dim",
-            label: "Stable",
-          },
-          { value: "beta", label: "Beta" },
-        ]}
-        value={isBeta ? "beta" : "dim"}
+        orientation="vertical"
+        onChange={(type) => setSettings({ type }, { replace: true })}
+        color={color}
+        data={data}
+        value={type}
       />
     </div>
   );
