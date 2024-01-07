@@ -16,7 +16,22 @@ interface StreamDeckProps {
   action: any;
 }
 
-const StreamDeckContext = createContext<StreamDeckContext>({
+type Settings = Record<string, any>;
+
+interface StreamDeckContext<TSettings, TGlobalSettings> {
+  communication?: any;
+  settings: TSettings;
+  setSettings: (
+    settings: Partial<TSettings>,
+    options?: { replace?: boolean }
+  ) => void;
+  globalSettings: TGlobalSettings;
+  setGlobalSettings: (settings: Partial<TGlobalSettings>) => void;
+  openURL: (url?: string) => void;
+  sendToPlugin: (payload: Record<string, any>) => void;
+}
+
+const StreamDeckContext = createContext<StreamDeckContext<Settings, Settings>>({
   settings: {},
   globalSettings: {},
   setSettings: () => {},
@@ -24,21 +39,6 @@ const StreamDeckContext = createContext<StreamDeckContext>({
   openURL: () => {},
   sendToPlugin: () => {},
 });
-
-type Settings = Record<string, any>;
-
-interface StreamDeckContext {
-  communication?: any;
-  settings: Settings;
-  setSettings: (
-    settings: Partial<Settings>,
-    options?: { replace?: boolean }
-  ) => void;
-  globalSettings: Settings;
-  setGlobalSettings: (settings: Partial<Settings>) => void;
-  openURL: (url?: string) => void;
-  sendToPlugin: (payload: Record<string, any>) => void;
-}
 
 export const StreamDeck: FC<StreamDeckProps> = ({
   uuid,
@@ -172,6 +172,14 @@ export const StreamDeck: FC<StreamDeckProps> = ({
   );
 };
 
-export const useStreamDeck = () => {
-  return useContext(StreamDeckContext);
+type BaseSettings = Record<string, any>;
+
+export const useStreamDeck = <
+  TSettings = BaseSettings,
+  TGlobalSettings = BaseSettings,
+>() => {
+  return useContext(StreamDeckContext) as StreamDeckContext<
+    TSettings,
+    TGlobalSettings
+  >;
 };

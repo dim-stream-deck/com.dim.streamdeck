@@ -12,10 +12,28 @@ import $, {
   WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { ArtifactIcon } from "./artifact-icon";
+import { mergeRight } from "ramda";
 
 interface MetricsSettings {
   metric?: MetricType;
+  disabled?: MetricType[];
+  order?: MetricType[];
+  pinned?: boolean;
 }
+
+const defaults = {
+  order: [
+    "battlePass",
+    "vanguard",
+    "gambit",
+    "crucible",
+    "gunsmith",
+    "ironBanner",
+    "trials",
+    "triumphs",
+    "triumphsActive",
+  ],
+} as const;
 
 /**
  * Show Destiny Metrics
@@ -68,8 +86,17 @@ export class Metrics extends SingletonAction {
   }
 
   async onKeyDown(e: KeyDownEvent<MetricsSettings>) {
+    const settings = mergeRight(defaults, e.payload.settings);
+    // ignore if pinned
+    if (settings.pinned) {
+      return;
+    }
+    // filter out disabled items
+    const metrics = settings.order.filter(
+      (metric) => !settings.disabled?.includes(metric)
+    );
     // cycle through the available items
-    const metric = next(e.payload.settings.metric ?? "battlePass", MetricTypes);
+    const metric = next(e.payload.settings.metric ?? metrics[0], metrics);
     e.action.setSettings({ metric });
     // update current button
     const globalSettings = $.settings.getGlobalSettings<GlobalSettings>();
