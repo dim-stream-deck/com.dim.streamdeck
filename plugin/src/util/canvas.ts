@@ -1,8 +1,9 @@
 import CanvasKitInit, {
-	EmulatedCanvas2DContext,
-	Image,
+  EmulatedCanvas2DContext,
+  Image,
 } from "canvaskit-wasm/bin/canvaskit.js";
 import { Cache } from "./cache";
+import { splitEvery } from "ramda";
 
 export const CanvasKit = CanvasKitInit({
   locateFile: (file) => process.cwd() + "/" + file,
@@ -44,3 +45,6 @@ export const grayscale = (ctx: EmulatedCanvas2DContext) => {
   }
   ctx.putImageData(imageData, 0, 0);
 };
+
+export const splitTitle = (text?: string) =>
+  text ? splitEvery(6, text).join("\n") : undefined;

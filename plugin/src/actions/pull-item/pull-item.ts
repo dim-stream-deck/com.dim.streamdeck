@@ -2,20 +2,21 @@ import { DIM } from "@/dim/api";
 import { ev } from "@/main";
 import { Gestures, GestureType } from "@/util/gestures";
 import $, {
-	Action,
-	action,
-	DidReceiveSettingsEvent,
-	KeyDownEvent,
-	KeyUpEvent,
-	SingletonAction,
-	WillAppearEvent,
-	WillDisappearEvent,
+  Action,
+  action,
+  DidReceiveSettingsEvent,
+  KeyDownEvent,
+  KeyUpEvent,
+  SingletonAction,
+  WillAppearEvent,
+  WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { ItemIcon } from "./ItemIcon";
 import { GlobalSettings } from "@/settings";
 import { Equipment } from "@/util/equipment";
 import { Cache } from "@/util/cache";
 import { Watcher } from "@/util/watcher";
+import { splitTitle } from "@/util/canvas";
 
 export type AltAction = "hold" | "double" | undefined;
 
@@ -24,6 +25,7 @@ export interface PullItemSettings {
   icon?: string;
   inventory?: boolean;
   isExotic?: boolean;
+  isSubClass?: boolean;
   label?: string;
   overlay?: string;
   subtitle?: string;
@@ -64,6 +66,7 @@ export class PullItem extends SingletonAction {
                 overlay: settings.overlay,
                 element: settings.element,
                 isExotic: settings.isExotic,
+                isSubClass: settings.isSubClass,
                 equipped,
               },
               {
@@ -73,6 +76,7 @@ export class PullItem extends SingletonAction {
           : undefined
     );
 
+    e.setTitle(settings.isSubClass ? splitTitle(settings.label) : undefined);
     e.setImage(image);
   }
 
@@ -100,6 +104,11 @@ export class PullItem extends SingletonAction {
       }
 
       let type = global[GestureMapping[gesture]] ?? "pull";
+
+      // skip useless actions
+      if (settings.isSubClass && type !== "equip") {
+        return;
+      }
 
       const isInSlots = Equipment.has(settings.item);
 

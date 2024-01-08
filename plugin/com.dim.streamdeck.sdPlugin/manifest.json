@@ -38,7 +38,8 @@
       "Name": "Pull/Equip Item",
       "States": [
         {
-          "Image": "imgs/actions/equip/state"
+          "Image": "imgs/actions/equip/state",
+          "TitleAlignment": "middle"
         }
       ],
       "SupportedInMultiActions": true,

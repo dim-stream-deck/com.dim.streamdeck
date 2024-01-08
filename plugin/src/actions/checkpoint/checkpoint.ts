@@ -8,13 +8,13 @@ import $, {
   WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { CheckpointManager } from "./manager";
-import { splitEvery } from "ramda";
 import { Cache } from "@/util/cache";
 import { CheckpointIcon } from "./checkpoint-icon";
 import clipboard from "clipboardy";
 import { GlobalSettings } from "@/settings";
 import { Watcher } from "@/util/watcher";
 import { exec, spawn } from "child_process";
+import { splitTitle } from "@/util/canvas";
 
 export interface CheckpointSettings {
   activity?: string;
@@ -61,7 +61,7 @@ export class Checkpoint extends SingletonAction {
 
   private async update(e: Action, settings: CheckpointSettings) {
     // update the step title
-    e.setTitle(splitEvery(6, settings.step ?? "").join("\n"));
+    e.setTitle(splitTitle(settings.step));
     // update the image
     if (settings.image) {
       const enabled = Boolean(CheckpointManager.search(settings));

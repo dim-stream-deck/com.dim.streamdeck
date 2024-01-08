@@ -14,6 +14,7 @@ interface ItemIcon {
   element?: string;
   equipped?: boolean;
   isExotic?: boolean;
+  isSubClass?: boolean;
 }
 
 interface ItemIconOptions {
@@ -37,12 +38,14 @@ export const ItemIcon = async (item: ItemIcon, options: ItemIconOptions) => {
 
   ctx.drawImage(image, 0, 0, 144, 144);
 
-  if (item.overlay) {
-    const overlayImage = await loadImageFromUrl(Canvas, item.overlay);
-    overlayImage && ctx.drawImage(overlayImage, 0, 0, 144, 144);
+  // skip some overlay stuff for subclasses
+  if (!item.isSubClass) {
+    if (item.overlay) {
+      const overlayImage = await loadImageFromUrl(Canvas, item.overlay);
+      overlayImage && ctx.drawImage(overlayImage, 0, 0, 144, 144);
+    }
+    ctx.drawImage(rarityImage, 0, 0, 144, 144);
   }
-
-  ctx.drawImage(rarityImage, 0, 0, 144, 144);
 
   if (item.element) {
     const elementImage = await loadImageFromUrl(Canvas, item.element);
