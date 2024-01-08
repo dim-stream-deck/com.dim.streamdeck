@@ -60,7 +60,7 @@ export default () => {
               <IconX />
             </ThemeIcon>
           )}
-          <Stack gap="sm" style={{ flex: 1 }}>
+          <Stack gap={4} style={{ flex: 1 }}>
             {settings.label && (
               <Text
                 fw="bold"
