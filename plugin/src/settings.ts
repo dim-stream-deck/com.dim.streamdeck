@@ -52,10 +52,15 @@ export interface Postmaster {
 
 // Global Settings
 
+export type PullItemAction = "equip" | "pull" | "vault";
+
 export interface GlobalSettings {
   // pull item
   equipmentGrayscale?: boolean;
-  pullItemSinglePress?: boolean;
+  pullItemSinglePress?: PullItemAction;
+  pullItemDoublePress?: PullItemAction;
+  pullItemHoldPress?: PullItemAction;
+  pullItemSingleToggle?: boolean;
   equippedItems: string[];
   // checkpoint
   checkpointJoinPrefix?: string;

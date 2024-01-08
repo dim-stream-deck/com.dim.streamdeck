@@ -14,7 +14,10 @@ export interface DimActions {
 
   collectPostmaster: () => void;
 
-  pullItem: (params: { itemId: string; equip: boolean }) => void;
+  pullItem: (params: {
+    itemId: string;
+    type: "equip" | "pull" | "vault";
+  }) => void;
 
   search: (params: {
     query: string;

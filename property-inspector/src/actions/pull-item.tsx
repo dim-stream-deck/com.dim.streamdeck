@@ -1,6 +1,6 @@
 import {
-  Collapse,
   Divider,
+  Fieldset,
   Group,
   Image,
   SegmentedControl,
@@ -11,27 +11,32 @@ import {
 } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
 import { Droppable } from "../components/Droppable";
-import { useEffect } from "react";
 import { IconX } from "@tabler/icons-react";
 import { DropText } from "../components/DropText";
-import {
-  AltAction,
-  PullItemSettings,
-} from "@plugin/actions/pull-item/pull-item";
+import { PullItemSettings } from "@plugin/actions/pull-item/pull-item";
 
 export default () => {
   const { settings, setSettings, globalSettings, setGlobalSettings } =
     useStreamDeck<PullItemSettings>();
 
-  useEffect(() => {
-    if (!settings.altActionTrigger) {
-      setSettings({ altActionTrigger: "hold" });
-    }
-  }, [settings]);
-
   if (!settings || !globalSettings) {
     return;
   }
+
+  const gestures = [
+    {
+      label: "single press",
+      key: "pullItemSinglePress",
+    },
+    {
+      label: "double press",
+      key: "pullItemDoublePress",
+    },
+    {
+      label: "hold press",
+      key: "pullItemHoldPress",
+    },
+  ] as const;
 
   return (
     <Stack gap="sm">
@@ -75,45 +80,55 @@ export default () => {
           </Stack>
         </Group>
       </Droppable>
-      {/* alt action settings */}
-      <Collapse in={Boolean(settings.item)}>
-        <Divider
-          labelPosition="center"
-          label="Equip (Alternative Action)"
-          mb="sm"
-        />
-        <SegmentedControl
-          w="100%"
-          data={[
-            { value: "double", label: "Double Press" },
-            { value: "hold", label: "Hold" },
-          ]}
-          size="sm"
-          color="dim"
-          value={settings.altActionTrigger}
-          onChange={(altActionTrigger) =>
-            setSettings({
-              altActionTrigger: altActionTrigger as AltAction,
-            })
-          }
-        />
-      </Collapse>
       <div>
-        <Divider labelPosition="center" label="Gestures" mb="sm" />
-        <Switch
-          mb="xs"
-          label="(Global) Equip item on single press"
-          checked={globalSettings.pullItemSinglePress ?? true}
-          onChange={(e) =>
-            setGlobalSettings({ pullItemSinglePress: e.currentTarget.checked })
-          }
-        />
+        <Divider labelPosition="center" label="Gestures (Global)" mb="sm" />
+        <Stack>
+          {gestures.map((it, i) => (
+            <Fieldset legend={it.label}>
+              <SegmentedControl
+                fullWidth
+                color="dim"
+                size="sm"
+                data={["equip", "pull", "vault"]}
+                value={globalSettings[it.key]}
+                onChange={(action) => {
+                  setGlobalSettings({
+                    [it.key]: action,
+                  });
+                }}
+              />
+              {i === 0 && (
+                <>
+                  <Divider my="xs" />
+                  <Group mt="xs" wrap="nowrap">
+                    <Switch
+                      checked={globalSettings.pullItemSingleToggle}
+                      onChange={(e) =>
+                        setGlobalSettings({
+                          pullItemSingleToggle: e.currentTarget.checked,
+                        })
+                      }
+                    />
+                    <Text c="dimmed" size="sm">
+                      if the item is already equipped send it to the{" "}
+                      <strong>vault</strong>
+                    </Text>
+                  </Group>
+                </>
+              )}
+            </Fieldset>
+          ))}
+        </Stack>
       </div>
       <div>
-        <Divider labelPosition="center" label="Accessibility" mb="sm" />
+        <Divider
+          labelPosition="center"
+          label="Accessibility (Global)"
+          mb="sm"
+        />
         <Switch
           mb="xs"
-          label="(Global) Grayscale filter for not-equipped items"
+          label="Grayscale filter for not-equipped items"
           checked={globalSettings.equipmentGrayscale ?? true}
           onChange={(e) =>
             setGlobalSettings({ equipmentGrayscale: e.currentTarget.checked })

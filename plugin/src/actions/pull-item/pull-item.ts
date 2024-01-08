@@ -1,15 +1,15 @@
 import { DIM } from "@/dim/api";
 import { ev } from "@/main";
-import { Gestures } from "@/util/gestures";
+import { Gestures, GestureType } from "@/util/gestures";
 import $, {
-  Action,
-  action,
-  DidReceiveSettingsEvent,
-  KeyDownEvent,
-  KeyUpEvent,
-  SingletonAction,
-  WillAppearEvent,
-  WillDisappearEvent,
+	Action,
+	action,
+	DidReceiveSettingsEvent,
+	KeyDownEvent,
+	KeyUpEvent,
+	SingletonAction,
+	WillAppearEvent,
+	WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { ItemIcon } from "./ItemIcon";
 import { GlobalSettings } from "@/settings";
@@ -28,8 +28,13 @@ export interface PullItemSettings {
   overlay?: string;
   subtitle?: string;
   element?: string;
-  altActionTrigger?: AltAction;
 }
+
+const GestureMapping = {
+  single: "pullItemSinglePress",
+  double: "pullItemDoublePress",
+  hold: "pullItemHoldPress",
+} as const;
 
 /**
  * Pulls an item from/to the vault or other characters.
@@ -86,22 +91,30 @@ export class PullItem extends SingletonAction {
       }
     });
 
-    this.gestures.start(e.action.id, async (type) => {
-      const global = await $.settings.getGlobalSettings<GlobalSettings>();
+    this.gestures.start(e.action.id, async (gesture: GestureType) => {
       const settings = await e.action.getSettings<PullItemSettings>();
-      const equip =
-        type === "single"
-          ? global.pullItemSinglePress ?? false
-          : type === settings.altActionTrigger;
-      if (settings.item) {
-        DIM.pullItem({
-          itemId: settings.item,
-          equip,
-        });
-        e.action.showOk();
-      } else {
-        e.action.showAlert();
+      const global = await $.settings.getGlobalSettings<GlobalSettings>();
+
+      if (!settings.item) {
+        return e.action.showAlert();
       }
+
+      let type = global[GestureMapping[gesture]] ?? "pull";
+
+      const isInSlots = Equipment.has(settings.item);
+
+      // support toggle action
+      if (gesture === "single" && global.pullItemSingleToggle) {
+        type = isInSlots ? "vault" : type;
+      }
+
+      // send action to DIM
+      DIM.pullItem({
+        itemId: settings.item,
+        type,
+      });
+
+      e.action.showOk();
     });
   }
 
