@@ -80,61 +80,68 @@ export default () => {
           </Stack>
         </Group>
       </Droppable>
-      <div>
-        <Divider labelPosition="center" label="Gestures (Global)" mb="sm" />
-        <Stack>
-          {gestures.map((it, i) => (
-            <Fieldset legend={it.label}>
-              <SegmentedControl
-                fullWidth
-                color="dim"
-                size="sm"
-                data={["equip", "pull", "vault"]}
-                value={globalSettings[it.key]}
-                onChange={(action) => {
-                  setGlobalSettings({
-                    [it.key]: action,
-                  });
-                }}
-              />
-              {i === 0 && (
-                <>
-                  <Divider my="xs" />
-                  <Group mt="xs" wrap="nowrap">
-                    <Switch
-                      checked={globalSettings.pullItemSingleToggle}
-                      onChange={(e) =>
-                        setGlobalSettings({
-                          pullItemSingleToggle: e.currentTarget.checked,
-                        })
-                      }
-                    />
-                    <Text c="dimmed" size="sm">
-                      if the item is already equipped send it to the{" "}
-                      <strong>vault</strong>
-                    </Text>
-                  </Group>
-                </>
-              )}
-            </Fieldset>
-          ))}
-        </Stack>
-      </div>
-      <div>
-        <Divider
-          labelPosition="center"
-          label="Accessibility (Global)"
-          mb="sm"
-        />
-        <Switch
-          mb="xs"
-          label="Grayscale filter for not-equipped items"
-          checked={globalSettings.equipmentGrayscale ?? true}
-          onChange={(e) =>
-            setGlobalSettings({ equipmentGrayscale: e.currentTarget.checked })
-          }
-        />
-      </div>
+      {!settings.isSubClass && (
+        <>
+          <div>
+            <Divider labelPosition="center" label="Gestures (Global)" mb="sm" />
+            <Stack>
+              {gestures.map((it, i) => (
+                <Fieldset legend={it.label}>
+                  <SegmentedControl
+                    fullWidth
+                    color="dim"
+                    size="sm"
+                    data={["equip", "pull", "vault"]}
+                    value={globalSettings[it.key]}
+                    onChange={(action) => {
+                      setGlobalSettings({
+                        [it.key]: action,
+                      });
+                    }}
+                  />
+                  {i === 0 && (
+                    <>
+                      <Divider my="xs" />
+                      <Group mt="xs" wrap="nowrap">
+                        <Switch
+                          checked={globalSettings.pullItemSingleToggle}
+                          onChange={(e) =>
+                            setGlobalSettings({
+                              pullItemSingleToggle: e.currentTarget.checked,
+                            })
+                          }
+                        />
+                        <Text c="dimmed" size="sm">
+                          if the item is already equipped send it to the{" "}
+                          <strong>vault</strong>
+                        </Text>
+                      </Group>
+                    </>
+                  )}
+                </Fieldset>
+              ))}
+            </Stack>
+          </div>
+
+          <div>
+            <Divider
+              labelPosition="center"
+              label="Accessibility (Global)"
+              mb="sm"
+            />
+            <Switch
+              mb="xs"
+              label="Grayscale filter for not-equipped items"
+              checked={globalSettings.equipmentGrayscale ?? true}
+              onChange={(e) =>
+                setGlobalSettings({
+                  equipmentGrayscale: e.currentTarget.checked,
+                })
+              }
+            />
+          </div>
+        </>
+      )}
     </Stack>
   );
 };
