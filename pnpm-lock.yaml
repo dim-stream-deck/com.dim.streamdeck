@@ -11,6 +11,9 @@ importers:
       '@elgato/streamdeck':
         specifier: ^0.2.0
         version: 0.2.0
+      '@plugin/types':
+        specifier: workspace:*
+        version: link:../types
       canvaskit-wasm:
         specifier: ^0.39.1
         version: 0.39.1
@@ -32,9 +35,6 @@ importers:
       ramda:
         specifier: ^0.29.1
         version: 0.29.1
-      shared:
-        specifier: workspace:*
-        version: link:../shared
       ws:
         specifier: ^8.15.1
         version: 8.15.1
@@ -127,6 +127,9 @@ importers:
         specifier: ^3.22.4
         version: 3.22.4
     devDependencies:
+      '@plugin/types':
+        specifier: workspace:*
+        version: link:../types
       '@swc/core':
         specifier: ^1.3.25
         version: 1.3.101
@@ -154,9 +157,6 @@ importers:
       prettier:
         specifier: ^3.1.1
         version: 3.1.1
-      shared:
-        specifier: workspace:*
-        version: link:../shared
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -170,7 +170,7 @@ importers:
         specifier: ^4.2.3
         version: 4.2.3(typescript@5.3.3)(vite@5.0.10)
 
-  shared:
+  types:
     devDependencies:
       zod:
         specifier: ^3.22.4

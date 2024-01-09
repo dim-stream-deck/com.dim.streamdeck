@@ -3,7 +3,7 @@ import { useStreamDeck } from "../StreamDeck";
 import Artifact from "../assets/max-power/artifact.png";
 import Total from "../assets/max-power/total.png";
 import Base from "../assets/max-power/helmet.png";
-import { MaxPowerSettings, MaxPowerType } from "shared";
+import { MaxPowerSettings, MaxPowerType } from "@plugin/types";
 
 const resources = [
   { value: "total", image: Total, label: "Total" },

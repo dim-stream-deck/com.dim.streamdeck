@@ -9,7 +9,7 @@ import {
   WillAppearEvent,
   WillDisappearEvent,
 } from "@elgato/streamdeck";
-import { MaxPowerSettings } from "shared";
+import { MaxPowerSettings } from "@plugin/types";
 
 /**
  * Show current character max power and allow to equip it.

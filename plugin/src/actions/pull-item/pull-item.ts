@@ -16,7 +16,7 @@ import { Equipment } from "@/util/equipment";
 import { Cache } from "@/util/cache";
 import { Watcher } from "@/util/watcher";
 import { splitTitle } from "@/util/canvas";
-import { GlobalSettings, PullItemSettings } from "shared";
+import { GlobalSettings, PullItemSettings } from "@plugin/types";
 
 export type AltAction = "hold" | "double" | undefined;
 

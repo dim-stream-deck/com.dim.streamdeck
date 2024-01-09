@@ -7,7 +7,7 @@ import {
   SingletonAction,
   WillAppearEvent,
 } from "@elgato/streamdeck";
-import { NoSettings } from "shared";
+import { NoSettings } from "@plugin/types";
 
 /**
  * Toggle the farming mode on DIM.

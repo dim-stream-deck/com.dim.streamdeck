@@ -1,7 +1,7 @@
 import { Autocomplete, Divider, Group, SegmentedControl } from "@mantine/core";
 import { IconArrowBackUp, IconHandGrab, IconSearch } from "@tabler/icons-react";
 import { useStreamDeck } from "../StreamDeck";
-import { SearchBehavior, SearchSettings } from "shared";
+import { SearchBehavior, SearchSettings } from "@plugin/types";
 
 const Behaviors = [
   {

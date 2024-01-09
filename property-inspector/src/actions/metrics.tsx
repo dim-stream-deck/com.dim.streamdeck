@@ -28,7 +28,7 @@ import {
   IconPinFilled,
   IconSquare,
 } from "@tabler/icons-react";
-import { MetricType, MetricsSettings } from "shared";
+import { MetricType, MetricsSettings } from "@plugin/types";
 
 const items = [
   { id: "battlePass", icon: BattlePass, label: "Battle Pass" },

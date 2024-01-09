@@ -21,7 +21,7 @@ import {
   CheckpointDifficulty,
   CheckpointSettings,
   CheckpointsSchema,
-} from "shared";
+} from "@plugin/types";
 
 export const checkpointDefinitions = async () => {
   const res = await fetch(import.meta.env.VITE_CHECKPOINTS_GIST);

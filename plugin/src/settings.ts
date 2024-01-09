@@ -1,6 +1,6 @@
 import $ from "@elgato/streamdeck";
 import { mergeDeepRight } from "ramda";
-import { GlobalSettings, GlobalSettingsSchema } from "shared";
+import { GlobalSettings, GlobalSettingsSchema } from "@plugin/types";
 
 // Global Settings
 

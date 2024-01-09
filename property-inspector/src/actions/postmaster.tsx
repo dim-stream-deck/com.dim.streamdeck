@@ -13,7 +13,11 @@ import Prism from "../assets/postmaster/Prism.jpg";
 import PostmasterIcon from "../assets/postmaster/postmaster.png";
 import Percent from "../assets/postmaster/percent.png";
 import Count from "../assets/postmaster/count.png";
-import { CounterStyle, PostmasterSettings, PostmasterType } from "shared";
+import {
+  CounterStyle,
+  PostmasterSettings,
+  PostmasterType,
+} from "@plugin/types";
 
 const resources = [
   { value: "total", image: PostmasterIcon, label: "Counter" },

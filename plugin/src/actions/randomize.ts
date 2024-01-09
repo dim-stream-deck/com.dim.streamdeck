@@ -1,6 +1,6 @@
 import { DIM } from "@/dim/api";
 import { action, KeyDownEvent, SingletonAction } from "@elgato/streamdeck";
-import { RandomizeSettings } from "shared";
+import { RandomizeSettings } from "@plugin/types";
 
 /**
  * Randomize the current loadout

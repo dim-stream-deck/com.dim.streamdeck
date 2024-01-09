@@ -5,7 +5,7 @@ import {
   IconBrandWindows,
   IconBrowser,
 } from "@tabler/icons-react";
-import { AppSettings, AppType } from "shared";
+import { AppSettings, AppType } from "@plugin/types";
 
 export default () => {
   const { settings, setSettings } = useStreamDeck<AppSettings>();

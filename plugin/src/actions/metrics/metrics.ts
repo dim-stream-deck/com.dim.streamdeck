@@ -13,7 +13,7 @@ import {
 import { ArtifactIcon } from "./artifact-icon";
 import { mergeRight } from "ramda";
 import { State } from "@/state";
-import { MetricsSettings, MetricTypes } from "shared";
+import { MetricsSettings, MetricTypes } from "@plugin/types";
 
 const defaults = {
   order: MetricTypes,

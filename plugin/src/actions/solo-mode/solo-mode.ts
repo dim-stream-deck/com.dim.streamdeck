@@ -8,7 +8,7 @@ import {
 } from "@elgato/streamdeck";
 import { exec } from "child_process";
 import { checkInstalledService } from "./service";
-import { NoSettings } from "shared";
+import { NoSettings } from "@plugin/types";
 
 interface PropertyInspectorData {
   action: "remove-service" | "install-service";

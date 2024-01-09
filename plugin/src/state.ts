@@ -1,7 +1,7 @@
 import { Equipment } from "./util/equipment";
 import { ev } from "./main";
 import { db, saveDB } from "./util/db";
-import { MaxPower, MetricType } from "shared";
+import { MaxPower, MetricType } from "@plugin/types";
 
 type Metrics = {
   artifactIcon: string;

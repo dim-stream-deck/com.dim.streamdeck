@@ -10,7 +10,7 @@ import {
   WillAppearEvent,
   WillDisappearEvent,
 } from "@elgato/streamdeck";
-import { PostmasterSettings, PostmasterType } from "shared";
+import { PostmasterSettings, PostmasterType } from "@plugin/types";
 
 /**
  *

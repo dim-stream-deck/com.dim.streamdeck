@@ -14,7 +14,7 @@ import clipboard from "clipboardy";
 import { Watcher } from "@/util/watcher";
 import { exec, spawn } from "child_process";
 import { splitTitle } from "@/util/canvas";
-import { CheckpointSettings, GlobalSettings } from "shared";
+import { CheckpointSettings, GlobalSettings } from "@plugin/types";
 
 /**
  * Generate the command to join the checkpoint

@@ -8,7 +8,7 @@ import {
 } from "@elgato/streamdeck";
 import { CharacterIcon } from "./character-icon";
 import { State } from "@/state";
-import { NoSettings } from "shared";
+import { NoSettings } from "@plugin/types";
 
 /**
  * Show character character

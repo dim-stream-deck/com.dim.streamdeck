@@ -1,4 +1,4 @@
 packages:
   - plugin
   - property-inspector
-  - shared
+  - types

@@ -1,7 +1,7 @@
 import { Divider, Group, SegmentedControl, Title } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
 import { Icon } from "../icon/Icon";
-import { RandomizeSettings } from "shared";
+import { RandomizeSettings } from "@plugin/types";
 
 export default () => {
   const { settings, setSettings } = useStreamDeck<RandomizeSettings>();

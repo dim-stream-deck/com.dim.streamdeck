@@ -8,7 +8,7 @@ import { toggleEquipment } from "./util/equipment";
 import http from "http";
 import { manifest } from "./util/version";
 import { State, loadEquipment } from "./state";
-import { GlobalSettings } from "shared";
+import { GlobalSettings } from "@plugin/types";
 
 const server = http.createServer();
 
