@@ -1,6 +1,5 @@
 import { DIM } from "@/dim/api";
 import { ev } from "@/main";
-import { NoSettings } from "@/settings";
 import { State } from "@/state";
 import {
   Action,
@@ -8,6 +7,7 @@ import {
   SingletonAction,
   WillAppearEvent,
 } from "@elgato/streamdeck";
+import { NoSettings } from "shared";
 
 /**
  * Toggle the farming mode on DIM.

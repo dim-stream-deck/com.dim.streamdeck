@@ -21,6 +21,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "shared": "workspace:*",
     "@elgato/streamdeck": "^0.2.0",
     "canvaskit-wasm": "^0.39.1",
     "cheerio": "1.0.0-rc.12",

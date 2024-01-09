@@ -1,13 +1,14 @@
 import EventEmitter from "events";
 import { WebSocketServer } from "ws";
 import $ from "@elgato/streamdeck";
-import { GlobalSettings, setGlobalSettings } from "./settings";
+import { setGlobalSettings } from "./settings";
 import { z } from "zod";
 import { WebSocket } from "ws";
 import { toggleEquipment } from "./util/equipment";
 import http from "http";
 import { manifest } from "./util/version";
 import { State, loadEquipment } from "./state";
+import { GlobalSettings } from "shared";
 
 const server = http.createServer();
 

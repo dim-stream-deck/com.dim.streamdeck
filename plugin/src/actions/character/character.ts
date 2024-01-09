@@ -7,8 +7,8 @@ import {
   WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { CharacterIcon } from "./character-icon";
-import { NoSettings } from "@/settings";
 import { State } from "@/state";
+import { NoSettings } from "shared";
 
 /**
  * Show character character

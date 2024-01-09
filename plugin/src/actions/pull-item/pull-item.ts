@@ -12,25 +12,13 @@ import $, {
   WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { ItemIcon } from "./item-icon";
-import { GlobalSettings } from "@/settings";
 import { Equipment } from "@/util/equipment";
 import { Cache } from "@/util/cache";
 import { Watcher } from "@/util/watcher";
 import { splitTitle } from "@/util/canvas";
+import { GlobalSettings, PullItemSettings } from "shared";
 
 export type AltAction = "hold" | "double" | undefined;
-
-export interface PullItemSettings {
-  item?: string;
-  icon?: string;
-  inventory?: boolean;
-  isExotic?: boolean;
-  isSubClass?: boolean;
-  label?: string;
-  overlay?: string;
-  subtitle?: string;
-  element?: string;
-}
 
 const GestureMapping = {
   single: "pullItemSinglePress",

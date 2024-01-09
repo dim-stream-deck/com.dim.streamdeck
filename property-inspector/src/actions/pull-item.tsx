@@ -13,7 +13,7 @@ import { useStreamDeck } from "../StreamDeck";
 import { Droppable } from "../components/Droppable";
 import { IconX } from "@tabler/icons-react";
 import { DropText } from "../components/DropText";
-import { PullItemSettings } from "@plugin/actions/pull-item/pull-item";
+import { PullItemSettings } from "shared";
 
 export default () => {
   const { settings, setSettings, globalSettings, setGlobalSettings } =

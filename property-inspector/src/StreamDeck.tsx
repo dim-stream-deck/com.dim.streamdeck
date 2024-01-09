@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { GlobalSettings } from "@plugin/settings";
+import { GlobalSettings } from "shared";
 
 interface StreamDeckProps {
   children: any;

@@ -1,3 +1,4 @@
 packages:
   - plugin
   - property-inspector
+  - shared

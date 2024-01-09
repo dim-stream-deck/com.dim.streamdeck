@@ -11,10 +11,10 @@ import { CheckpointManager } from "./manager";
 import { Cache } from "@/util/cache";
 import { CheckpointIcon } from "./checkpoint-icon";
 import clipboard from "clipboardy";
-import { GlobalSettings } from "@/settings";
 import { Watcher } from "@/util/watcher";
 import { exec, spawn } from "child_process";
 import { splitTitle } from "@/util/canvas";
+import { GlobalSettings } from "shared";
 
 export interface CheckpointSettings {
   activity?: string;
