@@ -8,6 +8,8 @@ permissions:
 jobs:
   release-plugin:
     runs-on: macos-latest
+    env:
+      PLUGIN_VERSION:
     steps:
       - uses: actions/checkout@v3
 
@@ -51,7 +53,7 @@ jobs:
           mv service-remover/remove-sd-solo-enabler.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
           mv service/sd-solo-enabler.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
           mv macro/macro.exe plugin/com.dim.streamdeck.sdPlugin/macro/macro.exe
-      
+
       - name: Build plugin
         working-directory: ./plugin
         run: pnpm build
@@ -61,9 +63,10 @@ jobs:
       - name: Publish package
         uses: ncipollo/release-action@v1.13.0
         with:
-            name: "${{ env.PLUGIN_VERSION }}"
-            prerelease: true
-            allowUpdates: true
-            tag: "${{ env.PLUGIN_VERSION }}"
-            token: "${{ secrets.GITHUB_TOKEN }}"
-            artifacts: "./plugin/com.dim.streamdeck.streamDeckPlugin"
+          name: "${{ env.PLUGIN_VERSION }}"
+          prerelease: true
+          allowUpdates: true
+          bodyFile: "./changelogs/${{ env.PLUGIN_VERSION }}.md"
+          tag: "${{ env.PLUGIN_VERSION }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          artifacts: "./plugin/com.dim.streamdeck.streamDeckPlugin"
