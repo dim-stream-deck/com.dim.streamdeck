@@ -170,7 +170,7 @@ export default () => {
     <div>
       <Divider labelPosition="center" label="Metric" mb="sm" />
       <Text c="dimmed" size="sm" pb="xs">
-        Select and order your preferred metrics to cycle through.
+        Toggle, sort or pin your preferred metrics.
       </Text>
 
       <DndContext
