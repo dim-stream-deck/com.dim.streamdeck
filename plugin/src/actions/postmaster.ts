@@ -10,19 +10,7 @@ import {
   WillAppearEvent,
   WillDisappearEvent,
 } from "@elgato/streamdeck";
-
-type PostmasterType =
-  | ""
-  | "total"
-  | "enhancementPrisms"
-  | "ascendantShards"
-  | "spoils";
-
-interface PostmasterSettings {
-  postmasterItem: PostmasterType;
-  collectPostmaster?: boolean;
-  style: "percentage" | "counter";
-}
+import { PostmasterSettings, PostmasterType } from "shared";
 
 /**
  *

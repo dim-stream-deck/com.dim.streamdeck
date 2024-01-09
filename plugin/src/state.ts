@@ -1,36 +1,11 @@
 import { Equipment } from "./util/equipment";
 import { ev } from "./main";
 import { db, saveDB } from "./util/db";
-
-// Metrics
-
-export const MetricTypes = [
-  "battlePass",
-  "crucible",
-  "gambit",
-  "gunsmith",
-  "ironBanner",
-  "trials",
-  "triumphs",
-  "triumphsActive",
-  "vanguard",
-] as const;
-
-export type MetricType = (typeof MetricTypes)[number];
+import { MaxPower, MetricType } from "shared";
 
 type Metrics = {
   artifactIcon: string;
 } & Partial<Record<MetricType, number>>;
-
-// Max Power
-
-export interface MaxPower {
-  artifact: number;
-  base: string;
-  total: string;
-}
-
-export type MaxPowerType = keyof MaxPower;
 
 // Character
 

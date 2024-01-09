@@ -1,14 +1,14 @@
 import { Divider, Group, SegmentedControl } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
 import {
-  IconAppWindow,
   IconBrandChrome,
   IconBrandWindows,
   IconBrowser,
 } from "@tabler/icons-react";
+import { AppSettings, AppType } from "shared";
 
 export default () => {
-  const { settings, setSettings } = useStreamDeck();
+  const { settings, setSettings } = useStreamDeck<AppSettings>();
   const type =
     settings.beta === true ? "beta-browser" : settings.type ?? "app-browser";
   const color = settings.type?.startsWith("beta") ? "cyan" : "dim";
@@ -47,7 +47,9 @@ export default () => {
       <SegmentedControl
         fullWidth
         orientation="vertical"
-        onChange={(type) => setSettings({ type }, { replace: true })}
+        onChange={(value) =>
+          setSettings({ type: value as AppType }, { replace: true })
+        }
         color={color}
         data={data}
         value={type}

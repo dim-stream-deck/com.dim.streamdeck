@@ -13,6 +13,7 @@ import Prism from "../assets/postmaster/Prism.jpg";
 import PostmasterIcon from "../assets/postmaster/postmaster.png";
 import Percent from "../assets/postmaster/percent.png";
 import Count from "../assets/postmaster/count.png";
+import { CounterStyle, PostmasterSettings, PostmasterType } from "shared";
 
 const resources = [
   { value: "total", image: PostmasterIcon, label: "Counter" },
@@ -27,7 +28,7 @@ const styles = [
 ];
 
 export default () => {
-  const { settings, setSettings } = useStreamDeck();
+  const { settings, setSettings } = useStreamDeck<PostmasterSettings>();
   const item = settings.postmasterItem ?? "total";
   return (
     <div>
@@ -39,7 +40,7 @@ export default () => {
             fullWidth
             orientation="vertical"
             value={settings.style}
-            onChange={(style) => setSettings({ style })}
+            onChange={(value) => setSettings({ style: value as CounterStyle })}
             data={styles.map((it) => ({
               value: it.value,
               label: (
@@ -65,7 +66,9 @@ export default () => {
         fullWidth
         orientation="vertical"
         value={settings.postmasterItem}
-        onChange={(postmasterItem) => setSettings({ postmasterItem })}
+        onChange={(value) =>
+          setSettings({ postmasterItem: value as PostmasterType })
+        }
         data={resources.map((it) => ({
           value: it.value,
           label: (

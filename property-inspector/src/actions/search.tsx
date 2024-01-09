@@ -1,34 +1,34 @@
-import {
-  Autocomplete,
-  Box,
-  Center,
-  Divider,
-  Group,
-  SegmentedControl,
-} from "@mantine/core";
+import { Autocomplete, Divider, Group, SegmentedControl } from "@mantine/core";
 import { IconArrowBackUp, IconHandGrab, IconSearch } from "@tabler/icons-react";
 import { useStreamDeck } from "../StreamDeck";
+import { SearchBehavior, SearchSettings } from "shared";
+
+const Behaviors = [
+  {
+    label: "Search Only",
+    icon: <IconSearch />,
+    value: "search",
+  },
+  {
+    label: "Pull Items",
+    icon: <IconHandGrab />,
+    value: "pull",
+  },
+  {
+    label: "Send to Vault",
+    icon: <IconArrowBackUp />,
+    value: "send-to-vault",
+  },
+] satisfies Array<{
+  label: string;
+  icon: JSX.Element;
+  value: SearchBehavior;
+}>;
 
 export default () => {
-  const { settings, setSettings } = useStreamDeck();
+  const { settings, setSettings } = useStreamDeck<SearchSettings>();
 
-  const behavior = [
-    {
-      label: "Search Only",
-      icon: <IconSearch />,
-      value: "search",
-    },
-    {
-      label: "Pull Items",
-      icon: <IconHandGrab />,
-      value: "pull",
-    },
-    {
-      label: "Send to Vault",
-      icon: <IconArrowBackUp />,
-      value: "send-to-vault",
-    },
-  ].map((it) => ({
+  const behavior = Behaviors.map((it) => ({
     ...it,
     label: (
       <Group>
@@ -74,7 +74,7 @@ export default () => {
         transitionDuration={300}
         transitionTimingFunction="linear"
         value={settings.behavior}
-        onChange={(behavior) => setSettings({ behavior })}
+        onChange={(value) => setSettings({ behavior: value as SearchBehavior })}
         data={behavior}
       />
     </div>

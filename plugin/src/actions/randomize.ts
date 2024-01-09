@@ -1,9 +1,6 @@
 import { DIM } from "@/dim/api";
 import { action, KeyDownEvent, SingletonAction } from "@elgato/streamdeck";
-
-interface RandomizeSettings {
-  weaponsOnly?: boolean;
-}
+import { RandomizeSettings } from "shared";
 
 /**
  * Randomize the current loadout

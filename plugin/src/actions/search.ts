@@ -1,17 +1,7 @@
 import { DIM } from "@/dim/api";
 import { action, KeyDownEvent, SingletonAction } from "@elgato/streamdeck";
 import { mergeRight } from "ramda";
-
-interface SearchSettings {
-  /**
-   * @deprecated
-   * @see query
-   */
-  search?: string;
-  query: string;
-  page: string;
-  behavior?: "search" | "pull" | "send-to-vault";
-}
+import { SearchSettings } from "shared";
 
 // default search settings
 const defaultSettings = {

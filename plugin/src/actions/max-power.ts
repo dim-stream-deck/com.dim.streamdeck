@@ -1,5 +1,5 @@
 import { DIM } from "@/dim/api";
-import { MaxPowerType, State } from "@/state";
+import { State } from "@/state";
 import { Watcher } from "@/util/watcher";
 import {
   Action,
@@ -9,10 +9,7 @@ import {
   WillAppearEvent,
   WillDisappearEvent,
 } from "@elgato/streamdeck";
-
-interface MaxPowerSettings {
-  powerType?: MaxPowerType | "all";
-}
+import { MaxPowerSettings } from "shared";
 
 /**
  * Show current character max power and allow to equip it.

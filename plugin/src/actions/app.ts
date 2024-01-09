@@ -1,15 +1,6 @@
 import $, { action, KeyUpEvent, SingletonAction } from "@elgato/streamdeck";
 import { spawn } from "child_process";
-
-interface AppSettings {
-  beta?: boolean;
-  type?:
-    | "app-browser"
-    | "beta-browser"
-    | "app-chrome"
-    | "beta-chrome"
-    | "app-windows";
-}
+import { AppSettings } from "shared";
 
 const Mapping = {
   "app-browser": "https://app.destinyitemmanager.com",

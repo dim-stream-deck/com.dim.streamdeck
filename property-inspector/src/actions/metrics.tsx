@@ -28,6 +28,7 @@ import {
   IconPinFilled,
   IconSquare,
 } from "@tabler/icons-react";
+import { MetricType, MetricsSettings } from "shared";
 
 const items = [
   { id: "battlePass", icon: BattlePass, label: "Battle Pass" },
@@ -39,7 +40,11 @@ const items = [
   { id: "trials", icon: Osiris, label: "Trials of Osiris" },
   { id: "triumphs", icon: Triumphs, label: "Triumphs (Total score)" },
   { id: "triumphsActive", icon: Triumphs, label: "Triumphs (Active score)" },
-];
+] satisfies Array<{
+  id: MetricType;
+  icon: string;
+  label: string;
+}>;
 
 interface SortableMetricProps {
   id: string;
@@ -129,13 +134,6 @@ const itemsById = items.reduce(
 
 // metric field
 
-interface MetricsSettings {
-  order: string[];
-  disabled: string[];
-  metric: string;
-  pinned: boolean;
-}
-
 export default () => {
   const { settings, setSettings } = useStreamDeck<MetricsSettings>();
   const [activeId, setActiveId] = useState<string | number | null>(null);
@@ -151,9 +149,8 @@ export default () => {
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-    const activeId = active.id as string;
-    const overId = over?.id as string | undefined;
-
+    const activeId = active.id as MetricType;
+    const overId = over?.id as MetricType;
     if (overId && activeId !== overId) {
       const oldIndex = order.indexOf(activeId);
       const newIndex = order.indexOf(overId);

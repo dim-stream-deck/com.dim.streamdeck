@@ -15,26 +15,15 @@ import {
 } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
 import { useQuery } from "@tanstack/react-query";
-import { z } from "zod";
 import { useMemo } from "react";
+import {
+  Checkpoint,
+  CheckpointDifficulty,
+  CheckpointSettings,
+  CheckpointsSchema,
+} from "shared";
 
-const CheckpointsSchema = z
-  .object({
-    activity: z.string(),
-    group: z.string(),
-    steps: z
-      .object({
-        title: z.string(),
-        image: z.string(),
-      })
-      .array(),
-    difficulties: z.string().array(),
-  })
-  .array();
-
-type Checkpoint = z.infer<typeof CheckpointsSchema>[number];
-
-const checkpointDefinitions = async () => {
+export const checkpointDefinitions = async () => {
   const res = await fetch(import.meta.env.VITE_CHECKPOINTS_GIST);
   return CheckpointsSchema.parse(await res.json()).reduce((acc, checkpoint) => {
     acc.set(checkpoint.activity, checkpoint);
@@ -44,7 +33,7 @@ const checkpointDefinitions = async () => {
 
 export default () => {
   const { globalSettings, setGlobalSettings, settings, setSettings } =
-    useStreamDeck();
+    useStreamDeck<CheckpointSettings>();
 
   const { data = new Map<string, Checkpoint>() } = useQuery({
     queryKey: ["checkpoints"],
@@ -52,7 +41,7 @@ export default () => {
     staleTime: Infinity,
   });
 
-  const checkpoint = data.get(settings.activity);
+  const checkpoint = settings.activity ? data.get(settings.activity) : null;
 
   const activities = useMemo(() => {
     const groups = new Map<string, string[]>();
@@ -106,19 +95,24 @@ export default () => {
               onChange={(activity) => {
                 if (activity) {
                   const [step] = data.get(activity)?.steps ?? [];
-                  setSettings({
-                    activity,
-                    ...(step
-                      ? {
-                          step: step.title,
-                          image: step.image,
-                        }
-                      : {
-                          step: null,
-                          image: null,
-                        }),
-                    difficulty: null,
-                  });
+                  setSettings(
+                    {
+                      activity,
+                      ...(step
+                        ? {
+                            step: step.title,
+                            image: step.image,
+                          }
+                        : {
+                            step: undefined,
+                            image: undefined,
+                          }),
+                      difficulty: undefined,
+                    },
+                    {
+                      replace: true,
+                    }
+                  );
                 }
               }}
             />
@@ -159,7 +153,9 @@ export default () => {
                   w="100%"
                   data={difficulties}
                   value={settings.difficulty}
-                  onChange={(difficulty) => setSettings({ difficulty })}
+                  onChange={(value) =>
+                    setSettings({ difficulty: value as CheckpointDifficulty })
+                  }
                 />
               </Grid.Col>
             </>

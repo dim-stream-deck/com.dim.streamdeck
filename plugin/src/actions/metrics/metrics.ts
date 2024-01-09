@@ -2,38 +2,22 @@ import { Cache } from "@/util/cache";
 import { next } from "@/util/cyclic";
 import { Watcher } from "@/util/watcher";
 import {
-	Action,
-	action,
-	DidReceiveSettingsEvent,
-	KeyDownEvent,
-	SingletonAction,
-	WillAppearEvent,
-	WillDisappearEvent,
+  Action,
+  action,
+  DidReceiveSettingsEvent,
+  KeyDownEvent,
+  SingletonAction,
+  WillAppearEvent,
+  WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { ArtifactIcon } from "./artifact-icon";
 import { mergeRight } from "ramda";
-import { MetricType, State } from "@/state";
-
-interface MetricsSettings {
-  metric?: MetricType;
-  disabled?: MetricType[];
-  order?: MetricType[];
-  pinned?: boolean;
-}
+import { State } from "@/state";
+import { MetricsSettings, MetricTypes } from "shared";
 
 const defaults = {
-  order: [
-    "battlePass",
-    "vanguard",
-    "gambit",
-    "crucible",
-    "gunsmith",
-    "ironBanner",
-    "trials",
-    "triumphs",
-    "triumphsActive",
-  ],
-} as const;
+  order: MetricTypes,
+};
 
 /**
  * Show Destiny Metrics

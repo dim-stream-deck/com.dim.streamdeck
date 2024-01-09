@@ -1,8 +1,8 @@
 import { load } from "cheerio";
-import { CheckpointSettings } from "./checkpoint";
 import { ev } from "@/main";
 import $ from "@elgato/streamdeck";
 import ms from "ms";
+import { CheckpointSettings } from "shared";
 
 interface Checkpoint {
   activity: string;

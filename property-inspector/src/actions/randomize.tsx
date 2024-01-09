@@ -1,9 +1,10 @@
 import { Divider, Group, SegmentedControl, Title } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
 import { Icon } from "../icon/Icon";
+import { RandomizeSettings } from "shared";
 
 export default () => {
-  const { settings, setSettings } = useStreamDeck();
+  const { settings, setSettings } = useStreamDeck<RandomizeSettings>();
   const weaponsOnly = settings.weaponsOnly === true;
 
   return (

@@ -14,14 +14,7 @@ import clipboard from "clipboardy";
 import { Watcher } from "@/util/watcher";
 import { exec, spawn } from "child_process";
 import { splitTitle } from "@/util/canvas";
-import { GlobalSettings } from "shared";
-
-export interface CheckpointSettings {
-  activity?: string;
-  step?: string;
-  image?: string;
-  difficulty?: "normal" | "master";
-}
+import { CheckpointSettings, GlobalSettings } from "shared";
 
 /**
  * Generate the command to join the checkpoint
