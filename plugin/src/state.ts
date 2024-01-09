@@ -11,19 +11,18 @@ export type Character = {
   background: string;
 };
 
+// State
+
 export interface State {
-  // pull item
   equippedItems: string[];
-  // farming mode
   farmingMode?: boolean;
-  // state
   character?: Character;
   maxPower?: MaxPower;
-  metrics?: {
-    artifactIcon: string;
-  } & Partial<Record<MetricType, number>>;
   postmaster?: Postmaster;
   vault?: Record<VaultType, number>;
+  metrics?: Record<MetricType, number> & {
+    artifactIcon: string;
+  };
 }
 
 // State manager
