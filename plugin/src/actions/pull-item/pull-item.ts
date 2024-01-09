@@ -11,7 +11,7 @@ import $, {
   WillAppearEvent,
   WillDisappearEvent,
 } from "@elgato/streamdeck";
-import { ItemIcon } from "./ItemIcon";
+import { ItemIcon } from "./item-icon";
 import { GlobalSettings } from "@/settings";
 import { Equipment } from "@/util/equipment";
 import { Cache } from "@/util/cache";

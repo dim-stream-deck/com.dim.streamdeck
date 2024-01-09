@@ -2,6 +2,7 @@ import { load } from "cheerio";
 import { CheckpointSettings } from "./checkpoint";
 import { ev } from "@/main";
 import $ from "@elgato/streamdeck";
+import ms from "ms";
 
 interface Checkpoint {
   activity: string;
@@ -20,7 +21,7 @@ let items: Checkpoint[] = [];
  */
 const queryCheckpoints = async () => {
   // update only if the last query was more than 2 minutes ago
-  if (lastQuery && Date.now() - lastQuery < 1000 * 60 * 2) {
+  if (lastQuery && Date.now() - lastQuery < ms("2m")) {
     return;
   }
   const body = await fetch(process.env.CHECKPOINT_API!);

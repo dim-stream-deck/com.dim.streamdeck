@@ -1,7 +1,7 @@
 import { DIM } from "@/dim/api";
-import { GlobalSettings } from "@/settings";
+import { State } from "@/state";
 import { Watcher } from "@/util/watcher";
-import $, {
+import {
   Action,
   action,
   DidReceiveSettingsEvent,
@@ -39,14 +39,11 @@ const process = (value?: PostmasterType) =>
 export class Postmaster extends SingletonAction {
   private watcher = Watcher("state");
 
-  private update(
-    e: Action,
-    settings: PostmasterSettings,
-    global: GlobalSettings
-  ) {
+  private update(e: Action, settings: PostmasterSettings) {
     const { postmasterItem, style } = settings;
+    const postmaster = State.get("postmaster");
     const key = process(postmasterItem);
-    const current = global.postmaster?.[key] ?? "?";
+    const current = postmaster?.[key] ?? "?";
     const value =
       current === "?"
         ? "?"
@@ -62,18 +59,13 @@ export class Postmaster extends SingletonAction {
 
   async onDidReceiveSettings(e: DidReceiveSettingsEvent<PostmasterSettings>) {
     const { settings } = e.payload;
-    const globalSettings = await $.settings.getGlobalSettings<GlobalSettings>();
-    this.update(e.action, settings, globalSettings);
+    this.update(e.action, settings);
   }
 
   onWillAppear(e: WillAppearEvent<PostmasterSettings>) {
     this.watcher.start(e.action.id, async () => {
       const settings = await e.action.getSettings<PostmasterSettings>();
-      this.update(
-        e.action,
-        settings,
-        await $.settings.getGlobalSettings<GlobalSettings>()
-      );
+      this.update(e.action, settings);
     });
   }
 

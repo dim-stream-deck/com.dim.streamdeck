@@ -1,4 +1,4 @@
-import { GlobalSettings, VaultType, VaultTypes } from "@/settings";
+import { State, VaultType, VaultTypes } from "@/state";
 import { next } from "@/util/cyclic";
 import { Watcher } from "@/util/watcher";
 import $, {
@@ -26,28 +26,20 @@ const processItem = (item?: VaultType) =>
 export class Vault extends SingletonAction {
   private watcher = Watcher("state");
 
-  private update(
-    action: Action,
-    settings: VaultSettings,
-    globalSettings: GlobalSettings
-  ) {
+  private update(action: Action, settings: VaultSettings) {
+    const vault = State.get("vault");
     const item = processItem(settings.item);
     action.setImage(`./imgs/canvas/vault/${item}.png`);
-    action.setTitle(`${globalSettings.vault?.[item] ?? "?"}`);
+    action.setTitle(`${vault?.[item] ?? "?"}`);
   }
 
   async onDidReceiveSettings(ev: DidReceiveSettingsEvent<VaultSettings>) {
-    const globalSettings = await $.settings.getGlobalSettings<GlobalSettings>();
-    this.update(ev.action, ev.payload.settings, globalSettings);
+    this.update(ev.action, ev.payload.settings);
   }
 
   async onWillAppear(e: WillAppearEvent<VaultSettings>) {
     this.watcher.start(e.action.id, async () =>
-      this.update(
-        e.action,
-        e.payload.settings,
-        await $.settings.getGlobalSettings<GlobalSettings>()
-      )
+      this.update(e.action, await e.action.getSettings<VaultSettings>())
     );
   }
 
@@ -61,7 +53,6 @@ export class Vault extends SingletonAction {
     const item = next(current, VaultTypes);
     e.action.setSettings({ item });
     // update current button
-    const globalSettings = $.settings.getGlobalSettings<GlobalSettings>();
-    this.update(e.action, { item }, await globalSettings);
+    this.update(e.action, { item });
   }
 }

@@ -1,7 +1,9 @@
 import { DIM } from "@/dim/api";
 import { ev } from "@/main";
-import { GlobalSettings, NoSettings } from "@/settings";
-import $, {
+import { NoSettings } from "@/settings";
+import { State } from "@/state";
+import {
+  Action,
   action,
   SingletonAction,
   WillAppearEvent,
@@ -14,10 +16,14 @@ import $, {
 export class FarmingMode extends SingletonAction {
   private listener: any;
 
+  private update(e: Action) {
+    const farmingMode = State.get("farmingMode");
+    e.setState(farmingMode ? 1 : 0);
+  }
+
   async onWillAppear(e: WillAppearEvent<NoSettings>) {
-    const settings = await $.settings.getGlobalSettings<GlobalSettings>();
-    e.action.setState(settings.farmingMode ? 1 : 0);
-    this.listener = (state: boolean) => e.action.setState(state ? 1 : 0);
+    this.update(e.action);
+    this.listener = () => this.update(e.action);
     ev.on("farmingMode", this.listener);
   }
 

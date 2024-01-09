@@ -1,13 +1,13 @@
 import EventEmitter from "events";
 import { WebSocketServer } from "ws";
 import $ from "@elgato/streamdeck";
-import { GlobalSettings } from "./settings";
+import { GlobalSettings, setGlobalSettings } from "./settings";
 import { z } from "zod";
 import { WebSocket } from "ws";
-import { mergeDeepRight } from "ramda";
-import { Equipment, toggleEquipment } from "./util/equipment";
+import { toggleEquipment } from "./util/equipment";
 import http from "http";
 import { manifest } from "./util/version";
+import { State, loadEquipment } from "./state";
 
 const server = http.createServer();
 
@@ -20,22 +20,16 @@ server.on("request", (req, res) => {
 
 export const ev = new EventEmitter();
 ev.setMaxListeners(30);
+loadEquipment();
 
 // In-memory storage of tokens
 const tokens = new Map<string, string>();
-
-// Load equipped items from the global settings
-const loadEquippedItems = (settings: GlobalSettings) => {
-  settings.equippedItems?.forEach((item) => Equipment.add(item));
-  ev.emit("equipmentStatus");
-};
 
 // Load tokens from the global settings
 $.settings.getGlobalSettings<GlobalSettings>().then((settings) => {
   Object.entries(settings.authentication ?? {}).forEach(([instance, token]) => {
     tokens.set(instance, token);
   });
-  loadEquippedItems(settings);
 });
 
 const ws = new WebSocketServer({
@@ -62,13 +56,6 @@ const DimMessage = z.discriminatedUnion("action", [
   }),
 ]);
 
-export const setGlobalSettings = async (update: Partial<GlobalSettings>) => {
-  // get the current global settings
-  const settings = await $.settings.getGlobalSettings<GlobalSettings>();
-  // merge old settings with the new ones
-  return $.settings.setGlobalSettings(mergeDeepRight(settings, update));
-};
-
 // Handle new connections and messages from the client
 ws.on("connection", (socket: WebSocket, req) => {
   // set the instance id on the socket
@@ -76,27 +63,22 @@ ws.on("connection", (socket: WebSocket, req) => {
   // watch for messages from the client
   socket.on("message", async (msg) => {
     const { action, data } = DimMessage.parse(JSON.parse(msg.toString()));
-    // emit the action to the event emitter
-    ev.emit(action, data);
     // log the action
     $.logger.info(`Received ${action} from ${socket.instance}`);
     // update global settings
     switch (action) {
       case "farmingMode":
-        await setGlobalSettings({
-          farmingMode: data,
-        });
+        State.set({ farmingMode: data });
         break;
       case "state":
-        await setGlobalSettings(data);
-        loadEquippedItems(data as GlobalSettings);
+        State.set(data);
         break;
       case "equipmentStatus":
-        setGlobalSettings({
-          equippedItems: toggleEquipment(data.itemId, data.equipped),
-        });
+        toggleEquipment(data.itemId, data.equipped);
         break;
     }
+    // update buttons
+    ev.emit(action);
   });
 });
 
@@ -137,7 +119,7 @@ ev.on("connect", async (data) => {
   // in-memory storage of tokens
   tokens.set(instance, token);
   // persist tokens to the global settings
-  await setGlobalSettings({
+  setGlobalSettings({
     authentication: {
       [instance]: token,
     },

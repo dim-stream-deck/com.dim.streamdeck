@@ -152,6 +152,19 @@
       "UUID": "com.dim.streamdeck.metrics"
     },
     {
+      "Icon": "imgs/actions/character/icon",
+      "Name": "Character",
+      "States": [
+        {
+          "Image": "imgs/actions/character/state",
+          "TitleAlignment": "bottom"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Show the current character",
+      "UUID": "com.dim.streamdeck.character"
+    },
+    {
       "Icon": "imgs/actions/max-power/icon",
       "Name": "Max Power",
       "States": [

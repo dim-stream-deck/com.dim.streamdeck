@@ -1,18 +1,18 @@
-import { GlobalSettings, MetricType, MetricTypes } from "@/settings";
 import { Cache } from "@/util/cache";
 import { next } from "@/util/cyclic";
 import { Watcher } from "@/util/watcher";
-import $, {
-  Action,
-  action,
-  DidReceiveSettingsEvent,
-  KeyDownEvent,
-  SingletonAction,
-  WillAppearEvent,
-  WillDisappearEvent,
+import {
+	Action,
+	action,
+	DidReceiveSettingsEvent,
+	KeyDownEvent,
+	SingletonAction,
+	WillAppearEvent,
+	WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { ArtifactIcon } from "./artifact-icon";
 import { mergeRight } from "ramda";
+import { MetricType, State } from "@/state";
 
 interface MetricsSettings {
   metric?: MetricType;
@@ -42,17 +42,11 @@ const defaults = {
 export class Metrics extends SingletonAction {
   private watcher = Watcher("state");
 
-  private async update(
-    action: Action,
-    settings: MetricsSettings,
-    globalSettings: GlobalSettings
-  ) {
+  private async update(action: Action, settings: MetricsSettings) {
     const metric = settings.metric ?? "battlePass";
+    const metrics = State.get("metrics");
 
-    const icon =
-      metric === "battlePass"
-        ? globalSettings.metrics?.artifactIcon
-        : undefined;
+    const icon = metric === "battlePass" ? metrics?.artifactIcon : undefined;
 
     const image = icon
       ? await Cache.canvas(icon, () => ArtifactIcon(icon))
@@ -62,22 +56,17 @@ export class Metrics extends SingletonAction {
       action.setImage(image);
     }
 
-    action.setTitle(`${globalSettings.metrics?.[metric] ?? "?"}`);
+    action.setTitle(`${metrics?.[metric] ?? "?"}`);
   }
 
   async onDidReceiveSettings(ev: DidReceiveSettingsEvent<MetricsSettings>) {
-    const globalSettings = await $.settings.getGlobalSettings<GlobalSettings>();
-    this.update(ev.action, ev.payload.settings, globalSettings);
+    this.update(ev.action, ev.payload.settings);
   }
 
   async onWillAppear(e: WillAppearEvent<MetricsSettings>) {
     this.watcher.start(e.action.id, async () => {
       const settings = await e.action.getSettings<MetricsSettings>();
-      this.update(
-        e.action,
-        settings,
-        await $.settings.getGlobalSettings<GlobalSettings>()
-      );
+      this.update(e.action, settings);
     });
   }
 
@@ -98,8 +87,7 @@ export class Metrics extends SingletonAction {
     // cycle through the available items
     const metric = next(e.payload.settings.metric ?? metrics[0], metrics);
     e.action.setSettings({ metric });
-    // update current button
-    const globalSettings = $.settings.getGlobalSettings<GlobalSettings>();
-    this.update(e.action, { metric }, await globalSettings);
+    // update button
+    this.update(e.action, { metric });
   }
 }

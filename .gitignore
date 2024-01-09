@@ -166,3 +166,4 @@ build/
 plugin/*/bin
 
 canvaskit.wasm
+state.json

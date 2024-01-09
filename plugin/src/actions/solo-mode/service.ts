@@ -1,4 +1,4 @@
-import { setGlobalSettings } from "@/main";
+import { setGlobalSettings } from "@/settings";
 import $ from "@elgato/streamdeck";
 
 // check if the service is installed (local service should be fast to respond)

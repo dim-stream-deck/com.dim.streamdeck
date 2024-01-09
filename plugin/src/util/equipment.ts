@@ -1,3 +1,5 @@
+import { State } from "@/state";
+
 export const Equipment = new Set<string>();
 
 export const toggleEquipment = (item: string, equipped: boolean) => {
@@ -6,5 +8,7 @@ export const toggleEquipment = (item: string, equipped: boolean) => {
   } else {
     Equipment.delete(item);
   }
-  return Array.from(Equipment);
+  // update state
+  const equippedItems = Array.from(Equipment);
+  State.set({ equippedItems });
 };

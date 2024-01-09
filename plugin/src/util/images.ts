@@ -14,3 +14,9 @@ export const legendary = readAsArrayBuffer("./imgs/canvas/item/legendary.png");
 export const equippedMark = readAsArrayBuffer(
   "./imgs/canvas/item/equipped-mark.png"
 );
+
+const warlock = readAsArrayBuffer("./imgs/canvas/character/warlock.png");
+const titan = readAsArrayBuffer("./imgs/canvas/character/titan.png");
+const hunter = readAsArrayBuffer("./imgs/canvas/character/hunter.png");
+
+export const classes = [titan, hunter, warlock];

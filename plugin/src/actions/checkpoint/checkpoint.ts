@@ -92,7 +92,7 @@ export class Checkpoint extends SingletonAction {
     if (cp?.copyId) {
       const { command, paste } = await joinCommand(cp.copyId);
       await clipboard.write(command);
-      paste && sendCommand(command);
+      paste && sendCommand();
       e.action.showOk();
     } else {
       e.action.showAlert();
