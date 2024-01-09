@@ -12,3 +12,10 @@ export type PostmasterSettings = {
   collectPostmaster?: boolean;
   style: CounterStyle;
 };
+
+export type Postmaster = {
+  ascendantShards: number;
+  enhancementPrisms: number;
+  spoils: number;
+  total: number;
+};

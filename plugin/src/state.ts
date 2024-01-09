@@ -1,42 +1,15 @@
 import { Equipment } from "./util/equipment";
 import { ev } from "./main";
 import { db, saveDB } from "./util/db";
-import { MaxPower, MetricType } from "@plugin/types";
-
-type Metrics = {
-  artifactIcon: string;
-} & Partial<Record<MetricType, number>>;
+import { MaxPower, MetricType, Postmaster, VaultType } from "@plugin/types";
 
 // Character
 
-export interface Character {
+export type Character = {
   class: number;
   icon: string;
   background: string;
-}
-
-// Vault
-
-export const VaultTypes = ["shards", "brightDust", "glimmer", "vault"] as const;
-
-export type VaultType = (typeof VaultTypes)[number] | "dust";
-
-type Vault = {
-  /**
-   * @deprecated
-   * @see brightDust
-   */
-  dust?: number;
-} & Partial<Record<VaultType, number>>;
-
-// Postmaster
-
-export interface Postmaster {
-  ascendantShards: number;
-  enhancementPrisms: number;
-  spoils: number;
-  total: number;
-}
+};
 
 export interface State {
   // pull item
@@ -46,9 +19,11 @@ export interface State {
   // state
   character?: Character;
   maxPower?: MaxPower;
-  metrics?: Metrics;
+  metrics?: {
+    artifactIcon: string;
+  } & Partial<Record<MetricType, number>>;
   postmaster?: Postmaster;
-  vault?: Vault;
+  vault?: Record<VaultType, number>;
 }
 
 // State manager

@@ -22,5 +22,6 @@ export * from "./src/max-power";
 export * from "./src/randomize";
 export * from "./src/search";
 export * from "./src/app";
+export * from "./src/vault";
 export * from "./src/checkpoint";
 export * from "./src/pull-item";

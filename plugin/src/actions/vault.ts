@@ -1,7 +1,7 @@
-import { State, VaultType, VaultTypes } from "@/state";
+import { State } from "@/state";
 import { next } from "@/util/cyclic";
 import { Watcher } from "@/util/watcher";
-import $, {
+import {
   Action,
   action,
   DidReceiveSettingsEvent,
@@ -10,14 +10,7 @@ import $, {
   WillAppearEvent,
   WillDisappearEvent,
 } from "@elgato/streamdeck";
-
-interface VaultSettings {
-  item?: VaultType;
-}
-
-// Convert a deprecated item name to the new one.
-const processItem = (item?: VaultType) =>
-  item === "dust" ? "brightDust" : item ?? "vault";
+import { VaultSettings, VaultTypes } from "@plugin/types";
 
 /**
  * Show Vault counters
@@ -28,9 +21,11 @@ export class Vault extends SingletonAction {
 
   private update(action: Action, settings: VaultSettings) {
     const vault = State.get("vault");
-    const item = processItem(settings.item);
-    action.setImage(`./imgs/canvas/vault/${item}.png`);
-    action.setTitle(`${vault?.[item] ?? "?"}`);
+    const item = settings.item;
+    if (item) {
+      action.setImage(`./imgs/canvas/vault/${item}.png`);
+      action.setTitle(`${vault?.[item] ?? "?"}`);
+    }
   }
 
   async onDidReceiveSettings(ev: DidReceiveSettingsEvent<VaultSettings>) {
@@ -49,10 +44,9 @@ export class Vault extends SingletonAction {
 
   async onKeyDown(e: KeyDownEvent<VaultSettings>) {
     // cycle through the available items
-    const current = processItem(e.payload.settings.item);
+    const current = e.payload.settings.item;
     const item = next(current, VaultTypes);
     e.action.setSettings({ item });
-    // update current button
     this.update(e.action, { item });
   }
 }
