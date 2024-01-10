@@ -4,6 +4,7 @@ import $, {
   Action,
   action,
   DidReceiveSettingsEvent,
+  SendToPluginEvent,
   SingletonAction,
 } from "@elgato/streamdeck";
 import { ItemIcon } from "./item-icon";
@@ -11,13 +12,9 @@ import { Cache } from "@/util/cache";
 import { Watcher } from "@/util/watcher";
 import { splitTitle } from "@/util/canvas";
 import { PullItemSettings, Schemas } from "@plugin/types";
-import {
-  KeyDown,
-  KeyUp,
-  WillAppear,
-  WillDisappear,
-} from "@/settings";
+import { KeyDown, KeyUp, WillAppear, WillDisappear } from "@/settings";
 import { Equipment } from "@/state";
+import { ev } from "@/main";
 
 export type AltAction = "hold" | "double" | undefined;
 
@@ -129,5 +126,9 @@ export class PullItem extends SingletonAction {
 
   onPropertyInspectorDidDisappear() {
     DIM.selection();
+  }
+
+  onSendToPlugin(e: SendToPluginEvent<{}, {}>) {
+    ev.emit("equipmentStatus");
   }
 }

@@ -23,8 +23,13 @@ import { DropText } from "../components/DropText";
 import { PullItemSettings } from "@plugin/types";
 
 export default () => {
-  const { settings, setSettings, globalSettings, setGlobalSettings } =
-    useStreamDeck<PullItemSettings>();
+  const {
+    settings,
+    setSettings,
+    globalSettings,
+    setGlobalSettings,
+    sendToPlugin,
+  } = useStreamDeck<PullItemSettings>();
 
   if (!settings || !globalSettings) {
     return;
@@ -140,14 +145,17 @@ export default () => {
             </Accordion.Control>
             <Accordion.Panel>
               <Switch
-                mt="sm"
+                mt="xs"
                 label="Grayscale filter for not-equipped items"
                 checked={globalSettings.equipmentGrayscale ?? true}
-                onChange={(e) =>
+                onChange={(e) => {
                   setGlobalSettings({
                     equipmentGrayscale: e.currentTarget.checked,
-                  })
-                }
+                  });
+                  sendToPlugin({
+                    action: "updateSettings",
+                  });
+                }}
               />
             </Accordion.Panel>
           </Accordion.Item>
