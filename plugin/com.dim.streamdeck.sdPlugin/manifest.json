@@ -4,6 +4,38 @@
   "Author": "fcannizzaro",
   "URL": "https://dimstreamdeck.vercel.app",
   "PropertyInspectorPath": "pi/index.html",
+  "Profiles": [
+    {
+      "Name": "DIM",
+      "ReadOnly": true,
+      "DeviceType": 0,
+      "DontAutoSwitchWhenInstalled": true
+    },
+    {
+      "Name": "DIM-Mini",
+      "ReadOnly": true,
+      "DeviceType": 1,
+      "DontAutoSwitchWhenInstalled": true
+    },
+    {
+      "Name": "DIM-XL",
+      "ReadOnly": true,
+      "DeviceType": 2,
+      "DontAutoSwitchWhenInstalled": true
+    },
+    {
+      "Name": "DIM",
+      "ReadOnly": true,
+      "DeviceType": 3,
+      "DontAutoSwitchWhenInstalled": true
+    },
+    {
+      "Name": "DIM-Plus",
+      "ReadOnly": true,
+      "DeviceType": 7,
+      "DontAutoSwitchWhenInstalled": true
+    }
+  ],
   "Actions": [
     {
       "Icon": "imgs/actions/solo-mode/icon",
@@ -176,6 +208,17 @@
       "SupportedInMultiActions": false,
       "Tooltip": "Show the current character Max Power and tap to apply",
       "UUID": "com.dim.streamdeck.max-power"
+    },
+    {
+      "Name": "Tile",
+      "Controllers": ["Keypad", "Encoder"],
+      "States": [
+        {
+          "TitleAlignment": "bottom"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "UUID": "com.dim.streamdeck.tile"
     },
     {
       "Icon": "imgs/actions/farming-mode/icon",
