@@ -71,14 +71,3 @@ export type PostmasterStyle = PostmasterSettings["style"];
 // Loadout
 
 export type LoadoutSettings = z.infer<typeof LoadoutSettingsSchema>;
-
-/*
-
-export type Postmaster = {
-  ascendantShards: number;
-  enhancementPrisms: number;
-  spoils: number;
-  total: number;
-};
-
-*/
