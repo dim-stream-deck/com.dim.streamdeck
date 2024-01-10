@@ -6,6 +6,7 @@ import {
   Action,
   action,
   DidReceiveSettingsEvent,
+  KeyDownEvent,
   SingletonAction,
 } from "@elgato/streamdeck";
 import { Schemas, VaultSettings, VaultTypeSchema } from "@plugin/types";
@@ -37,10 +38,10 @@ export class Vault extends SingletonAction {
   }
 
   // cycle through the available items
-  onKeyDown(e: KeyDown) {
+  onKeyDown(e: KeyDownEvent<VaultSettings>) {
     const current = Schemas.vault(e.payload.settings);
-    const item = next(current.type, VaultTypeSchema.options);
-    e.action.setSettings({ item });
+    const type = next(current.type, VaultTypeSchema.options);
+    e.action.setSettings({ type });
     this.update(e.action);
   }
 }
