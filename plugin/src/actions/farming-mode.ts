@@ -1,13 +1,8 @@
 import { DIM } from "@/dim/api";
 import { ev } from "@/main";
+import { WillAppear } from "@/settings";
 import { State } from "@/state";
-import {
-  Action,
-  action,
-  SingletonAction,
-  WillAppearEvent,
-} from "@elgato/streamdeck";
-import { NoSettings } from "@plugin/types";
+import { Action, action, SingletonAction } from "@elgato/streamdeck";
 
 /**
  * Toggle the farming mode on DIM.
@@ -21,7 +16,7 @@ export class FarmingMode extends SingletonAction {
     e.setState(farmingMode ? 1 : 0);
   }
 
-  async onWillAppear(e: WillAppearEvent<NoSettings>) {
+  onWillAppear(e: WillAppear) {
     this.update(e.action);
     this.listener = () => this.update(e.action);
     ev.on("farmingMode", this.listener);

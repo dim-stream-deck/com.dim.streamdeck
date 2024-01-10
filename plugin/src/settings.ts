@@ -1,4 +1,10 @@
-import $ from "@elgato/streamdeck";
+import $, {
+  DidReceiveSettingsEvent,
+  KeyDownEvent,
+  KeyUpEvent,
+  WillAppearEvent,
+  WillDisappearEvent,
+} from "@elgato/streamdeck";
 import { mergeDeepRight } from "ramda";
 import { GlobalSettings, GlobalSettingsSchema } from "@plugin/types";
 
@@ -11,3 +17,10 @@ export const setGlobalSettings = async (update: Partial<GlobalSettings>) => {
   // merge old settings with the new ones
   return $.settings.setGlobalSettings(mergeDeepRight(settings, update));
 };
+
+// Settings
+export type KeyUp = KeyUpEvent<{}>;
+export type KeyDown = KeyDownEvent<{}>;
+export type DidReceiveSettings = DidReceiveSettingsEvent<{}>;
+export type WillAppear = WillAppearEvent<{}>;
+export type WillDisappear = WillDisappearEvent<{}>;

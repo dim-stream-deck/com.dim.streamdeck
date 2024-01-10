@@ -3,9 +3,10 @@ import { useStreamDeck } from "../StreamDeck";
 import { Droppable } from "../components/Droppable";
 import { DropText } from "../components/DropText";
 import { IconX } from "@tabler/icons-react";
+import { Schemas } from "@plugin/types";
 
 export default () => {
-  const { settings, setSettings } = useStreamDeck();
+  const { settings, setSettings } = useStreamDeck(Schemas.loadout);
   return (
     <Droppable
       type="loadout"
@@ -51,7 +52,7 @@ export default () => {
                 </Text>
               </Group>
             )}
-            <DropText type="loadout" selected={settings.label} />
+            <DropText type="loadout" selected={Boolean(settings.label)} />
           </Stack>
         </Group>
       </Stack>

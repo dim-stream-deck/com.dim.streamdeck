@@ -1,7 +1,7 @@
 import { LRUCache } from "lru-cache";
 
 const cache = new LRUCache<string, string | ArrayBuffer>({
-  max: 100,
+  max: 250,
 });
 
 export const bungify = (url: string) => `https://www.bungie.net${url}`;

@@ -1,22 +1,24 @@
 import { DIM } from "@/dim/api";
-import { ev } from "@/main";
 import { Gestures, GestureType } from "@/util/gestures";
 import $, {
   Action,
   action,
   DidReceiveSettingsEvent,
-  KeyDownEvent,
-  KeyUpEvent,
   SingletonAction,
-  WillAppearEvent,
-  WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { ItemIcon } from "./item-icon";
 import { Equipment } from "@/util/equipment";
 import { Cache } from "@/util/cache";
 import { Watcher } from "@/util/watcher";
 import { splitTitle } from "@/util/canvas";
-import { GlobalSettings, PullItemSettings } from "@plugin/types";
+import { PullItemSettings, Schemas } from "@plugin/types";
+import {
+  DidReceiveSettings,
+  KeyDown,
+  KeyUp,
+  WillAppear,
+  WillDisappear,
+} from "@/settings";
 
 export type AltAction = "hold" | "double" | undefined;
 
@@ -34,27 +36,31 @@ export class PullItem extends SingletonAction {
   private gestures = Gestures();
   private watcher = Watcher("equipmentStatus");
 
-  private async update(e: Action, settings: PullItemSettings) {
-    if (!settings.item || !settings.icon) {
+  private async update(e: Action, settings?: PullItemSettings) {
+    const { item: id, ...item } =
+      settings ?? Schemas.pullItem(await e.getSettings());
+
+    if (!id || !item.icon) {
       return;
     }
 
-    const { equipmentGrayscale = true } =
-      await $.settings.getGlobalSettings<GlobalSettings>();
+    const { equipmentGrayscale = true } = Schemas.global(
+      await $.settings.getGlobalSettings()
+    );
 
-    const equipped = Equipment.has(settings.item);
+    const equipped = Equipment.has(id);
 
     const image = await Cache.canvas(
-      `${settings.item}/${equipped}/${equipmentGrayscale}`,
+      `${id}/${equipped}/${equipmentGrayscale}`,
       () =>
-        settings.icon && settings.item
+        item.icon && id
           ? ItemIcon(
               {
-                base: settings.icon,
-                overlay: settings.overlay,
-                element: settings.element,
-                isExotic: settings.isExotic,
-                isSubClass: settings.isSubClass,
+                base: item.icon,
+                overlay: item.overlay,
+                element: item.element,
+                isExotic: item.isExotic,
+                isSubClass: item.isSubClass,
                 equipped,
               },
               {
@@ -64,28 +70,18 @@ export class PullItem extends SingletonAction {
           : undefined
     );
 
-    e.setTitle(settings.isSubClass ? splitTitle(settings.label) : undefined);
+    e.setTitle(item.isSubClass ? splitTitle(item.label) : undefined);
     e.setImage(image);
   }
 
-  onWillAppear(e: WillAppearEvent<PullItemSettings>) {
-    const settings = e.payload.settings;
+  onWillAppear(e: WillAppear) {
+    this.update(e.action);
 
-    if (settings.item) {
-      ev.on(settings.item, () => this.update(e.action, settings));
-      this.update(e.action, settings);
-    }
-
-    this.watcher.start(e.action.id, async (data) => {
-      const settings = await e.action.getSettings<PullItemSettings>();
-      if (data?.itemId === settings.item) {
-        this.update(e.action, settings);
-      }
-    });
+    this.watcher.start(e.action.id, () => this.update(e.action));
 
     this.gestures.start(e.action.id, async (gesture: GestureType) => {
-      const settings = await e.action.getSettings<PullItemSettings>();
-      const global = await $.settings.getGlobalSettings<GlobalSettings>();
+      const global = Schemas.global(await $.settings.getGlobalSettings());
+      const settings = Schemas.pullItem(await e.action.getSettings());
 
       if (!settings.item) {
         return e.action.showAlert();
@@ -115,7 +111,7 @@ export class PullItem extends SingletonAction {
     });
   }
 
-  onWillDisappear(e: WillDisappearEvent<PullItemSettings>) {
+  onWillDisappear(e: WillDisappear) {
     this.gestures.stop(e.action.id);
     this.watcher.stop(e.action.id);
   }
@@ -124,11 +120,11 @@ export class PullItem extends SingletonAction {
     this.update(e.action, e.payload.settings);
   }
 
-  onKeyUp(e: KeyUpEvent<PullItemSettings>) {
+  onKeyUp(e: KeyUp) {
     this.gestures.keyUp(e.action.id);
   }
 
-  onKeyDown(e: KeyDownEvent<PullItemSettings>) {
+  onKeyDown(e: KeyDown) {
     this.gestures.keyDown(e.action.id);
   }
 

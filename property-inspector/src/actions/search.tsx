@@ -1,7 +1,7 @@
 import { Autocomplete, Divider, Group, SegmentedControl } from "@mantine/core";
 import { IconArrowBackUp, IconHandGrab, IconSearch } from "@tabler/icons-react";
 import { useStreamDeck } from "../StreamDeck";
-import { SearchBehavior, SearchSettings } from "@plugin/types";
+import { Schemas, SearchBehavior } from "@plugin/types";
 
 const Behaviors = [
   {
@@ -26,7 +26,7 @@ const Behaviors = [
 }>;
 
 export default () => {
-  const { settings, setSettings } = useStreamDeck<SearchSettings>();
+  const { settings, setSettings } = useStreamDeck(Schemas.search);
 
   const behavior = Behaviors.map((it) => ({
     ...it,
@@ -44,9 +44,9 @@ export default () => {
       <Autocomplete
         radius="xs"
         data={[]}
-        defaultValue={settings.query ?? settings.search ?? ""}
+        defaultValue={settings.query}
         placeholder="Search item/perk"
-        onChange={(value) => setSettings({ search: value })}
+        onChange={(query) => setSettings({ query })}
       />
       <Divider labelPosition="center" my="sm" label="Page" />
       <SegmentedControl

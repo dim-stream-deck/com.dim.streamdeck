@@ -4,7 +4,7 @@ import shards from "../assets/vault/shards.png";
 import dust from "../assets/vault/dust.png";
 import glimmer from "../assets/vault/glimmer.png";
 import vault from "../assets/vault/vault.png";
-import { VaultSettings, VaultType } from "@plugin/types";
+import { Schemas, VaultType, VaultTypeSchema } from "@plugin/types";
 
 const resources = [
   { value: "shards", image: shards, label: "Legendary Shards" },
@@ -18,7 +18,7 @@ const resources = [
 }>;
 
 export default () => {
-  const { settings, setSettings } = useStreamDeck<VaultSettings>();
+  const { settings, setSettings } = useStreamDeck(Schemas.vault);
 
   return (
     <div>
@@ -26,8 +26,10 @@ export default () => {
       <SegmentedControl
         fullWidth
         orientation="vertical"
-        value={settings.item ?? "vault"}
-        onChange={(value) => setSettings({ item: value as VaultType })}
+        value={settings.type}
+        onChange={(value) =>
+          setSettings({ type: VaultTypeSchema.parse(value) })
+        }
         data={resources.map((it) => ({
           value: it.value,
           label: (

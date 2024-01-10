@@ -8,7 +8,7 @@ import {
 } from "@elgato/streamdeck";
 import { exec } from "child_process";
 import { checkInstalledService } from "./service";
-import { NoSettings } from "@plugin/types";
+import { KeyDown, WillAppear } from "@/settings";
 
 interface PropertyInspectorData {
   action: "remove-service" | "install-service";
@@ -33,17 +33,15 @@ export class SoloMode extends SingletonAction {
     return status === "true";
   }
 
-  onWillAppear(e: WillAppearEvent<NoSettings>) {
+  onWillAppear(e: WillAppear) {
     this.updateState(e.action, "status");
   }
 
-  onKeyDown(e: KeyDownEvent<NoSettings>) {
+  onKeyDown(e: KeyDown) {
     this.updateState(e.action, "toggle");
   }
 
-  async onSendToPlugin(
-    e: SendToPluginEvent<PropertyInspectorData, NoSettings>
-  ) {
+  async onSendToPlugin(e: SendToPluginEvent<PropertyInspectorData, {}>) {
     const prefix =
       e.payload.action === "install-service" ? "install" : "remove";
     // run the installer/remover

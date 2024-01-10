@@ -3,7 +3,7 @@ import { useStreamDeck } from "../StreamDeck";
 import Artifact from "../assets/max-power/artifact.png";
 import Total from "../assets/max-power/total.png";
 import Base from "../assets/max-power/helmet.png";
-import { MaxPowerSettings, MaxPowerType } from "@plugin/types";
+import { MaxPowerType, MaxPowerTypeSchema, Schemas } from "@plugin/types";
 
 const resources = [
   { value: "total", image: Total, label: "Total" },
@@ -16,8 +16,7 @@ const resources = [
 }>;
 
 export default () => {
-  const { settings, setSettings } = useStreamDeck<MaxPowerSettings>();
-  const powerType = settings.powerType || "total";
+  const { settings, overrideSettings } = useStreamDeck(Schemas.maxPower);
   return (
     <div>
       <Divider labelPosition="center" label="Power Type" mb="sm" />
@@ -25,8 +24,11 @@ export default () => {
         fullWidth
         color="dim"
         orientation="vertical"
-        value={powerType}
-        onChange={(value) => setSettings({ powerType: value as MaxPowerType })}
+        value={settings.type}
+        onChange={(value) => {
+          const type = MaxPowerTypeSchema.parse(value);
+          overrideSettings({ type });
+        }}
         data={resources.map((it) => ({
           value: it.value,
           label: (

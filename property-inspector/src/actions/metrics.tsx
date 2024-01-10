@@ -28,7 +28,7 @@ import {
   IconPinFilled,
   IconSquare,
 } from "@tabler/icons-react";
-import { MetricType, MetricsSettings } from "@plugin/types";
+import { Metric, MetricSchema, MetricsSettings } from "@plugin/types";
 
 const items = [
   { id: "battlePass", icon: BattlePass, label: "Battle Pass" },
@@ -41,7 +41,7 @@ const items = [
   { id: "triumphs", icon: Triumphs, label: "Triumphs (Total score)" },
   { id: "triumphsActive", icon: Triumphs, label: "Triumphs (Active score)" },
 ] satisfies Array<{
-  id: MetricType;
+  id: Metric;
   icon: string;
   label: string;
 }>;
@@ -149,11 +149,11 @@ export default () => {
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-    const activeId = active.id as MetricType;
-    const overId = over?.id as MetricType;
+    const activeId = active.id;
+    const overId = over?.id;
     if (overId && activeId !== overId) {
-      const oldIndex = order.indexOf(activeId);
-      const newIndex = order.indexOf(overId);
+      const oldIndex = order.indexOf(MetricSchema.parse(activeId));
+      const newIndex = order.indexOf(MetricSchema.parse(overId));
       setSettings({
         order: arrayMove(order, oldIndex, newIndex),
       });

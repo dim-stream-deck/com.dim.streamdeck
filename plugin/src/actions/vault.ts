@@ -1,3 +1,4 @@
+import { KeyDown, WillAppear, WillDisappear } from "@/settings";
 import { State } from "@/state";
 import { next } from "@/util/cyclic";
 import { Watcher } from "@/util/watcher";
@@ -5,12 +6,9 @@ import {
   Action,
   action,
   DidReceiveSettingsEvent,
-  KeyDownEvent,
   SingletonAction,
-  WillAppearEvent,
-  WillDisappearEvent,
 } from "@elgato/streamdeck";
-import { VaultSettings, VaultTypes } from "@plugin/types";
+import { Schemas, VaultSettings, VaultTypeSchema } from "@plugin/types";
 
 /**
  * Show Vault counters
@@ -19,34 +17,30 @@ import { VaultSettings, VaultTypes } from "@plugin/types";
 export class Vault extends SingletonAction {
   private watcher = Watcher("state");
 
-  private update(action: Action, settings: VaultSettings) {
+  private async update(action: Action, settings?: VaultSettings) {
     const vault = State.get("vault");
-    const item = settings.item;
-    if (item) {
-      action.setImage(`./imgs/canvas/vault/${item}.png`);
-      action.setTitle(`${vault?.[item] ?? "?"}`);
-    }
+    const { type } = settings ?? Schemas.vault(await action.getSettings());
+    action.setImage(`./imgs/canvas/vault/${type}.png`);
+    action.setTitle(`${vault?.[type].toLocaleString() ?? "?"}`);
   }
 
-  async onDidReceiveSettings(ev: DidReceiveSettingsEvent<VaultSettings>) {
-    this.update(ev.action, ev.payload.settings);
+  onDidReceiveSettings(e: DidReceiveSettingsEvent<VaultSettings>) {
+    this.update(e.action, e.payload.settings);
   }
 
-  async onWillAppear(e: WillAppearEvent<VaultSettings>) {
-    this.watcher.start(e.action.id, async () =>
-      this.update(e.action, await e.action.getSettings<VaultSettings>())
-    );
+  onWillAppear(e: WillAppear) {
+    this.watcher.start(e.action.id, () => this.update(e.action));
   }
 
-  onWillDisappear(e: WillDisappearEvent<VaultSettings>) {
+  onWillDisappear(e: WillDisappear) {
     this.watcher.stop(e.action.id);
   }
 
-  async onKeyDown(e: KeyDownEvent<VaultSettings>) {
-    // cycle through the available items
-    const current = e.payload.settings.item;
-    const item = next(current, VaultTypes);
+  // cycle through the available items
+  onKeyDown(e: KeyDown) {
+    const current = Schemas.vault(e.payload.settings);
+    const item = next(current.type, VaultTypeSchema.options);
     e.action.setSettings({ item });
-    this.update(e.action, { item });
+    this.update(e.action);
   }
 }

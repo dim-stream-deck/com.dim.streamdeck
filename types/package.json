@@ -2,8 +2,9 @@
   "name": "@plugin/types",
   "private": true,
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
     "zod": "^3.22.4"
   }
 }

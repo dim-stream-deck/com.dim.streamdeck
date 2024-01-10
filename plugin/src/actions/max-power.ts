@@ -1,4 +1,5 @@
 import { DIM } from "@/dim/api";
+import { DidReceiveSettings, WillAppear, WillDisappear } from "@/settings";
 import { State } from "@/state";
 import { Watcher } from "@/util/watcher";
 import {
@@ -6,10 +7,8 @@ import {
   action,
   DidReceiveSettingsEvent,
   SingletonAction,
-  WillAppearEvent,
-  WillDisappearEvent,
 } from "@elgato/streamdeck";
-import { MaxPowerSettings } from "@plugin/types";
+import { MaxPowerSettings, Schemas } from "@plugin/types";
 
 /**
  * Show current character max power and allow to equip it.
@@ -18,28 +17,23 @@ import { MaxPowerSettings } from "@plugin/types";
 export class MaxPower extends SingletonAction {
   private watcher = Watcher("state");
 
-  private update(action: Action, settings: MaxPowerSettings) {
+  private async update(action: Action, settings?: MaxPowerSettings) {
     const maxPower = State.get("maxPower");
-    const powerType = settings.powerType ?? "total";
-    if (powerType !== "all") {
-      action.setImage(`./imgs/canvas/max-power/${powerType}.png`);
-      action.setTitle(`${maxPower?.[powerType] ?? "?"}`);
-    }
+    const { type } = settings ?? Schemas.maxPower(await action.getSettings());
+    action.setImage(`./imgs/canvas/max-power/${type}.png`);
+    action.setTitle(`${maxPower?.[type] ?? "?"}`);
   }
 
-  async onDidReceiveSettings(ev: DidReceiveSettingsEvent<MaxPowerSettings>) {
-    this.update(ev.action, ev.payload.settings);
+  onWillAppear(e: WillAppear) {
+    this.watcher.start(e.action.id, () => this.update(e.action));
   }
 
-  async onWillAppear(e: WillAppearEvent<MaxPowerSettings>) {
-    this.watcher.start(e.action.id, async () => {
-      const settings = await e.action.getSettings<MaxPowerSettings>();
-      this.update(e.action, settings);
-    });
-  }
-
-  onWillDisappear(e: WillDisappearEvent<MaxPowerSettings>) {
+  onWillDisappear(e: WillDisappear) {
     this.watcher.stop(e.action.id);
+  }
+
+  onDidReceiveSettings(e: DidReceiveSettingsEvent<MaxPowerSettings>) {
+    this.update(e.action, e.payload.settings);
   }
 
   onKeyDown() {

@@ -2,10 +2,7 @@ import $, {
   Action,
   action,
   DidReceiveSettingsEvent,
-  KeyDownEvent,
   SingletonAction,
-  WillAppearEvent,
-  WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { CheckpointManager } from "./manager";
 import { Cache } from "@/util/cache";
@@ -14,7 +11,8 @@ import clipboard from "clipboardy";
 import { Watcher } from "@/util/watcher";
 import { exec, spawn } from "child_process";
 import { splitTitle } from "@/util/canvas";
-import { CheckpointSettings, GlobalSettings } from "@plugin/types";
+import { CheckpointSettings, GlobalSettings, Schemas } from "@plugin/types";
+import { KeyDown, WillAppear, WillDisappear } from "@/settings";
 
 /**
  * Generate the command to join the checkpoint
@@ -52,34 +50,32 @@ const sendCommand = () => {
 export class Checkpoint extends SingletonAction {
   private watcher = Watcher("checkpoints");
 
-  private async update(e: Action, settings: CheckpointSettings) {
+  private async update(e: Action, settings?: CheckpointSettings) {
+    const cp = settings ?? Schemas.checkpoint(await e.getSettings());
     // update the step title
-    e.setTitle(splitTitle(settings.step));
+    e.setTitle(splitTitle(cp.step));
     // update the image
-    if (settings.image) {
-      const enabled = Boolean(CheckpointManager.search(settings));
-      const image = await Cache.canvas(`${settings.activity}/${enabled}`, () =>
-        settings.image ? CheckpointIcon(settings.image, enabled) : undefined
+    if (cp.image) {
+      const enabled = Boolean(CheckpointManager.search(cp));
+      const image = await Cache.canvas(`${cp.activity}/${enabled}`, () =>
+        cp.image ? CheckpointIcon(cp.image, enabled) : undefined
       );
       e.setImage(image);
     } else {
-      e.setImage(undefined);
+      e.setImage();
     }
   }
 
-  async onWillAppear(e: WillAppearEvent<CheckpointSettings>) {
+  async onWillAppear(e: WillAppear) {
     await CheckpointManager.refresh();
-    this.watcher.start(e.action.id, async () => {
-      const settings = await e.action.getSettings<CheckpointSettings>();
-      this.update(e.action, settings);
-    });
+    this.watcher.start(e.action.id, () => this.update(e.action));
   }
 
-  async onWillDisappear(e: WillDisappearEvent<CheckpointSettings>) {
+  async onWillDisappear(e: WillDisappear) {
     this.watcher.stop(e.action.id);
   }
 
-  async onKeyDown(e: KeyDownEvent<CheckpointSettings>) {
+  async onKeyDown(e: KeyDown) {
     await CheckpointManager.refresh();
     const cp = CheckpointManager.search(e.payload.settings);
     if (cp?.copyId) {
@@ -92,7 +88,7 @@ export class Checkpoint extends SingletonAction {
     }
   }
 
-  async onDidReceiveSettings(ev: DidReceiveSettingsEvent<CheckpointSettings>) {
-    this.update(ev.action, ev.payload.settings);
+  onDidReceiveSettings(e: DidReceiveSettingsEvent<CheckpointSettings>) {
+    this.update(e.action, e.payload.settings);
   }
 }

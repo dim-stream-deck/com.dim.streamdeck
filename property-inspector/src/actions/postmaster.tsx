@@ -14,9 +14,11 @@ import PostmasterIcon from "../assets/postmaster/postmaster.png";
 import Percent from "../assets/postmaster/percent.png";
 import Count from "../assets/postmaster/count.png";
 import {
-  CounterStyle,
-  PostmasterSettings,
+  CounterStyleSchema,
+  PostmasterStyle,
   PostmasterType,
+  PostmasterTypeSchema,
+  Schemas,
 } from "@plugin/types";
 
 const resources = [
@@ -24,16 +26,24 @@ const resources = [
   { value: "enhancementPrisms", image: Prism, label: "Enhancement Prisms" },
   { value: "ascendantShards", image: Shard, label: "Ascendant Shards" },
   { value: "spoils", image: Spoils, label: "Spoils of Conquest" },
-];
+] satisfies Array<{
+  value: PostmasterType;
+  image: string;
+  label: string;
+}>;
 
 const styles = [
   { value: "percentage", image: Percent, label: "Percentage" },
   { value: "counter", image: Count, label: "Counter" },
-];
+] satisfies Array<{
+  value: PostmasterStyle;
+  image: string;
+  label: string;
+}>;
 
 export default () => {
-  const { settings, setSettings } = useStreamDeck<PostmasterSettings>();
-  const item = settings.postmasterItem ?? "total";
+  const { settings, setSettings } = useStreamDeck(Schemas.postmaster);
+  const item = settings.type;
   return (
     <div>
       {item === "total" && (
@@ -44,7 +54,9 @@ export default () => {
             fullWidth
             orientation="vertical"
             value={settings.style}
-            onChange={(value) => setSettings({ style: value as CounterStyle })}
+            onChange={(value) =>
+              setSettings({ style: CounterStyleSchema.parse(value) })
+            }
             data={styles.map((it) => ({
               value: it.value,
               label: (
@@ -58,7 +70,7 @@ export default () => {
           <Divider labelPosition="center" label="Interaction" mb="sm" />
           <Switch
             label="Collect items on tap"
-            checked={settings.collectPostmaster ?? false}
+            checked={settings.collectPostmaster}
             onChange={(e) =>
               setSettings({ collectPostmaster: e.currentTarget.checked })
             }
@@ -69,9 +81,9 @@ export default () => {
       <SegmentedControl
         fullWidth
         orientation="vertical"
-        value={settings.postmasterItem}
+        value={settings.type}
         onChange={(value) =>
-          setSettings({ postmasterItem: value as PostmasterType })
+          setSettings({ type: PostmasterTypeSchema.parse(value) })
         }
         data={resources.map((it) => ({
           value: it.value,

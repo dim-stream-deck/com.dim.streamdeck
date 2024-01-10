@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { GlobalSettings } from "@plugin/types";
+import { ZodSchema } from "zod";
 
 interface StreamDeckProps {
   children: any;
@@ -26,6 +27,7 @@ interface StreamDeckContext<TSettings> {
     settings: Partial<TSettings>,
     options?: { replace?: boolean }
   ) => void;
+  overrideSettings: (settings: Partial<TSettings>) => void;
   globalSettings: Partial<GlobalSettings>;
   setGlobalSettings: (settings: Partial<GlobalSettings>) => void;
   openURL: (url?: string) => void;
@@ -36,6 +38,7 @@ const StreamDeckContext = createContext<StreamDeckContext<Settings>>({
   settings: {},
   globalSettings: {},
   setSettings: () => {},
+  overrideSettings: () => {},
   setGlobalSettings: () => {},
   openURL: () => {},
   sendToPlugin: () => {},
@@ -113,13 +116,19 @@ export const StreamDeck: FC<StreamDeckProps> = ({
   );
 
   const setPartialSettings = useCallback(
-    (update: Partial<Settings>, options?: { replace?: boolean }) => {
-      const payload = options?.replace
-        ? update
-        : {
-            ...settings,
-            ...update,
-          };
+    (update: Partial<Settings>) => {
+      const payload = {
+        ...settings,
+        ...update,
+      };
+      send("setSettings", { payload });
+      setSettings(payload);
+    },
+    [settings, send]
+  );
+
+  const overrideSettings = useCallback(
+    (payload: Partial<Settings>) => {
       send("setSettings", { payload });
       setSettings(payload);
     },
@@ -159,13 +168,14 @@ export const StreamDeck: FC<StreamDeckProps> = ({
   return (
     <StreamDeckContext.Provider
       value={{
+        openURL,
+        sendToPlugin,
         communication,
         settings,
         globalSettings,
+        overrideSettings,
         setSettings: setPartialSettings,
         setGlobalSettings: setPartialGlobalSettings,
-        openURL,
-        sendToPlugin,
       }}
     >
       {children}
@@ -173,8 +183,12 @@ export const StreamDeck: FC<StreamDeckProps> = ({
   );
 };
 
-type BaseSettings = Record<string, any>;
-
-export const useStreamDeck = <TSettings = BaseSettings,>() => {
-  return useContext(StreamDeckContext) as StreamDeckContext<TSettings>;
+export const useStreamDeck = <TSettings = any,>(
+  validator?: (data: unknown) => TSettings
+) => {
+  const props = useContext(StreamDeckContext) as StreamDeckContext<TSettings>;
+  return {
+    ...props,
+    settings: validator ? validator(props.settings) : props.settings,
+  };
 };

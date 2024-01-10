@@ -18,9 +18,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import {
   Checkpoint,
-  CheckpointDifficulty,
-  CheckpointSettings,
+  CheckpointDifficultySchema,
   CheckpointsSchema,
+  Schemas,
 } from "@plugin/types";
 
 export const checkpointDefinitions = async () => {
@@ -33,7 +33,7 @@ export const checkpointDefinitions = async () => {
 
 export default () => {
   const { globalSettings, setGlobalSettings, settings, setSettings } =
-    useStreamDeck<CheckpointSettings>();
+    useStreamDeck(Schemas.checkpoint);
 
   const { data = new Map<string, Checkpoint>() } = useQuery({
     queryKey: ["checkpoints"],
@@ -94,7 +94,8 @@ export default () => {
               value={settings.activity}
               onChange={(activity) => {
                 if (activity) {
-                  const [step] = data.get(activity)?.steps ?? [];
+                  const cp = data.get(activity);
+                  const [step] = cp?.steps ?? [];
                   setSettings(
                     {
                       activity,
@@ -107,7 +108,7 @@ export default () => {
                             step: undefined,
                             image: undefined,
                           }),
-                      difficulty: undefined,
+                      difficulty: cp?.difficulties?.[0],
                     },
                     {
                       replace: true,
@@ -154,7 +155,9 @@ export default () => {
                   data={difficulties}
                   value={settings.difficulty}
                   onChange={(value) =>
-                    setSettings({ difficulty: value as CheckpointDifficulty })
+                    setSettings({
+                      difficulty: CheckpointDifficultySchema.parse(value),
+                    })
                   }
                 />
               </Grid.Col>
@@ -177,6 +180,10 @@ export default () => {
           Checkpoint#1111
         </Text>
       </Group>
+      <Text c="dimmed" size="sm">
+        *This field should be filled only if you don't use{" "}
+        <strong>English</strong> as your game language.
+      </Text>
       <Divider labelPosition="center" label="Type in chat" />
       <Switch
         label="Paste the command"

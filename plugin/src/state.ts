@@ -1,7 +1,7 @@
 import { Equipment } from "./util/equipment";
 import { ev } from "./main";
 import { db, saveDB } from "./util/db";
-import { MaxPower, MetricType, Postmaster, VaultType } from "@plugin/types";
+import { Metric, VaultType } from "@plugin/types";
 
 // Character
 
@@ -13,17 +13,30 @@ export type Character = {
 
 // State
 
-export interface State {
+type Postmaster = {
+  ascendantShards: number;
+  enhancementPrisms: number;
+  spoils: number;
+  total: number;
+};
+
+type MaxPower = {
+  artifact: number;
+  base: string;
+  total: string;
+};
+
+export type State = {
   equippedItems: string[];
   farmingMode?: boolean;
   character?: Character;
   maxPower?: MaxPower;
   postmaster?: Postmaster;
   vault?: Record<VaultType, number>;
-  metrics?: Record<MetricType, number> & {
+  metrics?: Record<Metric, number> & {
     artifactIcon: string;
   };
-}
+};
 
 // State manager
 export const State = {

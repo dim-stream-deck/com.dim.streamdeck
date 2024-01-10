@@ -5,33 +5,45 @@ import {
   IconBrandWindows,
   IconBrowser,
 } from "@tabler/icons-react";
-import { AppSettings, AppType } from "@plugin/types";
+import { AppType, AppTypeSchema, Schemas } from "@plugin/types";
+
+const Options = [
+  {
+    value: "app-browser",
+    label: "app.destinyitemmanager.com",
+    icon: <IconBrowser />,
+  },
+  {
+    value: "beta-browser",
+    label: "beta.destinyitemmanager.com",
+    icon: <IconBrowser />,
+  },
+  {
+    value: "app-chrome",
+    label: "Chrome PWA",
+    icon: <IconBrandChrome />,
+  },
+  {
+    value: "beta-chrome",
+    label: "Chrome PWA (Beta)",
+    icon: <IconBrandChrome />,
+  },
+  {
+    value: "app-windows",
+    label: "Windows App",
+    icon: <IconBrandWindows />,
+  },
+] satisfies Array<{
+  value: AppType;
+  label: string;
+  icon: React.ReactNode;
+}>;
 
 export default () => {
-  const { settings, setSettings } = useStreamDeck<AppSettings>();
-  const type =
-    settings.beta === true ? "beta-browser" : settings.type ?? "app-browser";
+  const { settings, setSettings } = useStreamDeck(Schemas.app);
   const color = settings.type?.startsWith("beta") ? "cyan" : "dim";
 
-  const data = [
-    {
-      value: "app-browser",
-      label: "app.destinyitemmanager.com",
-      icon: <IconBrowser />,
-    },
-    {
-      value: "beta-browser",
-      label: "beta.destinyitemmanager.com",
-      icon: <IconBrowser />,
-    },
-    { value: "app-chrome", label: "Chrome PWA", icon: <IconBrandChrome /> },
-    {
-      value: "beta-chrome",
-      label: "Chrome PWA (Beta)",
-      icon: <IconBrandChrome />,
-    },
-    { value: "app-windows", label: "Windows App", icon: <IconBrandWindows /> },
-  ].map((it) => ({
+  const data = Options.map((it) => ({
     ...it,
     label: (
       <Group>
@@ -47,12 +59,13 @@ export default () => {
       <SegmentedControl
         fullWidth
         orientation="vertical"
-        onChange={(value) =>
-          setSettings({ type: value as AppType }, { replace: true })
-        }
+        onChange={(value) => {
+          const type = AppTypeSchema.parse(value);
+          setSettings({ type }, { replace: true });
+        }}
         color={color}
         data={data}
-        value={type}
+        value={settings.type}
       />
     </div>
   );
