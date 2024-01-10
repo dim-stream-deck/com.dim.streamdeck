@@ -118,15 +118,15 @@ export const VaultSettingsSchema = z.object({
 export const PullItemActionSchema = z.enum(["equip", "pull", "vault"]);
 
 export const PullItemSettingsSchema = z.object({
-  item: z.string().optional(),
-  icon: z.string().optional(),
-  inventory: z.boolean().optional(),
-  isExotic: z.boolean().optional(),
-  isSubClass: z.boolean().optional(),
-  label: z.string().optional(),
-  overlay: z.string().optional(),
-  subtitle: z.string().optional(),
-  element: z.string().optional(),
+  item: z.string().nullish(),
+  icon: z.string().nullish(),
+  inventory: z.boolean().nullish(),
+  isExotic: z.boolean().nullish(),
+  isSubClass: z.boolean().nullish(),
+  label: z.string().nullish(),
+  overlay: z.string().nullish(),
+  subtitle: z.string().nullish(),
+  element: z.string().nullish(),
 });
 
 // Postmaster
@@ -149,17 +149,17 @@ export const PostmasterSettingsSchema = z.object({
 // Loadout
 
 export const LoadoutSettingsSchema = z.object({
-  loadout: z.string().optional(),
-  label: z.string().optional(),
-  subtitle: z.string().optional(),
-  icon: z.string().optional(),
-  character: z.string().optional(),
+  loadout: z.string().nullish(),
+  label: z.string().nullish(),
+  subtitle: z.string().nullish(),
+  icon: z.string().nullish(),
+  character: z.string().nullish(),
   inGameIcon: z
     .object({
       background: z.string(),
       icon: z.string(),
     })
-    .optional(),
+    .nullish(),
 });
 
 export const Schemas = {
