@@ -46,5 +46,5 @@ export const grayscale = (ctx: EmulatedCanvas2DContext) => {
   ctx.putImageData(imageData, 0, 0);
 };
 
-export const splitTitle = (text?: string) =>
+export const splitTitle = (text?: string | null) =>
   text ? splitEvery(6, text).join("\n") : undefined;

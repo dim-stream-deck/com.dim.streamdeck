@@ -5,6 +5,7 @@ import {
   Action,
   action,
   DidReceiveSettingsEvent,
+  KeyDownEvent,
   SingletonAction,
 } from "@elgato/streamdeck";
 import { ArtifactIcon } from "./artifact-icon";
@@ -51,7 +52,7 @@ export class Metrics extends SingletonAction {
     this.watcher.stop(e.action.id);
   }
 
-  onKeyDown(e: KeyDown) {
+  onKeyDown(e: KeyDownEvent<MetricsSettings>) {
     const { pinned, order, metric, disabled } = Schemas.metrics(
       e.payload.settings
     );
@@ -63,6 +64,9 @@ export class Metrics extends SingletonAction {
     const metrics = order.filter((metric) => !disabled?.includes(metric));
     // cycle through the available items
     e.action.setSettings({
+      pinned,
+      order,
+      disabled,
       metric: next(metric, metrics),
     });
     // update button

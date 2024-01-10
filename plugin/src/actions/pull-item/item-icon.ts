@@ -6,30 +6,29 @@ import {
   loadImageFromUrl,
 } from "@/util/canvas";
 import { equippedMark, exotic, legendary } from "@/util/images";
+import { PullItemSettings } from "@plugin/types";
 import { EmulatedCanvas2DContext } from "canvaskit-wasm";
 
-interface ItemIcon {
-  base: string;
-  overlay?: string;
-  element?: string;
+type ItemIcon = PullItemSettings & {
   equipped?: boolean;
-  isExotic?: boolean;
-  isSubClass?: boolean;
-}
+};
 
 interface ItemIconOptions {
   grayscale?: boolean;
 }
 
 export const ItemIcon = async (item: ItemIcon, options: ItemIconOptions) => {
-  const source = await Cache.imageFromUrl(item.base, "arraybuffer");
+  if (!item.icon) {
+    return;
+  }
+  const source = await Cache.imageFromUrl(item.icon, "arraybuffer");
   if (!source) {
     return;
   }
   const Canvas = await CanvasKit;
   const canvas = Canvas.MakeCanvas(144, 144);
   const ctx = canvas.getContext("2d") as EmulatedCanvas2DContext;
-  const image = loadImage(Canvas, item.base, source);
+  const image = loadImage(Canvas, item.icon, source);
   const rarityImage = loadImage(
     Canvas,
     item.isExotic ? "exotic" : "legendary",

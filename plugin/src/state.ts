@@ -1,7 +1,8 @@
-import { Equipment } from "./util/equipment";
 import { ev } from "./main";
 import { db, saveDB } from "./util/db";
 import { Metric, VaultType } from "@plugin/types";
+
+export const Equipment = new Set<string>();
 
 // Character
 
@@ -57,7 +58,8 @@ export const State = {
 /**
  * Load the equipped items from the local db.
  */
-export const loadEquipment = () => {
+export const reloadEquipment = () => {
+  Equipment.clear();
   db.data.equippedItems?.forEach((item) => Equipment.add(item));
   ev.emit("equipmentStatus");
 };

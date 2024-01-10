@@ -7,18 +7,17 @@ import $, {
   SingletonAction,
 } from "@elgato/streamdeck";
 import { ItemIcon } from "./item-icon";
-import { Equipment } from "@/util/equipment";
 import { Cache } from "@/util/cache";
 import { Watcher } from "@/util/watcher";
 import { splitTitle } from "@/util/canvas";
 import { PullItemSettings, Schemas } from "@plugin/types";
 import {
-  DidReceiveSettings,
   KeyDown,
   KeyUp,
   WillAppear,
   WillDisappear,
 } from "@/settings";
+import { Equipment } from "@/state";
 
 export type AltAction = "hold" | "double" | undefined;
 
@@ -56,11 +55,7 @@ export class PullItem extends SingletonAction {
         item.icon && id
           ? ItemIcon(
               {
-                base: item.icon,
-                overlay: item.overlay,
-                element: item.element,
-                isExotic: item.isExotic,
-                isSubClass: item.isSubClass,
+                ...item,
                 equipped,
               },
               {

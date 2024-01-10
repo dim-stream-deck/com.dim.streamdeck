@@ -4,10 +4,9 @@ import $ from "@elgato/streamdeck";
 import { setGlobalSettings } from "./settings";
 import { z } from "zod";
 import { WebSocket } from "ws";
-import { toggleEquipment } from "./util/equipment";
 import http from "http";
 import { manifest } from "./util/version";
-import { State, loadEquipment } from "./state";
+import { State, reloadEquipment } from "./state";
 import { GlobalSettings } from "@plugin/types";
 
 const server = http.createServer();
@@ -21,7 +20,7 @@ server.on("request", (req, res) => {
 
 export const ev = new EventEmitter();
 ev.setMaxListeners(30);
-loadEquipment();
+reloadEquipment();
 
 // In-memory storage of tokens
 const tokens = new Map<string, string>();
@@ -48,13 +47,6 @@ const DimMessage = z.discriminatedUnion("action", [
     action: z.literal("state"),
     data: z.record(z.any()),
   }),
-  z.object({
-    action: z.literal("equipmentStatus"),
-    data: z.object({
-      equipped: z.boolean(),
-      itemId: z.string(),
-    }),
-  }),
 ]);
 
 // Handle new connections and messages from the client
@@ -73,9 +65,7 @@ ws.on("connection", (socket: WebSocket, req) => {
         break;
       case "state":
         State.set(data);
-        break;
-      case "equipmentStatus":
-        toggleEquipment(data.itemId, data.equipped);
+        reloadEquipment();
         break;
     }
     // update buttons

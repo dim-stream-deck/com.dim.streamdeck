@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Collapse,
   Divider,
   Group,
   SegmentedControl,
@@ -46,37 +47,35 @@ export default () => {
   const item = settings.type;
   return (
     <div>
-      {item === "total" && (
-        <>
-          <Divider labelPosition="center" label="Style" mb="sm" />
-          <SegmentedControl
-            mb="sm"
-            fullWidth
-            orientation="vertical"
-            value={settings.style}
-            onChange={(value) =>
-              setSettings({ style: CounterStyleSchema.parse(value) })
-            }
-            data={styles.map((it) => ({
-              value: it.value,
-              label: (
-                <Group>
-                  <Avatar size="sm" src={it.image} />
-                  <Text ml="sm">{it.label}</Text>
-                </Group>
-              ),
-            }))}
-          />
-          <Divider labelPosition="center" label="Interaction" mb="sm" />
-          <Switch
-            label="Collect items on tap"
-            checked={settings.collectPostmaster}
-            onChange={(e) =>
-              setSettings({ collectPostmaster: e.currentTarget.checked })
-            }
-          />
-        </>
-      )}
+      <Collapse in={item === "total"}>
+        <Divider labelPosition="center" label="Style" mb="sm" />
+        <SegmentedControl
+          mb="sm"
+          fullWidth
+          orientation="vertical"
+          value={settings.style}
+          onChange={(value) =>
+            setSettings({ style: CounterStyleSchema.parse(value) })
+          }
+          data={styles.map((it) => ({
+            value: it.value,
+            label: (
+              <Group>
+                <Avatar size="sm" src={it.image} />
+                <Text ml="sm">{it.label}</Text>
+              </Group>
+            ),
+          }))}
+        />
+        <Divider labelPosition="center" label="Interaction" mb="sm" />
+        <Switch
+          label="Collect items on tap"
+          checked={settings.collectPostmaster}
+          onChange={(e) =>
+            setSettings({ collectPostmaster: e.currentTarget.checked })
+          }
+        />
+      </Collapse>
       <Divider labelPosition="center" label="Item" my="sm" />
       <SegmentedControl
         fullWidth
