@@ -3,7 +3,6 @@ import { ev } from "@/main";
 import $ from "@elgato/streamdeck";
 import ms from "ms";
 import { CheckpointSettings } from "@plugin/types";
-import { INSPECT_MAX_BYTES } from "buffer";
 
 interface Checkpoint {
   activity: string;
