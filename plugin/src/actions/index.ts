@@ -13,9 +13,13 @@ import { Postmaster } from "./postmaster";
 import { Loadout } from "./loadout/loadout";
 import { Checkpoint } from "./checkpoint/checkpoint";
 import { Character } from "./character/character";
+import { Picker } from "./picker/picker";
+import { Tile } from "./picker/tile";
 
 $.actions.registerAction(new App());
 $.actions.registerAction(new Character());
+$.actions.registerAction(new Tile());
+$.actions.registerAction(new Picker());
 $.actions.registerAction(new Checkpoint());
 $.actions.registerAction(new FarmingMode());
 $.actions.registerAction(new Loadout());

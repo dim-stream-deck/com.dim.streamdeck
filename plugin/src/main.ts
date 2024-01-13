@@ -8,6 +8,7 @@ import http from "http";
 import { manifest } from "./util/version";
 import { State, reloadEquipment } from "./state";
 import { GlobalSettings } from "@plugin/types";
+import { DimMessageSchema } from "./dim/message";
 
 const server = http.createServer();
 
@@ -38,24 +39,13 @@ const ws = new WebSocketServer({
 
 server.listen(9120);
 
-const DimMessage = z.discriminatedUnion("action", [
-  z.object({
-    action: z.literal("farmingMode"),
-    data: z.boolean(),
-  }),
-  z.object({
-    action: z.literal("state"),
-    data: z.record(z.any()),
-  }),
-]);
-
 // Handle new connections and messages from the client
 ws.on("connection", (socket: WebSocket, req) => {
   // set the instance id on the socket
   socket.instance = req.url?.split("/").pop();
   // watch for messages from the client
   socket.on("message", async (msg) => {
-    const { action, data } = DimMessage.parse(JSON.parse(msg.toString()));
+    const { action, data } = DimMessageSchema.parse(JSON.parse(msg.toString()));
     // log the action
     $.logger.info(`Received ${action} from ${socket.instance}`);
     // update global settings
@@ -66,6 +56,10 @@ ws.on("connection", (socket: WebSocket, req) => {
       case "state":
         State.set(data);
         reloadEquipment();
+        break;
+      case "pickerItems":
+        console.log(data);
+        ev.emit(`pickerItems:${data.device}`, data.items);
         break;
     }
     // update buttons

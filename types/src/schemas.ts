@@ -97,7 +97,7 @@ export const CheckpointSettingsSchema = z.object({
   activity: z.string().optional(),
   step: z.string().optional(),
   image: z.string().optional(),
-  difficulty: CheckpointDifficultySchema.optional(),
+  difficulty: CheckpointDifficultySchema.nullish(),
 });
 
 // Vault
@@ -120,7 +120,6 @@ export const PullItemActionSchema = z.enum(["equip", "pull", "vault"]);
 export const PullItemSettingsSchema = z.object({
   item: z.string().nullish(),
   icon: z.string().nullish(),
-  inventory: z.boolean().nullish(),
   isExotic: z.boolean().nullish(),
   isSubClass: z.boolean().nullish(),
   label: z.string().nullish(),
@@ -162,6 +161,29 @@ export const LoadoutSettingsSchema = z.object({
     .nullish(),
 });
 
+// Picker
+
+export const PickerFilterSchema = z.enum([
+  "element",
+  "crafted",
+  "weapon",
+  "armor",
+  "class",
+  "perk",
+  "filters",
+]);
+
+export const PickerSettingsSchema = z.object({
+  filters: PickerFilterSchema.array().default([]),
+  options: z
+    .object({
+      weapon: z.string().array().optional(),
+      filters: z.string().array().optional(),
+      perk: z.string().array().optional(),
+    })
+    .default({}),
+});
+
 export const Schemas = {
   global: (data: unknown) => GlobalSettingsSchema.parse(data),
   app: (data: unknown) => AppSettingsSchema.parse(data),
@@ -171,6 +193,7 @@ export const Schemas = {
   maxPower: (data: unknown) => MaxPowerSettingsSchema.parse(data),
   checkpoint: (data: unknown) => CheckpointSettingsSchema.parse(data),
   vault: (data: unknown) => VaultSettingsSchema.parse(data),
+  picker: (data: unknown) => PickerSettingsSchema.parse(data),
   pullItem: (data: unknown) => PullItemSettingsSchema.parse(data),
   postmaster: (data: unknown) => PostmasterSettingsSchema.parse(data),
   loadout: (data: unknown) => LoadoutSettingsSchema.parse(data),

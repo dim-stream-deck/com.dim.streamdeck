@@ -7,6 +7,7 @@ import {
   LoadoutSettingsSchema,
   MaxPowerSettingsSchema,
   MetricsSettingsSchema,
+  PickerFilterSchema,
   PostmasterSettingsSchema,
   PullItemSettingsSchema,
   RandomizeSettingsSchema,
@@ -71,3 +72,7 @@ export type PostmasterStyle = PostmasterSettings["style"];
 // Loadout
 
 export type LoadoutSettings = z.infer<typeof LoadoutSettingsSchema>;
+
+// Picker
+
+export type PickerFilterType = z.infer<typeof PickerFilterSchema>;

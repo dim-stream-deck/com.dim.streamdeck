@@ -9,15 +9,15 @@ import { equippedMark, exotic, legendary } from "@/util/images";
 import { PullItemSettings } from "@plugin/types";
 import { EmulatedCanvas2DContext } from "canvaskit-wasm";
 
-type ItemIcon = PullItemSettings & {
-  equipped?: boolean;
-};
-
 interface ItemIconOptions {
   grayscale?: boolean;
+  equipped?: boolean;
 }
 
-export const ItemIcon = async (item: ItemIcon, options: ItemIconOptions) => {
+export const ItemIcon = async (
+  item: PullItemSettings,
+  options?: ItemIconOptions
+) => {
   if (!item.icon) {
     return;
   }
@@ -73,17 +73,18 @@ export const ItemIcon = async (item: ItemIcon, options: ItemIconOptions) => {
     }
   }
 
-  // convert to grayscale
-  if (!item.equipped && options.grayscale) {
-    grayscale(ctx);
+  if (options) {
+    // convert to grayscale
+    if (!options.equipped && options.grayscale) {
+      grayscale(ctx);
+    }
+
+    if (options.equipped && !options.grayscale) {
+      const mark = loadImage(Canvas, "equipped-mark", equippedMark);
+      const size = 24;
+      ctx.drawImage(mark, 12, 144 - 12 - size, size, size);
+    }
   }
 
-  if (item.equipped && !options.grayscale) {
-    const mark = loadImage(Canvas, "equipped-mark", equippedMark);
-    const size = 24;
-    ctx.drawImage(mark, 12, 144 - 12 - size, size, size);
-  }
-
-  const data = canvas.toDataURL();
-  return data;
+  return canvas.toDataURL();
 };

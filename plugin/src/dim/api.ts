@@ -30,4 +30,7 @@ export const DIM: DimActions = {
   search: (args) => sendToWeb({ action: "search", ...args }),
 
   randomize: (args) => sendToWeb({ action: "randomize", ...args }),
+
+  requestPickerItems: (args) =>
+    sendToWeb({ action: "requestPickerItems", ...args }),
 };

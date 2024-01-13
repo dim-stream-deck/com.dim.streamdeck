@@ -16,8 +16,6 @@ import { KeyDown, KeyUp, WillAppear, WillDisappear } from "@/settings";
 import { Equipment } from "@/state";
 import { ev } from "@/main";
 
-export type AltAction = "hold" | "double" | undefined;
-
 const GestureMapping = {
   single: "pullItemSinglePress",
   double: "pullItemDoublePress",
@@ -50,15 +48,10 @@ export class PullItem extends SingletonAction {
       `${id}/${equipped}/${equipmentGrayscale}`,
       () =>
         item.icon && id
-          ? ItemIcon(
-              {
-                ...item,
-                equipped,
-              },
-              {
-                grayscale: equipmentGrayscale,
-              }
-            )
+          ? ItemIcon(item, {
+              equipped,
+              grayscale: equipmentGrayscale,
+            })
           : undefined
     );
 

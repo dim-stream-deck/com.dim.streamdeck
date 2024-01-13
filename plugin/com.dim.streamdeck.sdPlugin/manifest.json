@@ -104,6 +104,19 @@
       "UUID": "com.dim.streamdeck.search"
     },
     {
+      "Icon": "imgs/actions/metrics/icon",
+      "Name": "Picker",
+      "States": [
+        {
+          "Image": "imgs/actions/metrics/state",
+          "TitleAlignment": "bottom"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Pick items on a multi-stage picker",
+      "UUID": "com.dim.streamdeck.picker"
+    },
+    {
       "Icon": "imgs/actions/refresh/icon",
       "Name": "Refresh DIM",
       "States": [
@@ -183,6 +196,7 @@
       "Tooltip": "Show a specific game metric",
       "UUID": "com.dim.streamdeck.metrics"
     },
+
     {
       "Icon": "imgs/actions/character/icon",
       "Name": "Character",
@@ -217,6 +231,7 @@
           "TitleAlignment": "bottom"
         }
       ],
+      "DisableCaching": true,
       "SupportedInMultiActions": false,
       "UUID": "com.dim.streamdeck.tile"
     },

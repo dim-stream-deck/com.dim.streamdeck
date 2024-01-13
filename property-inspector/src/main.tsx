@@ -10,6 +10,7 @@ import metrics from "./actions/metrics";
 import checkpoint from "./actions/checkpoint";
 import pullItem from "./actions/pull-item";
 import maxPower from "./actions/max-power";
+import picker from "./actions/picker/picker";
 import { StreamDeck, useStreamDeck } from "./StreamDeck";
 import "./index.css";
 import { ActionIcon, Group } from "@mantine/core";
@@ -35,6 +36,7 @@ const components = {
   vault,
   loadout,
   app,
+  picker,
   postmaster,
   randomize,
   metrics,

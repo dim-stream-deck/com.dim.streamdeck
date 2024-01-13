@@ -22,7 +22,7 @@ export class Vault extends SingletonAction {
     const vault = State.get("vault");
     const { type } = settings ?? Schemas.vault(await action.getSettings());
     action.setImage(`./imgs/canvas/vault/${type}.png`);
-    action.setTitle(`${vault?.[type].toLocaleString("en-US") ?? "?"}`);
+    action.setTitle(`${vault?.[type]?.toLocaleString("en-US") ?? "?"}`);
   }
 
   onDidReceiveSettings(e: DidReceiveSettingsEvent<VaultSettings>) {
