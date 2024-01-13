@@ -47,7 +47,9 @@ export const onPickerActivate = (
   };
 
   if (settings.options.weapon) {
-    const keys = new Set(settings.options.weapon);
+    const keys = new Set(
+      settings.options.weapon.map((it) => it.replace("-", ""))
+    );
     Options.weapon = Options.weapon.filter((it) => keys.has(it.id));
   }
 
@@ -63,7 +65,7 @@ export const onPickerActivate = (
 
   settings.filters.forEach((filter, i) => {
     grid.updateButton(buttons[i], {
-      id: "",
+      id: "all",
       image: Images[filter],
       type: filter,
     });
@@ -91,6 +93,7 @@ export const onPickerActivate = (
       await Promise.all(
         items.map(async (item: any) => ({
           id: item.item,
+          title: "",
           image: () => ItemIcon(item),
           type: "item",
         }))
