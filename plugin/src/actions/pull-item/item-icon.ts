@@ -19,11 +19,11 @@ export const ItemIcon = async (
   options?: ItemIconOptions
 ) => {
   if (!item.icon) {
-    return;
+    return "";
   }
   const source = await Cache.imageFromUrl(item.icon, "arraybuffer");
   if (!source) {
-    return;
+    return "";
   }
   const Canvas = await CanvasKit;
   const canvas = Canvas.MakeCanvas(144, 144);

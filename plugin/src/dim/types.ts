@@ -26,12 +26,7 @@ export interface DimActions {
     sendToVault: boolean;
   }) => void;
 
-  requestPickerItems: (params: {
-    element: "all" | number;
-    weapon: number;
-    device: string;
-    crafted?: boolean;
-  }) => void;
+  requestPickerItems: (params: { query: string; device: string }) => void;
 
   randomize: (params: { weaponsOnly: boolean }) => void;
 }

@@ -8,6 +8,7 @@ import {
   MaxPowerSettingsSchema,
   MetricsSettingsSchema,
   PickerFilterSchema,
+  PickerSettingsSchema,
   PostmasterSettingsSchema,
   PullItemSettingsSchema,
   RandomizeSettingsSchema,
@@ -75,4 +76,9 @@ export type LoadoutSettings = z.infer<typeof LoadoutSettingsSchema>;
 
 // Picker
 
-export type PickerFilterType = z.infer<typeof PickerFilterSchema>;
+export type PickerFilterType =
+  | z.infer<typeof PickerFilterSchema>
+  | "weapon-type"
+  | "item";
+
+export type PickerSettings = z.infer<typeof PickerSettingsSchema>;

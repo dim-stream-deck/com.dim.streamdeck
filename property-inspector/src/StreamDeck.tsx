@@ -1,14 +1,14 @@
 import {
-  createContext,
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
+	createContext,
+	FC,
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
 } from "react";
 import { GlobalSettings } from "@plugin/types";
-import { ZodSchema } from "zod";
 
 interface StreamDeckProps {
   children: any;
@@ -16,12 +16,22 @@ interface StreamDeckProps {
   uuid: string;
   event: string;
   action: any;
+  info: any;
 }
 
 type Settings = Record<string, any>;
 
+type Device = {
+  id: string;
+  size: {
+    columns: number;
+    rows: number;
+  };
+};
+
 interface StreamDeckContext<TSettings> {
   communication?: any;
+  size: Device["size"];
   settings: TSettings;
   setSettings: (
     settings: Partial<TSettings>,
@@ -35,7 +45,7 @@ interface StreamDeckContext<TSettings> {
 }
 
 const StreamDeckContext = createContext<StreamDeckContext<Settings>>({
-  settings: {},
+  device: { columns: 0, rows: 0 },
   globalSettings: {},
   setSettings: () => {},
   overrideSettings: () => {},
@@ -49,6 +59,7 @@ export const StreamDeck: FC<StreamDeckProps> = ({
   event,
   port,
   action,
+  info,
   children,
 }) => {
   const [communication, setCommunication] = useState<any>();
@@ -161,6 +172,11 @@ export const StreamDeck: FC<StreamDeckProps> = ({
     [send]
   );
 
+  const size = useMemo(
+    () => info.devices.find((it: any) => it.id === action.device)?.size,
+    [info]
+  );
+
   if (!ready) {
     return null;
   }
@@ -168,6 +184,7 @@ export const StreamDeck: FC<StreamDeckProps> = ({
   return (
     <StreamDeckContext.Provider
       value={{
+        size,
         openURL,
         sendToPlugin,
         communication,

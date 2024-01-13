@@ -34,3 +34,15 @@ export const DIM: DimActions = {
   requestPickerItems: (args) =>
     sendToWeb({ action: "requestPickerItems", ...args }),
 };
+
+export const buildQuery = (
+  filters: Record<string, string | undefined>,
+  type: "weapon" | "armor" | "all"
+) => {
+  const stringified = Object.values(filters)
+    .filter((it) => Boolean(it) && it !== "all")
+    .map((it) => `is:${it}`)
+    .join(" ");
+  const prefix = type === "all" ? ["is:weapon", "is:armor"] : [`is:${type}`];
+  return `(${prefix.join(" or ")}) ` + stringified;
+};

@@ -1,9 +1,9 @@
 import {
   Accordion,
-  Card,
   Collapse,
   Divider,
   Group,
+  SimpleGrid,
   Stack,
   Text,
 } from "@mantine/core";
@@ -11,21 +11,23 @@ import { useStreamDeck } from "../../StreamDeck";
 import { PickerFilterSchema, PickerFilterType, Schemas } from "@plugin/types";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { Filters } from "./Filters";
-import { Filter, hasSettings } from "./Filter";
+import { Filter } from "./Filter";
 import { IconSettings } from "@tabler/icons-react";
-import { Settings, WeaponSettings } from "./Settings";
+import { Settings } from "./Settings";
 
 export default () => {
-  const { settings, setSettings } = useStreamDeck(Schemas.picker);
-
+  const { settings, size, setSettings } = useStreamDeck(Schemas.picker);
+  const slots = size.columns - 2;
   const picked = settings.filters;
 
   function handleDragEnd(e: DragEndEvent) {
     const type = e.active.id as PickerFilterType;
     if (e.over && e.over.id === "droppable" && !picked.includes(type)) {
-      setSettings({
-        filters: [...picked, type],
-      });
+      if (picked.length < slots) {
+        setSettings({
+          filters: [...picked, type],
+        });
+      }
     }
     if (!e.over && picked.includes(type)) {
       setSettings({
@@ -47,32 +49,35 @@ export default () => {
       </div>
       <DndContext onDragEnd={handleDragEnd}>
         <Filters>
-          <Card withBorder p="xs" bg="rgba(0,0,0,.2)" radius="md" w="100%">
-            {picked.length === 0 ? (
-              <Text ta="center" c="dimmed" p="md">
-                Drag and drop filters here
-              </Text>
-            ) : (
-              <Group>
-                {picked.map((type) => (
-                  <Filter picked key={type} type={type} />
-                ))}
-              </Group>
-            )}
-          </Card>
+          {picked.length === 0 ? (
+            <Text ta="center" c="dimmed" p="md">
+              Drag and drop filters here
+            </Text>
+          ) : (
+            <Group gap={8}>
+              {picked.map((type) => (
+                <Filter picked key={type} type={type} />
+              ))}
+            </Group>
+          )}
         </Filters>
 
-        <Group justify="center" gap="md">
-          {PickerFilterSchema.options
-            .filter((it) => !picked.includes(it))
-            .map((type) => (
-              <Filter key={type} type={type} />
-            ))}
-        </Group>
+        <Collapse in={picked.length < slots}>
+          <SimpleGrid spacing={8} cols={3}>
+            {PickerFilterSchema.options
+              .filter((it) => !picked.includes(it))
+              .map((type) => (
+                <Filter
+                  disabled={picked.length >= slots}
+                  key={type}
+                  type={type}
+                />
+              ))}
+          </SimpleGrid>
+        </Collapse>
 
         <div>
           <Divider labelPosition="center" label="Settings" />
-
           <Accordion>
             {pickedWithSettings.map((type) => {
               const SettingsComponent = Settings[type];

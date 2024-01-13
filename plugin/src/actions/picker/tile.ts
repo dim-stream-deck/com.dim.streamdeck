@@ -1,42 +1,27 @@
-import $, {
-  action,
-  SingletonAction,
-  WillAppearEvent,
-} from "@elgato/streamdeck";
-import { GridHelper } from "./GridHelper";
+import { action, SingletonAction, WillAppearEvent } from "@elgato/streamdeck";
 import { KeyDown, WillDisappear } from "@/settings";
-
-export const grid = new GridHelper({
-  close: "./imgs/canvas/picker/close.png",
-  next: "./imgs/canvas/picker/next.png",
-  prev: "./imgs/canvas/picker/prev.png",
-});
+import { getGrid } from "./helper/GridManager";
 
 /**
- * Show a item picker
+ * dynamic tile
  */
 @action({ UUID: "com.dim.streamdeck.tile" })
 export class Tile extends SingletonAction {
   onWillAppear(e: WillAppearEvent<{}>) {
-    const button = grid.link(e);
-    e.action.setTitle(button.title);
-    e.action.setImage(button.image);
+    const grid = getGrid(e);
+    if (grid) {
+      const button = grid.link(e);
+      grid.render(button);
+    }
   }
 
   onWillDisappear(e: WillDisappear) {
-    grid.free(e);
+    const grid = getGrid(e);
+    grid?.free(e);
   }
 
   onKeyDown(e: KeyDown) {
-    const button = grid.button(e);
-    if (button.type === "close") {
-      grid.close(e);
-    } else if (button.type === "next") {
-      grid.onNextPage();
-    } else if (button.type === "prev") {
-      grid.onPrevPage();
-    } else {
-      grid.onClick(e);
-    }
+    const grid = getGrid(e);
+    grid?.onClick(e);
   }
 }

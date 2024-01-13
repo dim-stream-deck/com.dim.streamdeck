@@ -19,19 +19,19 @@ import { PickerFilterSchema } from "@plugin/types";
 
 const options = [
   {
-    value: "auto",
+    value: "auto-rifle",
     icon: auto,
   },
   {
-    value: "scout",
+    value: "scout-rifle",
     icon: scout,
   },
   {
-    value: "pulse",
+    value: "pulse-rifle",
     icon: pulse,
   },
   {
-    value: "hand",
+    value: "hand-cannon",
     icon: hc,
   },
   {
@@ -47,20 +47,20 @@ const options = [
     icon: shotgun,
   },
   {
-    value: "sniper",
+    value: "sniper-rifle",
     icon: sniper,
   },
   {
-    value: "FR",
+    value: "fusion-rifle",
     icon: fusion,
   },
   {
-    label: "GL",
+    label: "grenade-launcher",
     value: "GL",
     icon: gl,
   },
   {
-    value: "RL",
+    value: "rocket-launcher",
     icon: rocket,
   },
   {
@@ -68,11 +68,11 @@ const options = [
     icon: sword,
   },
   {
-    value: "LFR",
+    value: "linear-fusion-rifle",
     icon: linear,
   },
   {
-    value: "MG",
+    value: "machine-gun",
     icon: machineGun,
   },
   {
@@ -80,7 +80,7 @@ const options = [
     icon: bow,
   },
   {
-    value: "trace",
+    value: "trace-rifle",
     icon: trace,
   },
 ] as const;

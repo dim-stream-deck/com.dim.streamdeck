@@ -170,6 +170,7 @@ export const PickerFilterSchema = z.enum([
   "armor",
   "class",
   "perk",
+  "rarity",
   "filters",
 ]);
 

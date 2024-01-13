@@ -5,13 +5,15 @@ import { useDraggable } from "@dnd-kit/core";
 interface FilterProps {
   type: PickerFilterType;
   picked?: boolean;
+  disabled?: boolean;
 }
 
 export const hasSettings = new Set(["weapon", "filters", "perk"]);
 
-export const Filter = ({ type, picked }: FilterProps) => {
+export const Filter = ({ type, picked, disabled }: FilterProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: type,
+    disabled,
   });
   const style = transform
     ? {

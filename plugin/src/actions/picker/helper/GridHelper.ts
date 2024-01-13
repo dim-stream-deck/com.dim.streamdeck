@@ -1,12 +1,12 @@
 import $, { Action, ActionEvent } from "@elgato/streamdeck";
 import { EventEmitter } from "events";
 
-export interface Cell {
-  id?: string | number;
+export interface Cell<Type> {
+  id?: string;
   action?: Action;
-  image?: string;
+  image?: string | (() => Promise<string>);
   title?: string;
-  type?: "close" | "next" | "prev" | "dequeue" | string;
+  type?: "close" | "next" | Type;
 }
 
 export type ActionCoordinates = {
@@ -19,26 +19,48 @@ export type ActionCoordinates = {
 type Icons = {
   close: string;
   next: string;
-  prev: string;
 };
 
-export class GridHelper {
-  constructor(private readonly icons: Icons) {}
+type Size = {
+  rows: number;
+  cols: number;
+};
 
-  private buttons: Cell[] = [];
-  private cells: Cell[] = [];
-  private size = {
-    rows: 0,
-    cols: 0,
-  };
+export class GridHelper<Type> {
+  constructor(
+    private readonly icons: Icons,
+    private readonly size: Size
+  ) {}
 
+  /**
+   * the current buttons array
+   */
+  private buttons: Cell<Type>[] = [];
+
+  /**
+   * all the cells to paginate inside the buttons array
+   */
+  private cells: Cell<Type>[] = [];
+
+  /**
+   * pre-calculated indexes
+   */
   private index = {
     close: 0,
     end: 0,
   };
 
+  /**
+   * the current page
+   * @default 0
+   * @see {@link GridHelper.onNextPage}
+   * @see {@link GridHelper.applyCells}
+   */
   private page: number = 0;
 
+  /**
+   * the event emitter to listen for button presses
+   */
   private events = new EventEmitter();
 
   sub2Idx(e: ActionEvent<any>) {
@@ -46,38 +68,43 @@ export class GridHelper {
     return coords.coordinates.row * this.size.cols + coords.coordinates.column;
   }
 
-  lastRow() {
+  get lastRow() {
     return this.buttons.slice(this.index.close + 1);
   }
 
-  init(rows: number, cols: number) {
-    this.size = { rows, cols };
-    this.index.close = (rows - 1) * cols;
-    this.index.end = rows * cols - 1;
+  init() {
+    const total = this.size.rows * this.size.cols;
+    this.index.close = total - this.size.cols;
+    this.index.end = total - 1;
     this.page = 0;
     // cleanup any listeners
     this.events.removeAllListeners();
     // fill empty buttons
-    this.buttons = new Array(rows * cols).fill(null).map(() => ({}));
+    this.buttons = new Array(total).fill(null).map(() => ({}));
     // fill close button
     this.buttons[this.index.close] = {
       image: this.icons.close,
       type: "close",
     };
+    // refresh the grid
+    this.render();
     return this.events;
   }
 
-  fill(cells: Cell[]) {
+  fill(cells: Cell<Type>[]) {
     this.page = 0;
     this.cells = cells;
     this.applyCells();
     this.render();
   }
 
+  get total() {
+    return Math.ceil(this.cells.length / this.index.close);
+  }
+
   applyCells() {
     const cells = this.cells;
     const free = this.index.close;
-    const total = Math.ceil(this.cells.length / free) - 1;
     let idx = this.page * free;
 
     // update buttons
@@ -97,34 +124,31 @@ export class GridHelper {
 
     // update next button
     const nextButton = this.buttons[this.index.end];
-    const hasNext = this.page < total && cells.length > free;
-    nextButton.image = hasNext
-      ? this.icons.next
-      : this.icons.next.replace(".png", "-off.png");
-    nextButton.type = hasNext ? "next" : "";
-
-    // update prev button
-    const prevButton = this.buttons[this.index.end - 1];
-    const hasPrev = this.page > 0;
-    prevButton.image = hasPrev
-      ? this.icons.prev
-      : this.icons.prev.replace(".png", "-off.png");
-    prevButton.type = hasPrev ? "prev" : "";
-  }
-
-  render(button?: Cell) {
-    if (button) {
-      button.action?.setImage(button.image ?? "");
-      button.action?.setTitle(button.title ?? "");
-      return;
-    }
-    this.buttons.forEach((button) => {
-      button?.action?.setImage(button.image ?? "");
-      button?.action?.setTitle(button.title ?? "");
+    const hasNext = cells.length > free;
+    this.updateButton(nextButton, {
+      type: "next",
+      image: hasNext
+        ? this.icons.next
+        : this.icons.next.replace(".png", "-off.png"),
     });
   }
 
-  updateButton(button: Cell, update: Partial<Cell>) {
+  private async renderButton(button: Cell<Type>) {
+    const image =
+      typeof button.image === "function" ? await button.image() : button.image;
+    button.action?.setImage(image || "");
+    button.action?.setTitle(button.title || "");
+    return;
+  }
+
+  private async render(button?: Cell<Type>) {
+    if (button) {
+      return this.renderButton(button);
+    }
+    return Promise.all(this.buttons.map((button) => this.renderButton(button)));
+  }
+
+  updateButton(button: Cell<Type>, update: Partial<Cell<Type>>) {
     Object.assign(button, update);
     this.render(button);
   }
@@ -154,17 +178,21 @@ export class GridHelper {
 
   onClick(e: ActionEvent<any>) {
     const idx = this.sub2Idx(e);
-    this.events.emit("press", this.buttons[idx]);
+    const button = this.buttons[idx];
+
+    if (button.type === "close") {
+      return this.close(e);
+    }
+
+    if (button.type === "next") {
+      return this.onNextPage();
+    }
+
+    this.events.emit("press", button);
   }
 
   onNextPage() {
-    this.page++;
-    this.applyCells();
-    this.render();
-  }
-
-  onPrevPage() {
-    this.page--;
+    this.page = (this.page + 1) % this.total;
     this.applyCells();
     this.render();
   }

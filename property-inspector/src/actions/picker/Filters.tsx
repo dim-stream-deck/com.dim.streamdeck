@@ -1,4 +1,5 @@
 import { useDroppable } from "@dnd-kit/core";
+import { Card } from "@mantine/core";
 import { PropsWithChildren } from "react";
 
 export const Filters = ({ children }: PropsWithChildren) => {
@@ -10,8 +11,16 @@ export const Filters = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <div ref={setNodeRef} style={style}>
+    <Card
+      withBorder
+      p="xs"
+      bg="rgba(0,0,0,.2)"
+      radius="md"
+      w="100%"
+      ref={setNodeRef}
+      style={style}
+    >
       {children}
-    </div>
+    </Card>
   );
 };

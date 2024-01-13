@@ -108,6 +108,7 @@ window.connectElgatoStreamDeckSocket = (
   action: any
 ) => {
   action = JSON.parse(action);
+  info = JSON.parse(info);
   render(
     <StreamDeck
       {...{
@@ -115,7 +116,7 @@ window.connectElgatoStreamDeckSocket = (
         uuid,
         event,
         action,
-        info: JSON.parse(info),
+        info
       }}
     >
       <QueryClientProvider client={client}>
