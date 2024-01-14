@@ -43,16 +43,15 @@ export const onPickerActivate = (
     Options.weapon = Options.weapon.filter((it) => keys.has(it.id));
   }
 
-  const filters: Record<string, string | undefined> = {
-    weapon: "",
-    ...settings.defaultOptions,
-  };
+  const filters: Record<string, string | undefined> = Object.fromEntries(
+    settings.filters.map((it) => [it, settings.defaultOptions[it]])
+  );
 
   settings.filters.forEach((filter, i) => {
-    const value = settings.defaultOptions[filter] || "all";
+    const id = filters[filter];
     grid.updateButton(buttons[i], {
-      id: "all",
-      image: `./imgs/canvas/picker/${filter}/${value}.png`,
+      id,
+      image: `./imgs/canvas/picker/${filter}/${id}.png`,
       type: filter,
     });
   });

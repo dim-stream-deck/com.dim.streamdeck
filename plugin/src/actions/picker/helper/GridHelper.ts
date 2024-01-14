@@ -100,13 +100,6 @@ export class GridHelper<Type> {
     this.render();
   }
 
-  fillAvailable(cell: Cell<Type>) {
-    for (let i = 0; i < this.index.close; i++) {
-      const button = this.buttons[i];
-      this.updateButton(button, cell);
-    }
-  }
-
   get total() {
     return Math.ceil(this.cells.length / this.index.close);
   }
