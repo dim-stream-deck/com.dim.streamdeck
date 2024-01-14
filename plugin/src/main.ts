@@ -37,7 +37,7 @@ const ws = new WebSocketServer({
   server,
 });
 
-server.listen(9120);
+server.listen(9120, "localhost");
 
 // Handle new connections and messages from the client
 ws.on("connection", (socket: WebSocket, req) => {
