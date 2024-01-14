@@ -11,7 +11,7 @@ import {
 } from "./options";
 import { ItemIcon } from "@/actions/pull-item/item-icon";
 import { ev } from "@/main";
-import $ from "@elgato/streamdeck";
+import $, { Action } from "@elgato/streamdeck";
 import { nextBy } from "@/util/cyclic";
 import { PickerFilterType, PickerSettings } from "@plugin/types";
 
@@ -30,7 +30,8 @@ export const onPickerActivate = (
   grid: GridHelper<PickerFilterType>,
   device: string,
   profile: string,
-  settings: PickerSettings
+  settings: PickerSettings,
+  action: Action
 ) => {
   const events = grid.init();
   const buttons = grid.lastRow;
@@ -162,6 +163,7 @@ export const onPickerActivate = (
           itemId: button.id!,
           type: "pull",
         });
+        action.showOk();
         break;
     }
   });

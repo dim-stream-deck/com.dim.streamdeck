@@ -22,6 +22,6 @@ export class Picker extends SingletonAction {
     // get the picker settings
     const settings = Schemas.picker(e.payload.settings);
     // start the picker
-    onPickerActivate(grid, device.id, `DIM${suffix}`, settings);
+    onPickerActivate(grid, device.id, `DIM${suffix}`, settings, e.action);
   }
 }
