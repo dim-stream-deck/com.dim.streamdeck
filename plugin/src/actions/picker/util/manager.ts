@@ -92,10 +92,12 @@ export const onPickerActivate = (
     grid.fill(
       await Promise.all(
         items.map(async (item: any) => ({
-          id: item.item,
-          title: "",
-          image: () => ItemIcon(item),
           type: "item",
+          id: item.item,
+          image: () => ItemIcon(item),
+          misc: {
+            isExotic: item.isExotic,
+          },
         }))
       )
     );

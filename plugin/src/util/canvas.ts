@@ -4,6 +4,7 @@ import CanvasKitInit, {
 } from "canvaskit-wasm/bin/canvaskit.js";
 import { Cache } from "./cache";
 import { splitEvery } from "ramda";
+import { downloadAsArrayBuffer } from "./images";
 
 export const CanvasKit = CanvasKitInit({
   locateFile: (file) => process.cwd() + "/" + file,
@@ -28,7 +29,7 @@ export const loadImageFromUrl = async (
   kit: Awaited<typeof CanvasKit>,
   url: string
 ) => {
-  const image = await Cache.imageFromUrl(url, "arraybuffer");
+  const image = await downloadAsArrayBuffer(url);
   if (image) {
     return loadImage(kit, url, image);
   }

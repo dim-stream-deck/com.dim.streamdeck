@@ -10,6 +10,7 @@ import { LoadoutIcon } from "./loadout-icon";
 import { splitTitle } from "@/util/canvas";
 import { WillAppear, KeyDown } from "@/settings";
 import { LoadoutSettings, Schemas } from "@plugin/types";
+import { downloadAsArrayBuffer, toBase64 } from "@/util/images";
 
 /**
  * Equip a loadout
@@ -18,17 +19,15 @@ import { LoadoutSettings, Schemas } from "@plugin/types";
 export class Loadout extends SingletonAction {
   private async update(e: Action, settings?: LoadoutSettings) {
     // load settings
-    const { loadout, label, inGameIcon, icon } =
+    const { label, inGameIcon, icon } =
       settings ?? Schemas.loadout(await e.getSettings());
     // update the title and image
     e.setTitle(splitTitle(label));
     e.setImage(
-      inGameIcon && loadout
-        ? await Cache.canvas(loadout, () =>
-            inGameIcon ? LoadoutIcon(inGameIcon) : undefined
-          )
+      inGameIcon
+        ? await LoadoutIcon(inGameIcon)
         : icon
-          ? await Cache.imageFromUrl(icon)
+          ? toBase64(await downloadAsArrayBuffer(icon), "png")
           : undefined
     );
   }

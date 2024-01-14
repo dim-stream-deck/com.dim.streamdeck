@@ -1,4 +1,3 @@
-import { Cache } from "@/util/cache";
 import { Watcher } from "@/util/watcher";
 import { Action, action, SingletonAction } from "@elgato/streamdeck";
 import { CharacterIcon } from "./character-icon";
@@ -15,11 +14,7 @@ export class Character extends SingletonAction {
   private async update(e: Action) {
     const character = State.get("character");
     if (!character) return;
-    const image = await Cache.canvas(
-      `${character.class}-${character.icon}`,
-      () => (character ? CharacterIcon(character) : undefined)
-    );
-    e.setImage(image);
+    e.setImage(await CharacterIcon(character));
   }
 
   onWillAppear(e: WillAppear) {

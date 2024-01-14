@@ -1,5 +1,6 @@
 import { Cache } from "@/util/cache";
 import { CanvasKit } from "@/util/canvas";
+import { downloadAsArrayBuffer } from "@/util/images";
 
 interface IconDefinition {
   icon: string;
@@ -9,8 +10,16 @@ interface IconDefinition {
 const size = 96;
 
 export const LoadoutIcon = async (def: IconDefinition) => {
-  const iconSource = await Cache.imageFromUrl(def.icon, "arraybuffer");
-  const bgSource = await Cache.imageFromUrl(def.background, "arraybuffer");
+  const cacheKey = [def.icon, def.background];
+
+  // Check the cache
+  if (Cache.has(cacheKey)) {
+    return Cache.get(cacheKey);
+  }
+
+  // Generate the image
+  const iconSource = await downloadAsArrayBuffer(def.icon);
+  const bgSource = await downloadAsArrayBuffer(def.background);
   if (!iconSource || !bgSource) {
     return;
   }
@@ -21,6 +30,9 @@ export const LoadoutIcon = async (def: IconDefinition) => {
   const bg = Canvas.MakeImageFromEncoded(bgSource);
   ctx.drawImage(bg, 0, 0, size, size);
   ctx.drawImage(icon, 0, 0, size, size);
-  const data = canvas.toDataURL();
-  return data;
+
+  // Cache the image
+  const image = canvas.toDataURL();
+  Cache.set(cacheKey, image);
+  return image;
 };

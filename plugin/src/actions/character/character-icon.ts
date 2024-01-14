@@ -1,11 +1,17 @@
 import { Character } from "@/state";
 import { Cache } from "@/util/cache";
 import { CanvasKit } from "@/util/canvas";
-import { classes, shadow } from "@/util/images";
+import { classes, downloadAsArrayBuffer } from "@/util/images";
 import { EmulatedCanvas2DContext } from "canvaskit-wasm";
 
 export const CharacterIcon = async (character: Character) => {
-  const iconRes = await Cache.imageFromUrl(character.icon, "arraybuffer");
+  const cacheKey = [character.class, character.icon];
+
+  if (Cache.has(cacheKey)) {
+    return Cache.get(cacheKey);
+  }
+
+  const iconRes = await downloadAsArrayBuffer(character.icon);
   const classRes = classes[character.class];
 
   if (!iconRes) {
@@ -15,7 +21,6 @@ export const CharacterIcon = async (character: Character) => {
   const Canvas = await CanvasKit;
   const icon = Canvas.MakeImageFromEncoded(iconRes);
   const classIcon = Canvas.MakeImageFromEncoded(classRes);
-  const shadowImage = Canvas.MakeImageFromEncoded(shadow);
   const canvas = Canvas.MakeCanvas(144, 144);
   const ctx = canvas.getContext("2d") as EmulatedCanvas2DContext;
 
@@ -27,5 +32,7 @@ export const CharacterIcon = async (character: Character) => {
   // ctx.drawImage(shadowImage, 0, 0, 144, 144);
   ctx.drawImage(classIcon, 0, 0, 144, 144);
 
-  return canvas.toDataURL();
+  const image = canvas.toDataURL();
+  Cache.set(cacheKey, image);
+  return image;
 };

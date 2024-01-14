@@ -44,16 +44,10 @@ export class PullItem extends SingletonAction {
 
     const equipped = Equipment.has(id);
 
-    const image = await Cache.canvas(
-      `${id}/${equipped}/${equipmentGrayscale}`,
-      () =>
-        item.icon && id
-          ? ItemIcon(item, {
-              equipped,
-              grayscale: equipmentGrayscale,
-            })
-          : undefined
-    );
+    const image = await ItemIcon(item, {
+      equipped,
+      grayscale: equipmentGrayscale,
+    });
 
     e.setTitle(item.isSubClass ? splitTitle(item.label) : undefined);
     e.setImage(image);

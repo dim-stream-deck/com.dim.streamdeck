@@ -1,3 +1,4 @@
+import { Loaders } from "@/util/images";
 import $, { Action, ActionEvent } from "@elgato/streamdeck";
 import { EventEmitter } from "events";
 
@@ -7,6 +8,7 @@ export interface Cell<Type> {
   image?: string | (() => Promise<string>);
   title?: string;
   type?: "close" | "next" | Type;
+  misc?: Record<string, string | boolean | number>;
 }
 
 export type ActionCoordinates = {
@@ -98,6 +100,13 @@ export class GridHelper<Type> {
     this.render();
   }
 
+  fillAvailable(cell: Cell<Type>) {
+    for (let i = 0; i < this.index.close; i++) {
+      const button = this.buttons[i];
+      this.updateButton(button, cell);
+    }
+  }
+
   get total() {
     return Math.ceil(this.cells.length / this.index.close);
   }
@@ -109,7 +118,10 @@ export class GridHelper<Type> {
 
     // update buttons
     for (let i = 0; i < Math.min(cells.length, free); i++) {
-      Object.assign(this.buttons[i], cells[idx++] ?? { image: "", title: "" });
+      Object.assign(
+        this.buttons[i],
+        cells[idx++] ?? { image: "", title: "", ...cells[idx++] }
+      );
     }
 
     // cleanup buttons
@@ -135,13 +147,20 @@ export class GridHelper<Type> {
 
   private async renderButton(button: Cell<Type>) {
     const image =
-      typeof button.image === "function" ? await button.image() : button.image;
-    button.action?.setImage(image || "");
+      typeof button.image === "function" ? button.image() : button.image;
+
+    // show a loader if the image is not ready
+    if (typeof image !== "string") {
+      const type = button.misc?.isExotic ? "exotic" : "legendary";
+      await button.action?.setImage(Loaders[type]);
+    }
+
+    button.action?.setImage((await image) || "");
     button.action?.setTitle(button.title || "");
     return;
   }
 
-  private async render(button?: Cell<Type>) {
+  async render(button?: Cell<Type>) {
     if (button) {
       return this.renderButton(button);
     }

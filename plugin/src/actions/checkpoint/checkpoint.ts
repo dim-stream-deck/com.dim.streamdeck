@@ -57,10 +57,7 @@ export class Checkpoint extends SingletonAction {
     // update the image
     if (cp.image) {
       const enabled = Boolean(CheckpointManager.search(cp));
-      const image = await Cache.canvas(`${cp.activity}/${enabled}`, () =>
-        cp.image ? CheckpointIcon(cp.image, enabled) : undefined
-      );
-      e.setImage(image);
+      e.setImage(await CheckpointIcon(cp.image, enabled));
     } else {
       e.setImage();
     }

@@ -5,7 +5,12 @@ import {
   loadImage,
   loadImageFromUrl,
 } from "@/util/canvas";
-import { equippedMark, exotic, legendary } from "@/util/images";
+import {
+  downloadAsArrayBuffer,
+  equippedMark,
+  exotic,
+  legendary,
+} from "@/util/images";
 import { PullItemSettings } from "@plugin/types";
 import { EmulatedCanvas2DContext } from "canvaskit-wasm";
 
@@ -18,13 +23,19 @@ export const ItemIcon = async (
   item: PullItemSettings,
   options?: ItemIconOptions
 ) => {
+  // Check if the image is already cached
+  const cacheKey = [item.icon, options?.grayscale, options?.equipped];
+  if (Cache.has(cacheKey)) {
+    return Cache.get(cacheKey);
+  }
+
   if (!item.icon) {
     return "";
   }
-  const source = await Cache.imageFromUrl(item.icon, "arraybuffer");
-  if (!source) {
-    return "";
-  }
+
+  // Generate the image
+  const source = await downloadAsArrayBuffer(item.icon);
+  if (!source) return "";
   const Canvas = await CanvasKit;
   const canvas = Canvas.MakeCanvas(144, 144);
   const ctx = canvas.getContext("2d") as EmulatedCanvas2DContext;
@@ -86,5 +97,8 @@ export const ItemIcon = async (
     }
   }
 
-  return canvas.toDataURL();
+  // Cache the image
+  const generated = canvas.toDataURL();
+  Cache.set(cacheKey, generated);
+  return generated;
 };

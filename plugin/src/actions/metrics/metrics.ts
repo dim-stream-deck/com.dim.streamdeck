@@ -33,7 +33,7 @@ export class Metrics extends SingletonAction {
     const icon = metric === "battlePass" ? metrics?.artifactIcon : undefined;
 
     const image = icon
-      ? await Cache.canvas(icon, () => ArtifactIcon(icon))
+      ? await ArtifactIcon(icon)
       : `./imgs/canvas/metrics/${metric}.png`;
 
     action.setTitle(`${metrics?.[metric] ?? "?"}`);

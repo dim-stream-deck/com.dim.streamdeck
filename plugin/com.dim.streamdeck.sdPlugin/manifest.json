@@ -104,11 +104,11 @@
       "UUID": "com.dim.streamdeck.search"
     },
     {
-      "Icon": "imgs/actions/metrics/icon",
+      "Icon": "imgs/actions/picker/icon",
       "Name": "Picker",
       "States": [
         {
-          "Image": "imgs/actions/metrics/state",
+          "Image": "imgs/actions/picker/state",
           "TitleAlignment": "bottom"
         }
       ],

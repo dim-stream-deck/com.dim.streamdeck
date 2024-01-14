@@ -1,61 +1,65 @@
 import { LRUCache } from "lru-cache";
+import { createHash } from "node:crypto";
+import { createBrotliCompress, createBrotliDecompress } from "node:zlib";
+import { createWriteStream, createReadStream } from "node:fs";
+import $ from "@elgato/streamdeck";
+import { Readable, Writable } from "node:stream";
+import ms from "ms";
+import { BrotliDecompress } from "zlib";
+import { stream2buffer } from "./stream";
 
-const cache = new LRUCache<string, string | ArrayBuffer>({
-  max: 250,
+const md5 = (value: string) => createHash("md5").update(value).digest("hex");
+
+/**
+ * Cache for storing the results of expensive operations
+ */
+const cache = new LRUCache<string, string>({
+  max: 1000,
 });
 
-export const bungify = (url: string) => `https://www.bungie.net${url}`;
+type KeyPart = string | number | boolean | undefined | null;
 
-async function imageFromUrl(
-  url: string | undefined,
-  format: "arraybuffer"
-): Promise<ArrayBuffer | undefined>;
-
-async function imageFromUrl(
-  url?: string,
-  format?: "base64"
-): Promise<string | undefined>;
-
-async function imageFromUrl(
-  url?: string,
-  format: "base64" | "arraybuffer" = "base64"
-) {
-  if (!url) {
-    return;
-  }
-  if (cache.has(url)) {
-    return cache.get(url);
-  }
-  const res = await fetch(url.startsWith("/") ? bungify(url) : url);
-  const buffer = await res.arrayBuffer();
-  if (res.status == 200) {
-    if (format === "arraybuffer") {
-      cache.set(url, buffer);
-      return buffer;
-    }
-
-    const type = res.headers.get("content-type");
-    const content = Buffer.from(buffer).toString("base64");
-    const result = `data:${type}";base64,${content}`;
-    cache.set(url, result);
-    return result;
-  }
-}
-
-const canvas = async (
-  key: string,
-  fn: () => Promise<string | undefined> | undefined
-) => {
-  const k = `canvas:${key}`;
-  if (cache.has(key)) {
-    return cache.get(k) as string;
-  }
-  const result = await fn();
-  result && cache.set(k, result);
-  return result;
-};
+/**
+ * Flatten an array of strings into a single string
+ * @param values strings to flatten
+ * @returns
+ */
+const flat = (values: KeyPart[]) => md5(values.join(":"));
 
 export const Cache = {
-  imageFromUrl,
-  canvas,
+  get: (key: KeyPart[]) => cache.get(flat(key)) ?? "",
+  has: (key: KeyPart[]) => {
+    console.log(flat(key), cache.has(flat(key)));
+    return cache.has(flat(key));
+  },
+  set: (key: KeyPart[], value: string) => cache.set(flat(key), value),
 };
+
+/**
+ * Update the cache on disk every 10 minutes
+ */
+setInterval(() => {
+  $.logger.info(">> updating cache on disk");
+  const readable = new Readable();
+  readable.push(JSON.stringify(cache.dump()));
+  readable.push(null);
+  const cacheFile = createWriteStream("./cache.json.br");
+  readable.pipe(createBrotliCompress()).pipe(cacheFile);
+}, ms("10m"));
+
+/**
+ * Load the cache from disk
+ */
+
+const cacheFile = createReadStream("./cache.json.br");
+
+cacheFile.on("error", (error) => {
+  $.logger.error(">> failed to load cache from disk", error);
+});
+
+cacheFile.on("open", async () => {
+  const decompress = cacheFile.pipe(createBrotliDecompress());
+  const content = await stream2buffer(decompress);
+  cache.load(JSON.parse(content.toString()));
+  $.logger.info(">> loaded cache from disk");
+});
