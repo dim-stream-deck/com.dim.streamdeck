@@ -167,3 +167,4 @@ plugin/*/bin
 
 canvaskit.wasm
 state.json
+cache.json.br
