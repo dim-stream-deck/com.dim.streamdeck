@@ -3,9 +3,8 @@ import { createHash } from "node:crypto";
 import { createBrotliCompress, createBrotliDecompress } from "node:zlib";
 import { createWriteStream, createReadStream } from "node:fs";
 import $ from "@elgato/streamdeck";
-import { Readable, Writable } from "node:stream";
+import { Readable } from "node:stream";
 import ms from "ms";
-import { BrotliDecompress } from "zlib";
 import { stream2buffer } from "./stream";
 
 const md5 = (value: string) => createHash("md5").update(value).digest("hex");
