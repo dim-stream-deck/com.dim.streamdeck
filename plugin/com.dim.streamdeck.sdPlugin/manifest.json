@@ -273,7 +273,7 @@
   ],
   "Nodejs": {
     "Version": "20",
-    "Debug": "enabled"
+    "Debug": "--inspect=9999"
   },
   "UUID": "com.dim.streamdeck"
 }
