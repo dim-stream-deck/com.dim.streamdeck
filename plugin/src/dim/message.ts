@@ -16,6 +16,15 @@ export const DimMessageSchema = z.discriminatedUnion("action", [
       items: z.record(z.any()).array(),
     }),
   }),
+  z.object({
+    action: z.literal("perks"),
+    data: z
+      .object({
+        title: z.string(),
+        image: z.string(),
+      })
+      .array(),
+  }),
 ]);
 
 export type DimMessage = z.infer<typeof DimMessageSchema>;

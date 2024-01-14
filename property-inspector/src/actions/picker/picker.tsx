@@ -17,7 +17,9 @@ import { IconSelect, IconSettings } from "@tabler/icons-react";
 import { Settings } from "./Settings";
 
 export default () => {
-  const { settings, size, setSettings } = useStreamDeck(Schemas.picker);
+  const { settings, size, setSettings, communication } = useStreamDeck(
+    Schemas.picker
+  );
   const slots = size.columns - 2;
   const picked = settings.filters;
 

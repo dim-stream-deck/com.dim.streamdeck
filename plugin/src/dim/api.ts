@@ -33,6 +33,8 @@ export const DIM: DimActions = {
 
   requestPickerItems: (args) =>
     sendToWeb({ action: "requestPickerItems", ...args }),
+
+  requestPerks: () => sendToWeb({ action: "requestPerks" }),
 };
 
 export const buildQuery = (

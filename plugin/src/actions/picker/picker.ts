@@ -1,9 +1,16 @@
 import { KeyDown } from "@/settings";
-import $, { action, SingletonAction } from "@elgato/streamdeck";
+import $, {
+  action,
+  PropertyInspectorDidAppearEvent,
+  SingletonAction,
+} from "@elgato/streamdeck";
 import { registerPickerGrid } from "./helper/GridManager";
 import { onPickerActivate } from "./util/manager";
 import { Profiles } from "./util/options";
 import { Schemas } from "@plugin/types";
+import { DIM } from "@/dim/api";
+import { ev } from "@/main";
+import { State } from "@/state";
 
 /**
  * Show a item picker
@@ -23,5 +30,14 @@ export class Picker extends SingletonAction {
     const settings = Schemas.picker(e.payload.settings);
     // start the picker
     onPickerActivate(grid, device.id, `DIM${suffix}`, settings, e.action);
+  }
+
+  onPropertyInspectorDidAppear(e: PropertyInspectorDidAppearEvent<{}>) {
+    ev.once("perks", () => {
+      e.action.sendToPropertyInspector({
+        perks: State.get("perks"),
+      });
+    });
+    DIM.requestPerks();
   }
 }

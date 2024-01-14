@@ -37,6 +37,10 @@ export type State = {
   metrics?: Record<Metric, number> & {
     artifactIcon: string;
   };
+  perks: {
+    title: string;
+    image: string;
+  }[];
 };
 
 // State manager

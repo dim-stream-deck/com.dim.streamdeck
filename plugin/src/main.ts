@@ -57,8 +57,10 @@ ws.on("connection", (socket: WebSocket, req) => {
         State.set(data);
         reloadEquipment();
         break;
+      case "perks":
+        State.set({ perks: data });
+        break;
       case "pickerItems":
-        console.log(data);
         ev.emit(`pickerItems:${data.device}`, data.items);
         break;
     }

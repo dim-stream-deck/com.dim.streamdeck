@@ -15,6 +15,7 @@ import { ev } from "@/main";
 import $, { Action } from "@elgato/streamdeck";
 import { nextBy } from "@/util/cyclic";
 import { PickerCellType, PickerSettings } from "@plugin/types";
+import { State } from "@/state";
 
 export const onPickerActivate = (
   grid: GridHelper<PickerCellType>,
@@ -30,7 +31,7 @@ export const onPickerActivate = (
     element: Elements,
     weapon: WeaponButtons,
     crafted: Crafted,
-    perk: [],
+    perk: State.get("perks") ?? [],
     armor: Armor,
     filters: [],
     rarity: Rarity,
@@ -127,6 +128,9 @@ export const onPickerActivate = (
           button,
           pickerOpen ? CloseWeaponButton : OpenWeaponButton
         );
+        break;
+      case "perk":
+        grid.fill(Options.perk);
         break;
       case "weapon-type":
         // set the weapon filter
