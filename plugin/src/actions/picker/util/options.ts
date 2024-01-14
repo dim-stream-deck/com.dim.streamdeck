@@ -49,12 +49,12 @@ export const OpenWeaponButton = {
 
 export const Elements = expandDefinitions("element", [
   "all",
-  "kinetic",
   "solar",
   "void",
   "arc",
   "stasis",
   "strand",
+  "kinetic",
 ]);
 
 export const Crafted = expandDefinitions("crafted", [
