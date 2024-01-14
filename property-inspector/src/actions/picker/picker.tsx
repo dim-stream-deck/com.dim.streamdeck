@@ -3,6 +3,7 @@ import {
   Collapse,
   Divider,
   Group,
+  Select,
   SimpleGrid,
   Stack,
   Text,
@@ -12,8 +13,9 @@ import { PickerFilterSchema, PickerFilterType, Schemas } from "@plugin/types";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { Filters } from "./Filters";
 import { Filter } from "./Filter";
-import { IconSettings } from "@tabler/icons-react";
+import { IconSelect, IconSettings } from "@tabler/icons-react";
 import { Settings } from "./Settings";
+import { useCallback } from "react";
 
 export default () => {
   const { settings, size, setSettings } = useStreamDeck(Schemas.picker);
@@ -37,6 +39,15 @@ export default () => {
   }
 
   const pickedWithSettings = ["weapon", "filters"] as const;
+
+  const onDefaultValueChange = (filter: string, value: string | null) => {
+    setSettings({
+      defaultOptions: {
+        ...settings.defaultOptions,
+        [filter]: value ?? "all",
+      },
+    });
+  };
 
   return (
     <Stack>
@@ -103,6 +114,60 @@ export default () => {
                 </Accordion.Item>
               );
             })}
+            <Accordion.Item key="defaultOptions" value="defaultOptions">
+              <Accordion.Control icon={<IconSelect />}>
+                Initial options
+              </Accordion.Control>
+              <Accordion.Panel>
+                <SimpleGrid cols={2}>
+                  <Select
+                    label="armor"
+                    value={settings.defaultOptions.class}
+                    data={[
+                      "all",
+                      "helmet",
+                      "gauntlets",
+                      "chest",
+                      "boots",
+                      "classItem",
+                    ]}
+                    onChange={(value) => onDefaultValueChange("armor", value)}
+                  />
+                  <Select
+                    label="class"
+                    value={settings.defaultOptions.class}
+                    data={["all", "warlock", "hunter", "titan"]}
+                    onChange={(value) => onDefaultValueChange("class", value)}
+                  />
+                  <Select
+                    label="crafted"
+                    data={["all", "crafted", "random-roll"]}
+                    value={settings.defaultOptions.class}
+                    onChange={(value) => onDefaultValueChange("crafted", value)}
+                  />
+                  <Select
+                    label="rarity"
+                    data={["all", "legendary", "exotic"]}
+                    value={settings.defaultOptions.class}
+                    onChange={(value) => onDefaultValueChange("rarity", value)}
+                  />
+                  <Select
+                    label="element"
+                    data={[
+                      "all",
+                      "solar",
+                      "void",
+                      "arc",
+                      "stasis",
+                      "strand",
+                      "kinetic",
+                    ]}
+                    value={settings.defaultOptions.class}
+                    onChange={(value) => onDefaultValueChange("element", value)}
+                  />
+                </SimpleGrid>
+              </Accordion.Panel>
+            </Accordion.Item>
           </Accordion>
         </div>
       </DndContext>

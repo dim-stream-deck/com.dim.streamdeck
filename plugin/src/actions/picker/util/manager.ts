@@ -15,17 +15,6 @@ import $, { Action } from "@elgato/streamdeck";
 import { nextBy } from "@/util/cyclic";
 import { PickerFilterType, PickerSettings } from "@plugin/types";
 
-const Images = {
-  element: "./imgs/canvas/picker/element/all.png",
-  weapon: "./imgs/canvas/picker/weapon/all.png",
-  crafted: "./imgs/canvas/picker/crafted/all.png",
-  rarity: "./imgs/canvas/picker/rarity/all.png",
-  perk: "./imgs/canvas/picker/perk/all.png",
-  armor: "./imgs/canvas/picker/armor/all.png",
-  filters: "./imgs/canvas/picker/all.png",
-  class: "./imgs/canvas/picker/class/all.png",
-};
-
 export const onPickerActivate = (
   grid: GridHelper<PickerFilterType>,
   device: string,
@@ -55,19 +44,15 @@ export const onPickerActivate = (
   }
 
   const filters: Record<string, string | undefined> = {
-    element: "",
     weapon: "",
-    class: "",
-    crafted: "",
-    rarity: "",
-    perk: "",
-    armor: "",
+    ...settings.defaultOptions,
   };
 
   settings.filters.forEach((filter, i) => {
+    const value = settings.defaultOptions[filter] || "all";
     grid.updateButton(buttons[i], {
       id: "all",
-      image: Images[filter],
+      image: `./imgs/canvas/picker/${filter}/${value}.png`,
       type: filter,
     });
   });

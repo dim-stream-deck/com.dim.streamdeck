@@ -176,6 +176,9 @@ export const PickerFilterSchema = z.enum([
 
 export const PickerSettingsSchema = z.object({
   filters: PickerFilterSchema.array().default([]),
+  defaultOptions: z
+    .record(PickerFilterSchema, z.string().default("all"))
+    .default({}),
   options: z
     .object({
       weapon: z.string().array().optional(),
