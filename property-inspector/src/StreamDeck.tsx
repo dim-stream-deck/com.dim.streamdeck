@@ -1,12 +1,12 @@
 import {
-	createContext,
-	FC,
-	useCallback,
-	useContext,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
+  createContext,
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from "react";
 import { GlobalSettings } from "@plugin/types";
 
@@ -45,7 +45,8 @@ interface StreamDeckContext<TSettings> {
 }
 
 const StreamDeckContext = createContext<StreamDeckContext<Settings>>({
-  device: { columns: 0, rows: 0 },
+  size: { columns: 0, rows: 0 },
+  settings: {},
   globalSettings: {},
   setSettings: () => {},
   overrideSettings: () => {},

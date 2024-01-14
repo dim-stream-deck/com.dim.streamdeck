@@ -76,9 +76,8 @@ export type LoadoutSettings = z.infer<typeof LoadoutSettingsSchema>;
 
 // Picker
 
-export type PickerFilterType =
-  | z.infer<typeof PickerFilterSchema>
-  | "weapon-type"
-  | "item";
+export type PickerFilterType = z.infer<typeof PickerFilterSchema>;
+
+export type PickerCellType = PickerFilterType | "weapon-type" | "item";
 
 export type PickerSettings = z.infer<typeof PickerSettingsSchema>;

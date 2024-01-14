@@ -15,7 +15,6 @@ import { Filters } from "./Filters";
 import { Filter } from "./Filter";
 import { IconSelect, IconSettings } from "@tabler/icons-react";
 import { Settings } from "./Settings";
-import { useCallback } from "react";
 
 export default () => {
   const { settings, size, setSettings } = useStreamDeck(Schemas.picker);

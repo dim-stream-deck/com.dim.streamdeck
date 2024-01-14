@@ -13,10 +13,10 @@ import { ItemIcon } from "@/actions/pull-item/item-icon";
 import { ev } from "@/main";
 import $, { Action } from "@elgato/streamdeck";
 import { nextBy } from "@/util/cyclic";
-import { PickerFilterType, PickerSettings } from "@plugin/types";
+import { PickerCellType, PickerSettings } from "@plugin/types";
 
 export const onPickerActivate = (
-  grid: GridHelper<PickerFilterType>,
+  grid: GridHelper<PickerCellType>,
   device: string,
   profile: string,
   settings: PickerSettings,
@@ -97,7 +97,7 @@ export const onPickerActivate = (
   updateItems();
 
   // listen for picker events (from the grid)
-  events.on("press", (button: Cell<PickerFilterType>) => {
+  events.on("press", (button: Cell<PickerCellType>) => {
     switch (button.type) {
       case "element":
       case "class":

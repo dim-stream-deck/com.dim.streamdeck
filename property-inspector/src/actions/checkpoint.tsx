@@ -153,7 +153,7 @@ export default () => {
                   size="sm"
                   w="100%"
                   data={difficulties}
-                  value={settings.difficulty}
+                  value={settings.difficulty ?? undefined}
                   onChange={(value) =>
                     setSettings({
                       difficulty: CheckpointDifficultySchema.parse(value),
