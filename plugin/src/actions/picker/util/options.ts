@@ -76,6 +76,15 @@ export const Rarity = expandDefinitions("rarity", [
   "legendary",
 ]);
 
+export const Armor = expandDefinitions("armor", [
+  "all",
+  "helmet",
+  "gauntlets",
+  "chest",
+  "leg",
+  "classitem",
+]);
+
 // Profile Suffixes
 
 export const Profiles = [

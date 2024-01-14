@@ -178,7 +178,16 @@ export const PickerSettingsSchema = z.object({
   filters: PickerFilterSchema.array().default([]),
   defaultOptions: z
     .record(PickerFilterSchema, z.string().default("all"))
-    .default({}),
+    .default({
+      element: "all",
+      crafted: "all",
+      weapon: "all",
+      armor: "all",
+      class: "all",
+      perk: "all",
+      rarity: "all",
+      filters: "all",
+    }),
   options: z
     .object({
       weapon: z.string().array().optional(),

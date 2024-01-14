@@ -127,8 +127,8 @@ export default () => {
                       "helmet",
                       "gauntlets",
                       "chest",
-                      "boots",
-                      "classItem",
+                      "leg",
+                      "classitem",
                     ]}
                     onChange={(value) => onDefaultValueChange("armor", value)}
                   />

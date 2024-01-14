@@ -1,6 +1,7 @@
 import { DIM, buildQuery } from "@/dim/api";
 import { Cell, GridHelper } from "../helper/GridHelper";
 import {
+  Armor,
   Classes,
   CloseWeaponButton,
   Crafted,
@@ -30,7 +31,7 @@ export const onPickerActivate = (
     weapon: WeaponButtons,
     crafted: Crafted,
     perk: [],
-    armor: [],
+    armor: Armor,
     filters: [],
     rarity: Rarity,
     class: Classes,
@@ -98,6 +99,7 @@ export const onPickerActivate = (
   // listen for picker events (from the grid)
   events.on("press", (button: Cell<PickerCellType>) => {
     switch (button.type) {
+      case "armor":
       case "element":
       case "class":
       case "rarity":
