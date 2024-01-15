@@ -121,6 +121,7 @@ export const PullItemSettingsSchema = z.object({
   item: z.string().nullish(),
   icon: z.string().nullish(),
   isExotic: z.boolean().nullish(),
+  isCrafted: z.boolean().nullish(),
   isSubClass: z.boolean().nullish(),
   label: z.string().nullish(),
   overlay: z.string().nullish(),
@@ -174,7 +175,10 @@ export const PickerFilterSchema = z.enum([
   "filters",
 ]);
 
+export const PickerCategorySchema = z.enum(["all", "weapon", "armor"]);
+
 export const PickerSettingsSchema = z.object({
+  category: PickerCategorySchema.default("all"),
   filters: PickerFilterSchema.array().default([]),
   defaultOptions: z
     .record(PickerFilterSchema, z.string().default("all"))

@@ -8,7 +8,7 @@ export interface Cell<Type> {
   image?: string | (() => Promise<string>);
   title?: string;
   type?: "close" | "next" | Type;
-  misc?: Record<string, string | boolean | number>;
+  loadingType?: "exotic" | "legendary";
 }
 
 export type ActionCoordinates = {
@@ -143,9 +143,8 @@ export class GridHelper<Type> {
       typeof button.image === "function" ? button.image() : button.image;
 
     // show a loader if the image is not ready
-    if (typeof image !== "string") {
-      const type = button.misc?.isExotic ? "exotic" : "legendary";
-      await button.action?.setImage(Loaders[type]);
+    if (typeof image !== "string" && button.loadingType) {
+      await button.action?.setImage(Loaders[button.loadingType]);
     }
 
     button.action?.setImage((await image) || "");

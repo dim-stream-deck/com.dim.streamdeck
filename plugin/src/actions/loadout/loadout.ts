@@ -27,7 +27,7 @@ export class Loadout extends SingletonAction {
       inGameIcon
         ? await LoadoutIcon(inGameIcon)
         : icon
-          ? toBase64(await downloadAsArrayBuffer(icon), "png")
+          ? toBase64(await downloadAsArrayBuffer(icon), "image/png")
           : undefined
     );
   }

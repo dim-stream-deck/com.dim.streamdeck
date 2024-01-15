@@ -35,7 +35,7 @@ const Weapons = [
 export const WeaponButtons = Weapons.map((item) => ({
   ...item,
   id: item.id.replace("-", ""),
-  type: "weapon-type" as const,
+  type: "selection:weapon" as const,
   image: `./imgs/canvas/picker/weapon/${item.id.toLowerCase()}.png`,
 }));
 

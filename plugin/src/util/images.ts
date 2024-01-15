@@ -16,6 +16,12 @@ export const downloadAsArrayBuffer = async (url: string) => {
   return null;
 };
 
+/**
+ * Convert an ArrayBuffer to a base64 string
+ * @param buffer The ArrayBuffer to convert
+ * @param type The mime type of the image
+ * @returns The base64 string
+ */
 export const toBase64 = (buffer: ArrayBuffer | null, type: string) => {
   if (!buffer) return "";
   const content = Buffer.from(buffer).toString("base64");
@@ -42,6 +48,8 @@ export const shadow = readAsArrayBuffer("./imgs/canvas/shadow.png");
 export const exotic = readAsArrayBuffer("./imgs/canvas/item/exotic.png");
 
 export const legendary = readAsArrayBuffer("./imgs/canvas/item/legendary.png");
+
+export const crafted = readAsArrayBuffer("./imgs/canvas/item/crafted.png");
 
 export const equippedMark = readAsArrayBuffer(
   "./imgs/canvas/item/equipped-mark.png"

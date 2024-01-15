@@ -1,5 +1,6 @@
 import { sendToWeb } from "@/main";
 import { DimActions } from "./types";
+import { PickerCategory } from "@plugin/types";
 
 let latestSelection = Date.now();
 
@@ -39,11 +40,13 @@ export const DIM: DimActions = {
 
 export const buildQuery = (
   filters: Record<string, string | undefined>,
-  type: "weapon" | "armor" | "all"
+  type: PickerCategory
 ) => {
-  const stringified = Object.values(filters)
-    .filter((it) => Boolean(it) && it !== "all")
-    .map((it) => `is:${it}`)
+  const stringified = Object.entries(filters)
+    .filter(([, it]) => Boolean(it) && it !== "all")
+    .map(([key, value]) =>
+      key === "perk" ? `exactperk:"${value}"` : `is:${value}`
+    )
     .join(" ");
   const prefix = type === "all" ? ["is:weapon", "is:armor"] : [`is:${type}`];
   return `(${prefix.join(" or ")}) ` + stringified;

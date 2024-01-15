@@ -3,18 +3,39 @@ import {
   Collapse,
   Divider,
   Group,
+  SegmentedControl,
   Select,
   SimpleGrid,
   Stack,
   Text,
 } from "@mantine/core";
 import { useStreamDeck } from "../../StreamDeck";
-import { PickerFilterSchema, PickerFilterType, Schemas } from "@plugin/types";
+import {
+  PickerCategorySchema,
+  PickerFilterSchema,
+  PickerFilterType,
+  Schemas,
+} from "@plugin/types";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { Filters } from "./Filters";
 import { Filter } from "./Filter";
 import { IconSelect, IconSettings } from "@tabler/icons-react";
 import { Settings } from "./Settings";
+
+const Categories = [
+  {
+    label: "Weapon",
+    value: "weapon",
+  },
+  {
+    label: "Armor",
+    value: "armor",
+  },
+  {
+    label: "All",
+    value: "all",
+  },
+];
 
 export default () => {
   const { settings, size, setSettings, communication } = useStreamDeck(
@@ -87,6 +108,20 @@ export default () => {
               ))}
           </SimpleGrid>
         </Collapse>
+
+        <div>
+          <Divider labelPosition="center" label="Category" />
+          <SegmentedControl
+            mt="sm"
+            fullWidth
+            color="dim"
+            data={Categories}
+            value={settings.category}
+            onChange={(value) =>
+              setSettings({ category: PickerCategorySchema.parse(value) })
+            }
+          />
+        </div>
 
         <div>
           <Divider labelPosition="center" label="Settings" />

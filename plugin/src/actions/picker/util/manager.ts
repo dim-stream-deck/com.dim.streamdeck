@@ -16,6 +16,7 @@ import $, { Action } from "@elgato/streamdeck";
 import { nextBy } from "@/util/cyclic";
 import { PickerCellType, PickerSettings } from "@plugin/types";
 import { State } from "@/state";
+import { ImageIcon } from "./ImageIcon";
 
 export const onPickerActivate = (
   grid: GridHelper<PickerCellType>,
@@ -58,12 +59,6 @@ export const onPickerActivate = (
     });
   });
 
-  const queryType = settings.filters.includes("class")
-    ? "armor"
-    : settings.filters.includes("weapon")
-      ? "weapon"
-      : "all";
-
   let next;
   let pickerOpen = false;
 
@@ -71,7 +66,7 @@ export const onPickerActivate = (
     pickerOpen = false;
     DIM.requestPickerItems({
       device,
-      query: buildQuery(filters, queryType),
+      query: buildQuery(filters, settings.category),
     });
   };
 
@@ -79,12 +74,10 @@ export const onPickerActivate = (
     grid.fill(
       await Promise.all(
         items.map(async (item: any) => ({
-          type: "item",
+          type: "selection:item",
           id: item.item,
           image: () => ItemIcon(item),
-          misc: {
-            isExotic: item.isExotic,
-          },
+          loadingType: item.isExotic ? "exotic" : "legendary",
         }))
       )
     );
@@ -96,6 +89,9 @@ export const onPickerActivate = (
   ev.on("close", () => ev.removeListener(key, pickerItemsListener));
 
   updateItems();
+
+  const weaponButton = buttons.find((it) => it.type === "weapon");
+  const perkButton = buttons.find((it) => it.type === "perk");
 
   // listen for picker events (from the grid)
   events.on("press", (button: Cell<PickerCellType>) => {
@@ -130,9 +126,33 @@ export const onPickerActivate = (
         );
         break;
       case "perk":
-        grid.fill(Options.perk);
+        grid.fill([
+          {
+            id: "",
+            type: "selection:perk",
+            image: "./imgs/canvas/picker/perk/all.png",
+          },
+          ...Options.perk.map((it) => ({
+            id: it.title,
+            type: "selection:perk" as const,
+            image: () => ImageIcon(it.image),
+            loading: false,
+          })),
+        ]);
         break;
-      case "weapon-type":
+      case "selection:perk":
+        // set the perk filter
+        filters.perk = button.id;
+        // refresh the button
+        if (perkButton) {
+          grid.updateButton(perkButton, {
+            image: button.image,
+          });
+        }
+        // update filters
+        updateItems();
+        break;
+      case "selection:weapon":
         // set the weapon filter
         filters.weapon = button.id;
         // refresh the button
@@ -141,14 +161,13 @@ export const onPickerActivate = (
           image: button.image,
         });
         // update button filter
-        const weaponButton = buttons.find((it) => it.type === "weapon");
         if (weaponButton) {
           grid.updateButton(weaponButton, OpenWeaponButton);
         }
         // update the filter
         updateItems();
         break;
-      case "item":
+      case "selection:item":
         DIM.pullItem({
           itemId: button.id!,
           type: "pull",

@@ -6,6 +6,8 @@ import {
   loadImageFromUrl,
 } from "@/util/canvas";
 import {
+  crafted,
+  craftedMark,
   downloadAsArrayBuffer,
   equippedMark,
   exotic,
@@ -42,8 +44,8 @@ export const ItemIcon = async (
   const image = loadImage(Canvas, item.icon, source);
   const rarityImage = loadImage(
     Canvas,
-    item.isExotic ? "exotic" : "legendary",
-    item.isExotic ? exotic : legendary
+    item.isCrafted ? "crafted" : item.isExotic ? "exotic" : "legendary",
+    item.isCrafted ? crafted : item.isExotic ? exotic : legendary
   );
 
   ctx.drawImage(image, 0, 0, 144, 144);
@@ -56,7 +58,7 @@ export const ItemIcon = async (
     }
     ctx.drawImage(rarityImage, 0, 0, 144, 144);
   }
-
+  
   if (item.element) {
     const elementImage = await loadImageFromUrl(Canvas, item.element);
     const size = 32;
