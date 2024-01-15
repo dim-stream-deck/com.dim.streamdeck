@@ -21,7 +21,9 @@
     "destinyitemmanager",
     "enigo",
     "onwarn",
+    "perkname",
     "randomroll",
+    "singlefile",
     "typer"
   ]
 }
