@@ -15,6 +15,7 @@ import { PullItemSettings, Schemas } from "@plugin/types";
 import { KeyDown, KeyUp, WillAppear, WillDisappear } from "@/settings";
 import { Equipment } from "@/state";
 import { ev } from "@/main";
+import { Loaders } from "@/util/images";
 
 const GestureMapping = {
   single: "pullItemSinglePress",
@@ -44,13 +45,21 @@ export class PullItem extends SingletonAction {
 
     const equipped = Equipment.has(id);
 
-    const image = await ItemIcon(item, {
+    const cacheKey = [item.icon, equipmentGrayscale, equipped];
+
+    const image = ItemIcon(item, {
       equipped,
       grayscale: equipmentGrayscale,
     });
 
+    // show a loader if the image is not ready
+    if (!item.isSubClass && !Cache.has(cacheKey)) {
+      const type = item.isExotic ? "exotic" : "legendary";
+      await e.setImage(Loaders[`${type}Grayscale`]);
+    }
+
     e.setTitle(item.isSubClass ? splitTitle(item.label) : undefined);
-    e.setImage(image);
+    e.setImage(await image);
   }
 
   onWillAppear(e: WillAppear) {

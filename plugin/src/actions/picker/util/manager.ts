@@ -75,6 +75,7 @@ export const onPickerActivate = (
       await Promise.all(
         items.map(async (item: any) => ({
           type: "selection:item",
+          title: "",
           id: item.item,
           image: () => ItemIcon(item),
           loadingType: item.isExotic ? "exotic" : "legendary",

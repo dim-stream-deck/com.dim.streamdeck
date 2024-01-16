@@ -64,13 +64,21 @@ export const classes = [titan, hunter, warlock];
 
 // Base64
 
-const exoticLoader = readAsBase64("./imgs/canvas/picker/loader-exotic.png");
+const exoticLoader = readAsBase64("./imgs/canvas/loader/exotic.png");
 
-const legendaryLoader = readAsBase64(
-  "./imgs/canvas/picker/loader-legendary.png"
+const legendaryLoader = readAsBase64("./imgs/canvas/loader/legendary.png");
+
+const exoticGrayscaleLoader = readAsBase64(
+  "./imgs/canvas/loader/exotic-grayscale.png"
+);
+
+const legendaryGrayscaleLoader = readAsBase64(
+  "./imgs/canvas/loader/legendary-grayscale.png"
 );
 
 export const Loaders = {
   exotic: exoticLoader,
   legendary: legendaryLoader,
+  exoticGrayscale: exoticGrayscaleLoader,
+  legendaryGrayscale: legendaryGrayscaleLoader,
 };
