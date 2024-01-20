@@ -1,4 +1,11 @@
-import { action, SingletonAction, WillAppearEvent } from "@elgato/streamdeck";
+import {
+  action,
+  DialDownEvent,
+  DialRotateEvent,
+  SingletonAction,
+  TouchTapEvent,
+  WillAppearEvent,
+} from "@elgato/streamdeck";
 import { KeyDown, WillDisappear } from "@/settings";
 import { getGrid } from "./helper/GridManager";
 
@@ -10,8 +17,7 @@ export class Tile extends SingletonAction {
   onWillAppear(e: WillAppearEvent<{}>) {
     const grid = getGrid(e);
     if (grid) {
-      const button = grid.link(e);
-      grid.render(button);
+      grid.link(e, e.payload.controller === "Encoder");
     }
   }
 
@@ -23,5 +29,20 @@ export class Tile extends SingletonAction {
   onKeyDown(e: KeyDown) {
     const grid = getGrid(e);
     grid?.onClick(e);
+  }
+
+  onTouchTap(e: TouchTapEvent<{}>) {
+    const grid = getGrid(e);
+    grid?.onClick(e, true);
+  }
+
+  onDialDown(e: DialDownEvent<{}>) {
+    const grid = getGrid(e);
+    grid?.dialPress(e);
+  }
+
+  onDialRotate(e: DialRotateEvent<{}>) {
+    const grid = getGrid(e);
+    grid?.onDial(e, e.payload.ticks > 0);
   }
 }

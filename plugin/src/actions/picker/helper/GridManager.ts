@@ -6,17 +6,31 @@ const grids = new Map<string, GridHelper<PickerCellType>>();
 
 export const getGrid = (e: ActionEvent<any>) => grids.get(e.deviceId);
 
-export const registerPickerGrid = (id: string, rows: number, cols: number) => {
+export const registerPickerGrid = (
+  id: string,
+  rows: number,
+  cols: number,
+  withTouchScreen = false
+) => {
   if (!grids.has(id)) {
     const grid = new GridHelper<PickerCellType>(
       {
         close: "./imgs/canvas/picker/close.png",
-        next: "./imgs/canvas/picker/next.png",
+        next: withTouchScreen
+          ? {
+              on: "./imgs/canvas/picker/navigation.png",
+              off: "./imgs/canvas/picker/navigation-off.png",
+            }
+          : {
+              on: "./imgs/canvas/picker/next.png",
+              off: "./imgs/canvas/picker/next-off.png",
+            },
       },
       {
         rows,
         cols,
-      }
+      },
+      withTouchScreen
     );
     grids.set(id, grid).get(id);
   }

@@ -105,7 +105,7 @@ export const onPickerActivate = (
         // pick the options
         const options = Options[button.type];
         // cycle through elements
-        next = nextBy(button.id, "id", options);
+        next = nextBy(button.id, "id", options, button.direction);
         // refresh the button
         grid.updateButton(button, next);
         // update the filter
@@ -163,7 +163,9 @@ export const onPickerActivate = (
         });
         // update button filter
         if (weaponButton) {
-          grid.updateButton(weaponButton, OpenWeaponButton);
+          grid.updateButton(weaponButton, {
+            image: button.image,
+          });
         }
         // update the filter
         updateItems();

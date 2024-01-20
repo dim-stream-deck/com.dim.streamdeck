@@ -23,6 +23,7 @@ type Settings = Record<string, any>;
 
 type Device = {
   id: string;
+  type: number;
   size: {
     columns: number;
     rows: number;
@@ -95,7 +96,6 @@ export const StreamDeck: FC<StreamDeckProps> = ({
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log(data);
 
       switch (data.event) {
         case "didReceiveGlobalSettings":
@@ -173,10 +173,13 @@ export const StreamDeck: FC<StreamDeckProps> = ({
     [send]
   );
 
-  const size = useMemo(
-    () => info.devices.find((it: any) => it.id === action.device)?.size,
-    [info]
-  );
+  const size = useMemo(() => {
+    const device = info.devices.find((it: any) => it.id === action.device);
+    return {
+      rows: device.size.rows,
+      columns: device.size.columns + (device.type === 7 ? 1 : 0),
+    };
+  }, [info]);
 
   if (!ready) {
     return null;

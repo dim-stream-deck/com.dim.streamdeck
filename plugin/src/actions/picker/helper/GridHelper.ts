@@ -1,3 +1,4 @@
+import { mod } from "@/util/cyclic";
 import { Loaders } from "@/util/images";
 import $, { Action, ActionEvent } from "@elgato/streamdeck";
 import { EventEmitter } from "events";
@@ -9,6 +10,9 @@ export interface Cell<Type> {
   title?: string;
   type?: "close" | "next" | Type;
   loadingType?: "exotic" | "legendary";
+  encoder?: boolean;
+  layout?: string;
+  direction?: "right" | "left";
 }
 
 export type ActionCoordinates = {
@@ -20,7 +24,10 @@ export type ActionCoordinates = {
 
 type Icons = {
   close: string;
-  next: string;
+  next: {
+    on: string;
+    off: string;
+  };
 };
 
 type Size = {
@@ -31,13 +38,19 @@ type Size = {
 export class GridHelper<Type> {
   constructor(
     private readonly icons: Icons,
-    private readonly size: Size
+    private readonly size: Size,
+    private readonly hasTouchScreen: boolean
   ) {}
 
   /**
    * the current buttons array
    */
   private buttons: Cell<Type>[] = [];
+
+  /**
+   * the current touch buttons array
+   */
+  private touchButtons: Cell<Type>[] = [];
 
   /**
    * all the cells to paginate inside the buttons array
@@ -48,6 +61,7 @@ export class GridHelper<Type> {
    * pre-calculated indexes
    */
   private index = {
+    free: 0,
     close: 0,
     end: 0,
   };
@@ -71,23 +85,34 @@ export class GridHelper<Type> {
   }
 
   get lastRow() {
-    return this.buttons.slice(this.index.close + 1);
+    return this.hasTouchScreen
+      ? this.touchButtons
+      : this.buttons.slice(this.index.close);
   }
 
   init() {
     const total = this.size.rows * this.size.cols;
-    this.index.close = total - this.size.cols;
-    this.index.end = total - 1;
+    this.index.free = this.hasTouchScreen ? total : total - this.size.cols;
+    this.index.close = this.hasTouchScreen ? 0 : total - this.size.cols;
+    this.index.end = this.hasTouchScreen ? this.size.cols - 1 : total - 1;
     this.page = 0;
     // cleanup any listeners
     this.events.removeAllListeners();
     // fill empty buttons
     this.buttons = new Array(total).fill(null).map(() => ({}));
-    // fill close button
-    this.buttons[this.index.close] = {
-      image: this.icons.close,
-      type: "close",
-    };
+    // fill touch buttons
+    if (this.hasTouchScreen) {
+      this.touchButtons = new Array(this.size.cols).fill(null).map(() => ({
+        encoder: true,
+        layout: "picker-layout.json",
+      }));
+    } else {
+      // fill close button (only for non Stream Deck+ devices)
+      Object.assign(this.lastRow[0], {
+        image: this.icons.close,
+        type: "close",
+      });
+    }
     // refresh the grid
     this.render();
     return this.events;
@@ -101,16 +126,15 @@ export class GridHelper<Type> {
   }
 
   get total() {
-    return Math.ceil(this.cells.length / this.index.close);
+    return Math.ceil(this.cells.length / this.index.free);
   }
 
   applyCells() {
     const cells = this.cells;
-    const free = this.index.close;
-    let idx = this.page * free;
+    let idx = this.page * this.index.free;
 
     // update buttons
-    for (let i = 0; i < Math.min(cells.length, free); i++) {
+    for (let i = 0; i < Math.min(cells.length, this.index.free); i++) {
       Object.assign(
         this.buttons[i],
         cells[idx++] ?? { image: "", title: "", ...cells[idx++] }
@@ -118,7 +142,7 @@ export class GridHelper<Type> {
     }
 
     // cleanup buttons
-    for (let i = idx; i < free; i++) {
+    for (let i = idx; i < this.index.free; i++) {
       const { action } = this.buttons[i];
       this.buttons[i] = {
         action,
@@ -128,13 +152,12 @@ export class GridHelper<Type> {
     }
 
     // update next button
-    const nextButton = this.buttons[this.index.end];
-    const hasNext = cells.length > free;
+    const nextButton = this.lastRow[this.lastRow.length - 1];
+    const hasNext = cells.length > this.index.free;
     this.updateButton(nextButton, {
       type: "next",
-      image: hasNext
-        ? this.icons.next
-        : this.icons.next.replace(".png", "-off.png"),
+      layout: "picker-layout-full.json",
+      image: hasNext ? this.icons.next.on : this.icons.next.off,
     });
   }
 
@@ -147,8 +170,15 @@ export class GridHelper<Type> {
       await button.action?.setImage(Loaders[button.loadingType]);
     }
 
-    button.action?.setImage((await image) || "");
-    button.action?.setTitle(button.title || "");
+    const awaited = (await image) || "";
+
+    if (button.encoder) {
+      button.action?.setFeedbackLayout(button.layout || "");
+      button.action?.setFeedback({ icon: awaited, title: button.title || "" });
+    } else {
+      button.action?.setImage(awaited);
+      button.action?.setTitle(button.title || "");
+    }
     return;
   }
 
@@ -156,7 +186,11 @@ export class GridHelper<Type> {
     if (button) {
       return this.renderButton(button);
     }
-    return Promise.all(this.buttons.map((button) => this.renderButton(button)));
+    return Promise.all(
+      [...this.buttons, ...this.touchButtons].map((button) =>
+        this.renderButton(button)
+      )
+    );
   }
 
   updateButton(button: Cell<Type>, update: Partial<Cell<Type>>) {
@@ -164,10 +198,12 @@ export class GridHelper<Type> {
     this.render(button);
   }
 
-  link(e: ActionEvent<any>) {
+  link(e: ActionEvent<any>, fromEncoder = false) {
     const idx = this.sub2Idx(e);
-    this.buttons[idx].action = e.action;
-    return this.buttons[idx];
+    const button = fromEncoder ? this.touchButtons[idx] : this.buttons[idx];
+    button.action = e.action;
+    this.render(button);
+    return button;
   }
 
   free(e: ActionEvent<any>) {
@@ -187,23 +223,51 @@ export class GridHelper<Type> {
     $.profiles.switchToProfile(e.deviceId);
   }
 
-  onClick(e: ActionEvent<any>) {
+  onClick(e: ActionEvent<any>, fromEncoder = false) {
     const idx = this.sub2Idx(e);
-    const button = this.buttons[idx];
+    const btn = fromEncoder ? this.touchButtons[idx] : this.buttons[idx];
 
-    if (button.type === "close") {
+    if (btn.type === "close") {
       return this.close(e);
     }
 
-    if (button.type === "next") {
-      return this.onNextPage();
+    if (btn.type === "next") {
+      return this.onNextPage(e);
     }
 
-    this.events.emit("press", button);
+    this.events.emit("press", btn);
   }
 
-  onNextPage() {
+  onDial(e: ActionEvent<any>, clockwise: boolean) {
+    const idx = this.sub2Idx(e);
+    const btn = this.touchButtons[idx];
+    if (btn.type === "next") {
+      return clockwise ? this.onNextPage(e) : this.onPrevPage();
+    }
+    btn.direction = clockwise ? "right" : "left";
+    this.events.emit("press", btn);
+  }
+
+  dialPress(e: ActionEvent<any>) {
+    const idx = this.sub2Idx(e);
+    const btn = this.touchButtons[idx];
+    if (btn.type === "next") {
+      this.close(e);
+    }
+  }
+
+  onNextPage(e: ActionEvent<any>) {
+    const hasNext = this.cells.length > this.index.free;
+    if (!hasNext) {
+      return this.close(e);
+    }
     this.page = (this.page + 1) % this.total;
+    this.applyCells();
+    this.render();
+  }
+
+  onPrevPage() {
+    this.page = mod(this.page - 1, this.total);
     this.applyCells();
     this.render();
   }

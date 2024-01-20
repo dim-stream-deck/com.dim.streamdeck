@@ -27,10 +27,7 @@ const flat = (values: KeyPart[]) => md5(values.join(":"));
 
 export const Cache = {
   get: (key: KeyPart[]) => cache.get(flat(key)) ?? "",
-  has: (key: KeyPart[]) => {
-    console.log(flat(key), cache.has(flat(key)));
-    return cache.has(flat(key));
-  },
+  has: (key: KeyPart[]) => cache.has(flat(key)),
   set: (key: KeyPart[], value: string) => cache.set(flat(key), value),
 };
 

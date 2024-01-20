@@ -25,7 +25,12 @@ export class Picker extends SingletonAction {
       return;
     }
     // register the picker grid for this device
-    const grid = registerPickerGrid(e.deviceId, size.rows, size.columns);
+    const grid = registerPickerGrid(
+      e.deviceId,
+      size.rows,
+      size.columns,
+      device.type === 7
+    );
     // get the picker settings
     const settings = Schemas.picker(e.payload.settings);
     // start the picker

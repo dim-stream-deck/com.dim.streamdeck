@@ -1,0 +1,10 @@
+{
+  "id": "com.dim.streamdeck.layout",
+  "items": [
+    {
+      "key": "icon",
+      "type": "pixmap",
+      "rect": [0, 0, 200, 100]
+    }
+  ]
+}

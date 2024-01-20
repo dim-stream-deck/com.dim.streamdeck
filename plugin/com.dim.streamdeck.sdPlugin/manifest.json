@@ -155,6 +155,7 @@
     {
       "Icon": "imgs/actions/vault/icon",
       "Name": "Vault",
+      "UserTitleEnabled": false,
       "States": [
         {
           "Image": "imgs/actions/vault/state",
@@ -168,6 +169,7 @@
     {
       "Icon": "imgs/actions/postmaster/icon",
       "Name": "Postmaster",
+      "UserTitleEnabled": false,
       "States": [
         {
           "Image": "imgs/actions/postmaster/state",
@@ -186,6 +188,7 @@
     {
       "Icon": "imgs/actions/metrics/icon",
       "Name": "Metrics",
+      "UserTitleEnabled": false,
       "States": [
         {
           "Image": "imgs/actions/metrics/state",
@@ -213,6 +216,7 @@
     {
       "Icon": "imgs/actions/max-power/icon",
       "Name": "Max Power",
+      "UserTitleEnabled": false,
       "States": [
         {
           "Image": "imgs/actions/max-power/state",
@@ -225,6 +229,7 @@
     },
     {
       "Name": "Tile",
+      "UserTitleEnabled": false,
       "Controllers": ["Keypad", "Encoder"],
       "States": [
         {
