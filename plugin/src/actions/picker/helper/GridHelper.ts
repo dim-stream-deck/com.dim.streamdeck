@@ -161,23 +161,27 @@ export class GridHelper<Type> {
     });
   }
 
-  private async renderButton(button: Cell<Type>) {
-    const image =
-      typeof button.image === "function" ? button.image() : button.image;
+  private async renderButton(btn: Cell<Type>) {
+    if (!btn.action) {
+      return;
+    }
+
+    const image = typeof btn.image === "function" ? btn.image() : btn.image;
 
     // show a loader if the image is not ready
-    if (typeof image !== "string" && button.loadingType) {
-      await button.action?.setImage(Loaders[button.loadingType]);
+    if (typeof image !== "string" && btn.loadingType) {
+      await btn.action.setImage(Loaders[btn.loadingType]);
     }
 
     const awaited = (await image) || "";
 
-    if (button.encoder) {
-      button.action?.setFeedbackLayout(button.layout || "");
-      button.action?.setFeedback({ icon: awaited, title: button.title || "" });
+    if (btn.encoder) {
+      btn.action.setFeedbackLayout(btn.layout || "");
+      btn.action.setFeedback({ icon: awaited, title: btn.title || "" });
+      btn.action.setImage("./imgs/actions/picker/state.png");
     } else {
-      button.action?.setImage(awaited);
-      button.action?.setTitle(button.title || "");
+      btn.action.setImage(awaited);
+      btn.action.setTitle(btn.title || "");
     }
     return;
   }

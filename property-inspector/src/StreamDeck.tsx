@@ -23,7 +23,6 @@ type Settings = Record<string, any>;
 
 type Device = {
   id: string;
-  type: number;
   size: {
     columns: number;
     rows: number;
