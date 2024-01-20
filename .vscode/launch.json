@@ -8,7 +8,7 @@
       "name": "Attach to Plugin",
       "type": "node",
       "request": "attach",
-      "processId": "${command:PickProcess}",
+      "port": 9999,
       "outFiles": ["${workspaceFolder}/plugin/bin/**/*.js"],
       "resolveSourceMapLocations": ["${workspaceFolder}/plugin/**"]
     }
