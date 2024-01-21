@@ -88,7 +88,7 @@ export class GridHelper<Type> {
   get lastRow() {
     return this.hasTouchScreen
       ? this.touchButtons
-      : this.buttons.slice(this.index.close);
+      : this.buttons.slice(this.index.close + 1);
   }
 
   init() {
