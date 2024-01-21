@@ -238,6 +238,7 @@
       ],
       "DisableCaching": true,
       "SupportedInMultiActions": false,
+      "VisibleInActionsList": false,
       "UUID": "com.dim.streamdeck.tile"
     },
     {
