@@ -32,6 +32,7 @@ type Device = {
 interface StreamDeckContext<TSettings> {
   communication?: any;
   size: Device["size"];
+  os?: "windows" | "mac";
   settings: TSettings;
   setSettings: (
     settings: Partial<TSettings>,
@@ -188,6 +189,7 @@ export const StreamDeck: FC<StreamDeckProps> = ({
     <StreamDeckContext.Provider
       value={{
         size,
+        os: info.application.platform,
         openURL,
         sendToPlugin,
         communication,
