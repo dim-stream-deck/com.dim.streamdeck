@@ -9,6 +9,7 @@ import {
 } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
 import patreon from "../assets/patreon.png";
+import { log } from "../logger";
 
 const DAY = 1000 * 3600 * 24;
 
@@ -46,6 +47,7 @@ export const Support = () => {
             radius="md"
             onClick={() => {
               openURL(import.meta.env.VITE_PATREON);
+              log("support:open");
               setGlobalSettings({
                 promptSupport: false,
               });
@@ -61,6 +63,7 @@ export const Support = () => {
               radius="md"
               onClick={() => {
                 // add 3 days to the setup date
+                log("support:remind");
                 setGlobalSettings({
                   setupDate: new Date(setupDate + 3 * DAY),
                 });
@@ -72,13 +75,14 @@ export const Support = () => {
               variant="light"
               color="gray"
               radius="md"
-              onClick={() =>
+              onClick={() => {
+                log("support:dismiss");
                 setGlobalSettings({
                   promptSupport: false,
-                })
-              }
+                });
+              }}
             >
-              No
+              Dismiss
             </Button>
           </Group>
         </Card>
