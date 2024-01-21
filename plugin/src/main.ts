@@ -9,6 +9,7 @@ import { manifest } from "./util/version";
 import { State, reloadEquipment } from "./state";
 import { GlobalSettings } from "@plugin/types";
 import { DimMessageSchema } from "./dim/message";
+import { log } from "./util/logger";
 
 const server = http.createServer();
 
@@ -31,6 +32,13 @@ $.settings.getGlobalSettings<GlobalSettings>().then((settings) => {
   Object.entries(settings.authentication ?? {}).forEach(([instance, token]) => {
     tokens.set(instance, token);
   });
+  // Setup install date
+  if (!settings.setupDate) {
+    setGlobalSettings({ setupDate: new Date() });
+    log("install", {
+      os: $.info.application.platform,
+    });
+  }
 });
 
 const ws = new WebSocketServer({

@@ -10,8 +10,9 @@ export const GlobalSettingsSchema = z.object({
   pullItemSingleToggle: z.boolean().default(true),
   checkpointJoinPrefix: z.string().optional(),
   checkpointPaste: z.boolean().default(true),
-  enabledSoloService: z.boolean().optional(),
+  enabledSoloService: z.boolean().default(false),
   authentication: z.record(z.string()).default({}),
+  setupDate: z.date().optional(),
 });
 
 // Actions
