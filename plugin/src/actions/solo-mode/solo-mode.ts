@@ -1,15 +1,16 @@
 import {
   Action,
   action,
-  KeyDownEvent,
   SendToPluginEvent,
   SingletonAction,
-  WillAppearEvent,
 } from "@elgato/streamdeck";
 import { exec } from "child_process";
 import { checkInstalledService } from "./service";
 import { KeyDown, WillAppear } from "@/settings";
 import { log } from "@/util/logger";
+import fs from "fs/promises";
+import { join } from "path";
+import { existsSync } from "fs";
 
 interface PropertyInspectorData {
   action: "remove-service" | "install-service";
@@ -47,8 +48,18 @@ export class SoloMode extends SingletonAction {
   async onSendToPlugin(e: SendToPluginEvent<PropertyInspectorData, {}>) {
     const prefix =
       e.payload.action === "install-service" ? "install" : "remove";
+
+    // calc the service path outside the plugin directory (to avoid issues on update)
+    const servicePath = join(process.env.APPDATA!, "./sd-solo-enabler.exe");
+
+    // copy the service if it doesn't exist
+    if (!existsSync(servicePath)) {
+      fs.copyFile("./solo-mode/sd-solo-enabler.exe", servicePath);
+    }
+
     // run the installer/remover
     const p = exec(`start ./solo-mode/${prefix}-sd-solo-enabler.exe`);
+
     // verify and update the global settings
     p.on("exit", () =>
       setTimeout(

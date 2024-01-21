@@ -4,6 +4,7 @@ version = "1.0.0"
 edition = "2021"
 
 [dependencies]
+dirs = "5.0.1"
 rouille = "3.6.1"
 windows-service = "0.6.0"
 

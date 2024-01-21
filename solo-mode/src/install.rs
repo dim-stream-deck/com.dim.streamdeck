@@ -11,7 +11,7 @@ fn main() -> windows_service::Result<()> {
     let manager_access = ServiceManagerAccess::CONNECT | ServiceManagerAccess::CREATE_SERVICE;
     let service_manager = ServiceManager::local_computer(None::<&str>, manager_access)?;
 
-    let service_binary_path = std::env::current_exe()
+    let service_binary_path = dirs::config_dir()
         .unwrap()
         .with_file_name("sd-solo-enabler.exe");
 
@@ -50,9 +50,4 @@ fn main() -> windows_service::Result<()> {
     println!("Destiny 2 Solo Enabler > service installed and started successfully");
 
     Ok(())
-}
-
-#[cfg(not(windows))]
-fn main() {
-    panic!("This program is only intended to run on Windows.");
 }
