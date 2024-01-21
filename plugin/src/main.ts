@@ -1,4 +1,3 @@
-import EventEmitter from "events";
 import { WebSocketServer } from "ws";
 import $ from "@elgato/streamdeck";
 import { setGlobalSettings } from "./settings";
@@ -9,7 +8,8 @@ import { manifest } from "./util/version";
 import { State, reloadEquipment } from "./state";
 import { GlobalSettings } from "@plugin/types";
 import { DimMessageSchema } from "./dim/message";
-import { log } from "./util/logger";
+import { log } from "@/util/logger";
+import { ev } from "@/util/ev";
 
 const server = http.createServer();
 
@@ -20,8 +20,6 @@ server.on("request", (req, res) => {
   }
 });
 
-export const ev = new EventEmitter();
-ev.setMaxListeners(30);
 reloadEquipment();
 
 // In-memory storage of tokens

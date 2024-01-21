@@ -9,7 +9,7 @@ import { onPickerActivate } from "./util/manager";
 import { Profiles } from "./util/options";
 import { Schemas } from "@plugin/types";
 import { DIM } from "@/dim/api";
-import { ev } from "@/main";
+import { ev } from "@/util/ev";
 import { State } from "@/state";
 import { log } from "@/util/logger";
 

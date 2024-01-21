@@ -1,5 +1,5 @@
 import { load } from "cheerio";
-import { ev } from "@/main";
+import { ev } from "@/util/ev";
 import $ from "@elgato/streamdeck";
 import ms from "ms";
 import { CheckpointSettings } from "@plugin/types";

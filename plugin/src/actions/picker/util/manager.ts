@@ -9,7 +9,7 @@ import {
   WeaponButtons,
 } from "./options";
 import { ItemIcon } from "@/actions/pull-item/item-icon";
-import { ev } from "@/main";
+import { ev } from "@/util/ev";
 import $, { Action } from "@elgato/streamdeck";
 import { nextBy } from "@/util/cyclic";
 import {

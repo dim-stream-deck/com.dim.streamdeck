@@ -14,7 +14,7 @@ import { splitTitle } from "@/util/canvas";
 import { PullItemSettings, Schemas } from "@plugin/types";
 import { KeyDown, KeyUp, WillAppear, WillDisappear } from "@/settings";
 import { Equipment } from "@/state";
-import { ev } from "@/main";
+import { ev } from "@/util/ev";
 import { Loaders } from "@/util/images";
 import { log } from "@/util/logger";
 

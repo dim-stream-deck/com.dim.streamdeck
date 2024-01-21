@@ -1,6 +1,6 @@
-import { ev } from "./main";
 import { db, saveDB } from "./util/db";
 import { Metric, VaultType } from "@plugin/types";
+import { ev } from "./util/ev";
 
 export const Equipment = new Set<string>();
 

@@ -1,4 +1,4 @@
-import { ev } from "@/main";
+import { ev } from "@/util/ev";
 
 export const Watcher = (event: string) => {
   const listeners = new Map<string, (data: any) => void>();

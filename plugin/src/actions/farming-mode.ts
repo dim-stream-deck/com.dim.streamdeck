@@ -1,5 +1,5 @@
 import { DIM } from "@/dim/api";
-import { ev } from "@/main";
+import { ev } from "@/util/ev";
 import { WillAppear } from "@/settings";
 import { State } from "@/state";
 import { log } from "@/util/logger";
