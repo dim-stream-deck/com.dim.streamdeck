@@ -5,14 +5,16 @@ import { Paper } from "@mantine/core";
 interface DroppableProps {
   type: string;
   onSelect: (data: Record<string, any>) => void;
+  onError: (error: Error, dt: string) => void;
 }
 
 export function Droppable({
   type,
   children,
   onSelect,
+  onError,
 }: PropsWithChildren<DroppableProps>) {
-  const { isOver, props } = useDroppable(type, onSelect);
+  const { isOver, props } = useDroppable(type, onSelect, onError);
   return (
     <Paper
       {...props}

@@ -6,10 +6,13 @@ import { IconX } from "@tabler/icons-react";
 import { Schemas } from "@plugin/types";
 
 export default () => {
-  const { settings, setSettings } = useStreamDeck(Schemas.loadout);
+  const { log, settings, setSettings } = useStreamDeck(Schemas.loadout);
   return (
     <Droppable
       type="loadout"
+      onError={(error, dt) =>
+        log(`[error-drop] loadout ${error.message} - dt: "${dt}"`)
+      }
       onSelect={(data) =>
         setSettings(data, {
           replace: true,

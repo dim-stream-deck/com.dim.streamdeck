@@ -13,17 +13,13 @@ import {
 } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
 import { Droppable } from "../components/Droppable";
-import {
-  IconAccessible,
-  IconHandClick,
-  IconHandFinger,
-  IconX,
-} from "@tabler/icons-react";
+import { IconAccessible, IconHandClick, IconX } from "@tabler/icons-react";
 import { DropText } from "../components/DropText";
 import { PullItemSettings } from "@plugin/types";
 
 export default () => {
   const {
+    log,
     settings,
     setSettings,
     globalSettings,
@@ -54,6 +50,9 @@ export default () => {
     <Stack gap="sm">
       <Droppable
         type="item"
+        onError={(error, dt) =>
+          log(`[error-drop] pull-item ${error.message} - dt: "${dt}"`)
+        }
         onSelect={(data) =>
           setSettings({ ...data, element: data.element ?? null })
         }

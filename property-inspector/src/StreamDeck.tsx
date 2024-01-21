@@ -33,6 +33,7 @@ interface StreamDeckContext<TSettings> {
   communication?: any;
   size: Device["size"];
   os?: "windows" | "mac";
+  log: (message: string) => void;
   settings: TSettings;
   setSettings: (
     settings: Partial<TSettings>,
@@ -49,6 +50,7 @@ const StreamDeckContext = createContext<StreamDeckContext<Settings>>({
   size: { columns: 0, rows: 0 },
   settings: {},
   globalSettings: {},
+  log: () => {},
   setSettings: () => {},
   overrideSettings: () => {},
   setGlobalSettings: () => {},
@@ -181,6 +183,13 @@ export const StreamDeck: FC<StreamDeckProps> = ({
     };
   }, [info]);
 
+  const log = useCallback(
+    (message: string) => {
+      send("logMessage", { payload: { message } });
+    },
+    [send]
+  );
+
   if (!ready) {
     return null;
   }
@@ -193,6 +202,7 @@ export const StreamDeck: FC<StreamDeckProps> = ({
         openURL,
         sendToPlugin,
         communication,
+        log,
         settings,
         globalSettings,
         overrideSettings,

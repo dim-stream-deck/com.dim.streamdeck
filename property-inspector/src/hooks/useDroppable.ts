@@ -4,7 +4,8 @@ import { log } from "../logger";
 
 export const useDroppable = (
   type: string,
-  onSelect: (data: Record<string, any>) => void
+  onSelect: (data: Record<string, any>) => void,
+  onError: (error: Error, dt: string) => void
 ) => {
   const [isOver, setIsOver] = useState(false);
 
@@ -22,8 +23,8 @@ export const useDroppable = (
         }
         onSelect(data);
       } catch (e) {
-        console.log(e);
         if (e instanceof Error) {
+          onError(e, dt);
           log(`drop-error-${type}`, { message: e.message, dt });
         }
         notifications.show({
