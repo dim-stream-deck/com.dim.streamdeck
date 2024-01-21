@@ -3,10 +3,8 @@ import { Cell, GridHelper } from "../helper/GridHelper";
 import {
   Armor,
   Classes,
-  CloseWeaponButton,
   Crafted,
   Elements,
-  OpenWeaponButton,
   Rarity,
   WeaponButtons,
 } from "./options";
@@ -20,7 +18,6 @@ import {
   PickerSettings,
 } from "@plugin/types";
 import { State } from "@/state";
-import { ImageIcon } from "./ImageIcon";
 
 type OptionCell = {
   id?: string;
@@ -160,18 +157,10 @@ export const onPickerActivate = (
         updateItems();
         break;
       case "weapon":
-        grid.updateButton(
-          button,
-          stack.includes("weapon") ? CloseWeaponButton : OpenWeaponButton
-        );
-        if (stack.includes("weapon")) {
-          filters.weapon = "";
-          updateItems();
-        } else {
+        if (!stack.includes("weapon")) {
           grid.fill(Options.weapon);
           stack.push("weapon");
         }
-
         break;
       case "filters":
         if (stack.includes("filters")) {
