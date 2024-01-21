@@ -7,6 +7,7 @@ let latestSave = 0;
 // load db
 export const db = JSONFileSyncPreset<State>("state.json", {
   equippedItems: [],
+  perks: [],
 });
 
 export const saveDB = () => {

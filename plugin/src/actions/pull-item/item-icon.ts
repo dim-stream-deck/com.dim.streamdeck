@@ -7,7 +7,6 @@ import {
 } from "@/util/canvas";
 import {
   crafted,
-  craftedMark,
   downloadAsArrayBuffer,
   equippedMark,
   exotic,
@@ -58,7 +57,7 @@ export const ItemIcon = async (
     }
     ctx.drawImage(rarityImage, 0, 0, 144, 144);
   }
-  
+
   if (item.element) {
     const elementImage = await loadImageFromUrl(Canvas, item.element);
     const size = 32;
