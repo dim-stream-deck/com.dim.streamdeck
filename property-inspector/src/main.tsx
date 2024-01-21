@@ -1,31 +1,31 @@
-import { FC } from "react";
+import { FC, Suspense, lazy } from "react";
 import { render } from "./util";
-import search from "./actions/search";
-import vault from "./actions/vault";
-import loadout from "./actions/loadout";
-import app from "./actions/app";
-import postmaster from "./actions/postmaster";
-import randomize from "./actions/randomize";
-import metrics from "./actions/metrics";
-import checkpoint from "./actions/checkpoint";
-import pullItem from "./actions/pull-item";
-import maxPower from "./actions/max-power";
-import picker from "./actions/picker/picker";
 import { StreamDeck, useStreamDeck } from "./StreamDeck";
 import "./index.css";
-import { ActionIcon, Group } from "@mantine/core";
+import { ActionIcon, Center, Group, Loader } from "@mantine/core";
 import {
   IconBrandDiscord,
   IconBrandPatreon,
   IconWorldWww,
 } from "@tabler/icons-react";
-import soloMode from "./actions/solo-mode";
 import { NoSetting } from "./components/NoSettings";
-import "@mantine/core/styles.css";
-import "@mantine/notifications/styles.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const client = new QueryClient();
+
+const Support = lazy(() => import("./components/Support"));
+const app = lazy(() => import("./actions/app"));
+const search = lazy(() => import("./actions/search"));
+const vault = lazy(() => import("./actions/vault"));
+const loadout = lazy(() => import("./actions/loadout"));
+const postmaster = lazy(() => import("./actions/postmaster"));
+const randomize = lazy(() => import("./actions/randomize"));
+const metrics = lazy(() => import("./actions/metrics"));
+const checkpoint = lazy(() => import("./actions/checkpoint"));
+const pullItem = lazy(() => import("./actions/pull-item"));
+const maxPower = lazy(() => import("./actions/max-power"));
+const picker = lazy(() => import("./actions/picker/picker"));
+const soloMode = lazy(() => import("./actions/solo-mode"));
 
 export interface AppProps {
   action: any;
@@ -94,7 +94,18 @@ const App: FC<AppProps> = ({ action }) => {
 
   return (
     <>
-      {!Component ? <NoSetting /> : <Component />}
+      <Suspense>
+        <Support />
+      </Suspense>
+      <Suspense
+        fallback={
+          <Center py="md">
+            <Loader size="md" c="dim" />
+          </Center>
+        }
+      >
+        {!Component ? <NoSetting /> : <Component />}
+      </Suspense>
       <Links />
     </>
   );
@@ -116,7 +127,7 @@ window.connectElgatoStreamDeckSocket = (
         uuid,
         event,
         action,
-        info
+        info,
       }}
     >
       <QueryClientProvider client={client}>

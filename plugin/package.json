@@ -6,19 +6,19 @@
   "devDependencies": {
     "@elgato/cli": "^0.2.0",
     "@fcannizzaro/rollup-stream-deck-package": "^1.0.4",
-    "@rollup/plugin-commonjs": "^25.0.5",
-    "@rollup/plugin-node-resolve": "^15.2.2",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.5",
-    "@swc/core": "^1.3.103",
+    "@swc/core": "^1.3.105",
     "@tsconfig/node20": "^20.1.2",
     "@types/ms": "^0.7.34",
-    "@types/node": "20.11.2",
+    "@types/node": "20.11.5",
     "@types/ramda": "^0.29.9",
     "@types/ws": "^8.5.10",
-    "rollup": "^4.9.5",
+    "rollup": "^4.9.6",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-swc3": "^0.11.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "@elgato/streamdeck": "^0.2.0",
