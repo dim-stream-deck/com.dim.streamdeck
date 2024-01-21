@@ -1,4 +1,5 @@
 import { DIM } from "@/dim/api";
+import { log } from "@/util/logger";
 import { action, SingletonAction } from "@elgato/streamdeck";
 
 /**
@@ -8,5 +9,7 @@ import { action, SingletonAction } from "@elgato/streamdeck";
 export class Refresh extends SingletonAction {
   async onKeyDown() {
     DIM.refresh();
+    // log action
+    log("refresh");
   }
 }

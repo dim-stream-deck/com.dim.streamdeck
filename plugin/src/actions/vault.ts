@@ -1,6 +1,7 @@
 import { KeyDown, WillAppear, WillDisappear } from "@/settings";
 import { State } from "@/state";
 import { next } from "@/util/cyclic";
+import { log } from "@/util/logger";
 import { Watcher } from "@/util/watcher";
 import {
   Action,
@@ -43,5 +44,7 @@ export class Vault extends SingletonAction {
     const type = next(current.type, VaultTypeSchema.options);
     e.action.setSettings({ type });
     this.update(e.action);
+    // log action
+    log("vault");
   }
 }

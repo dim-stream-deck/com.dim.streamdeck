@@ -2,6 +2,7 @@ import { DIM } from "@/dim/api";
 import { action, SingletonAction } from "@elgato/streamdeck";
 import { Schemas } from "@plugin/types";
 import { KeyDown } from "@/settings";
+import { log } from "@/util/logger";
 
 /**
  * Trigger a search on DIM.
@@ -16,5 +17,7 @@ export class Search extends SingletonAction {
       pullItems: behavior === "pull",
       sendToVault: behavior === "send-to-vault",
     });
+    // log action
+    log("search");
   }
 }

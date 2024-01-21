@@ -17,6 +17,7 @@ import {
   WillDisappear,
   KeyDown,
 } from "@/settings";
+import { log } from "@/util/logger";
 
 /**
  * Show Destiny Metrics
@@ -71,5 +72,7 @@ export class Metrics extends SingletonAction {
     });
     // update button
     this.update(e.action);
+    // log action
+    log("metrics");
   }
 }

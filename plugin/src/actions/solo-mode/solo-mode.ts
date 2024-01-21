@@ -9,6 +9,7 @@ import {
 import { exec } from "child_process";
 import { checkInstalledService } from "./service";
 import { KeyDown, WillAppear } from "@/settings";
+import { log } from "@/util/logger";
 
 interface PropertyInspectorData {
   action: "remove-service" | "install-service";
@@ -39,6 +40,8 @@ export class SoloMode extends SingletonAction {
 
   onKeyDown(e: KeyDown) {
     this.updateState(e.action, "toggle");
+    // log action
+    log("solo-mode");
   }
 
   async onSendToPlugin(e: SendToPluginEvent<PropertyInspectorData, {}>) {

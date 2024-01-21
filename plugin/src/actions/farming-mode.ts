@@ -2,6 +2,7 @@ import { DIM } from "@/dim/api";
 import { ev } from "@/main";
 import { WillAppear } from "@/settings";
 import { State } from "@/state";
+import { log } from "@/util/logger";
 import { Action, action, SingletonAction } from "@elgato/streamdeck";
 
 /**
@@ -28,5 +29,7 @@ export class FarmingMode extends SingletonAction {
 
   onKeyUp() {
     DIM.toggleFarmingMode();
+    // log action
+    log("farming-mode");
   }
 }

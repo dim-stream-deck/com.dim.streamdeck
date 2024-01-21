@@ -1,6 +1,7 @@
 import { DIM } from "@/dim/api";
 import { DidReceiveSettings, WillAppear, WillDisappear } from "@/settings";
 import { State } from "@/state";
+import { log } from "@/util/logger";
 import { Watcher } from "@/util/watcher";
 import {
   Action,
@@ -38,5 +39,7 @@ export class MaxPower extends SingletonAction {
 
   onKeyDown() {
     DIM.equipMaxPower();
+    // log action
+    log("max-power");
   }
 }

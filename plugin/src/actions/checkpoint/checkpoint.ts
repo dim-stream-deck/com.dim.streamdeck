@@ -13,6 +13,7 @@ import { exec, spawn } from "child_process";
 import { splitTitle } from "@/util/canvas";
 import { CheckpointSettings, GlobalSettings, Schemas } from "@plugin/types";
 import { KeyDown, WillAppear, WillDisappear } from "@/settings";
+import { log } from "@/util/logger";
 
 /**
  * Generate the command to join the checkpoint
@@ -83,6 +84,8 @@ export class Checkpoint extends SingletonAction {
     } else {
       e.action.showAlert();
     }
+    // log action
+    log("checkpoint");
   }
 
   onDidReceiveSettings(e: DidReceiveSettingsEvent<CheckpointSettings>) {

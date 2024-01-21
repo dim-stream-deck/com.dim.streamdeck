@@ -11,6 +11,7 @@ import { Schemas } from "@plugin/types";
 import { DIM } from "@/dim/api";
 import { ev } from "@/main";
 import { State } from "@/state";
+import { log } from "@/util/logger";
 
 /**
  * Show a item picker
@@ -35,6 +36,8 @@ export class Picker extends SingletonAction {
     const settings = Schemas.picker(e.payload.settings);
     // start the picker
     onPickerActivate(grid, device.id, `DIM${suffix}`, settings, e.action);
+    // log action
+    log("picker");
   }
 
   onPropertyInspectorDidAppear(e: PropertyInspectorDidAppearEvent<{}>) {

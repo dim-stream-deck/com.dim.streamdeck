@@ -16,6 +16,7 @@ import { KeyDown, KeyUp, WillAppear, WillDisappear } from "@/settings";
 import { Equipment } from "@/state";
 import { ev } from "@/main";
 import { Loaders } from "@/util/images";
+import { log } from "@/util/logger";
 
 const GestureMapping = {
   single: "pullItemSinglePress",
@@ -114,6 +115,8 @@ export class PullItem extends SingletonAction {
 
   onKeyDown(e: KeyDown) {
     this.gestures.keyDown(e.action.id);
+    // log action
+    log("pull-item");
   }
 
   onPropertyInspectorDidAppear() {

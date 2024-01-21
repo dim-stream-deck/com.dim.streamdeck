@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { notifications } from "@mantine/notifications";
+import { log } from "../logger";
 
 export const useDroppable = (
   type: string,
@@ -9,8 +10,9 @@ export const useDroppable = (
 
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
+      const dt = e.dataTransfer.getData("text");
       try {
-        const data = JSON.parse(e.dataTransfer.getData("text"));
+        const data = JSON.parse(dt);
         if (data.type !== type) {
           return notifications.show({
             color: "red",
@@ -21,6 +23,9 @@ export const useDroppable = (
         onSelect(data);
       } catch (e) {
         console.log(e);
+        if (e instanceof Error) {
+          log(`drop-error-${type}`, { message: e.message, dt });
+        }
         notifications.show({
           color: "red",
           title: "Error",

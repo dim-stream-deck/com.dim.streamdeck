@@ -6,6 +6,7 @@ import {
   WillDisappear,
 } from "@/settings";
 import { State } from "@/state";
+import { log } from "@/util/logger";
 import { Watcher } from "@/util/watcher";
 import { Action, action, SingletonAction } from "@elgato/streamdeck";
 import { Schemas } from "@plugin/types";
@@ -51,5 +52,7 @@ export class Postmaster extends SingletonAction {
     if (settings.type === "total" && settings.collectPostmaster) {
       DIM.collectPostmaster();
     }
+    // log action
+    log("postmaster");
   }
 }

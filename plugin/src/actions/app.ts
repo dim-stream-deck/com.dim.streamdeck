@@ -2,6 +2,7 @@ import $, { action, SingletonAction } from "@elgato/streamdeck";
 import { spawn } from "child_process";
 import { Schemas } from "@plugin/types";
 import { KeyUp } from "@/settings";
+import { log } from "@/util/logger";
 
 /**
  * Open DIM application in Chrome
@@ -53,5 +54,7 @@ export class App extends SingletonAction {
     }
     // show ok icon
     e.action.showOk();
+    // log action
+    log("app");
   }
 }

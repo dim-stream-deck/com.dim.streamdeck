@@ -11,6 +11,7 @@ import { splitTitle } from "@/util/canvas";
 import { WillAppear, KeyDown } from "@/settings";
 import { LoadoutSettings, Schemas } from "@plugin/types";
 import { downloadAsArrayBuffer, toBase64 } from "@/util/images";
+import { log } from "@/util/logger";
 
 /**
  * Equip a loadout
@@ -45,6 +46,8 @@ export class Loadout extends SingletonAction {
       loadout: settings.loadout,
       character: settings.character,
     });
+    // log action
+    log("loadout");
   }
 
   onPropertyInspectorDidAppear() {
