@@ -138,7 +138,11 @@ export class GridHelper<Type> {
     for (let i = 0; i < Math.min(cells.length, this.index.free); i++) {
       Object.assign(
         this.buttons[i],
-        cells[idx++] ?? { image: "", title: "", ...cells[idx++] }
+        Object.assign(
+          {},
+          { image: "", title: "", loadingType: undefined },
+          cells[idx++]
+        )
       );
     }
 
@@ -182,7 +186,10 @@ export class GridHelper<Type> {
 
     if (btn.encoder) {
       btn.action.setFeedbackLayout(btn.layout || "");
-      btn.action.setFeedback({ icon: awaited, title: btn.title || "" });
+      btn.action.setFeedback({
+        icon: awaited,
+        title: btn.title || "",
+      });
       btn.action.setImage("./imgs/actions/picker/state.png");
     } else {
       btn.action.setImage(awaited);

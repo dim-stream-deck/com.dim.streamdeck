@@ -25,6 +25,13 @@ type OptionCell = {
   image: string;
 };
 
+const deleteFrom = (items: string[], item: string) => {
+  const index = items.indexOf(item);
+  if (index > -1) {
+    items.splice(index, 1);
+  }
+};
+
 export const onPickerActivate = (
   grid: GridHelper<PickerCellType>,
   device: string,
@@ -86,7 +93,6 @@ export const onPickerActivate = (
       await Promise.all(
         items.map(async (item: any) => ({
           type: "selection:item",
-          title: "",
           id: item.item,
           image: () => ItemIcon(item),
           loadingType: item.isExotic ? "exotic" : "legendary",
@@ -118,13 +124,9 @@ export const onPickerActivate = (
             id,
             image: option?.image ?? `./imgs/canvas/picker/${filter}/${id}.png`,
             type: filter as PickerFilterType,
-            title: "",
           };
         })
       );
-      grid.updateButton(filtersButton, {
-        image: `./imgs/canvas/picker/filters/all${stack.length > 0 ? "-off" : ""}.png`,
-      });
     }
   };
 
@@ -157,6 +159,7 @@ export const onPickerActivate = (
         updateItems();
         break;
       case "weapon":
+        deleteFrom(stack, "perk");
         if (!stack.includes("weapon")) {
           grid.fill(Options.weapon);
           stack.push("weapon");
@@ -165,32 +168,39 @@ export const onPickerActivate = (
       case "filters":
         if (stack.includes("filters")) {
           stack.length = 0;
-          updateFiltersGrid();
+          updateItems();
         } else {
           stack.push("filters");
           fillFilters();
         }
+        if (filtersButton) {
+          grid.updateButton(filtersButton, {
+            image: `./imgs/canvas/picker/filters/all${stack.length > 0 ? "-off" : ""}.png`,
+          });
+        }
         break;
       case "perk":
-        grid.fill([
-          {
-            id: "",
-            type: "selection:perk",
-            image: "./imgs/canvas/picker/perk/all.png",
-          },
-          ...Options.perk.map((it) => ({
-            id: it.title,
-            type: "selection:perk" as const,
-            image: it.image,
-            loading: false,
-          })),
-        ]);
+        deleteFrom(stack, "weapon");
+        if (!stack.includes("perk")) {
+          stack.push("perk");
+          grid.fill([
+            {
+              id: "",
+              type: "selection:perk",
+              image: "./imgs/canvas/picker/perk/all.png",
+            },
+            ...Options.perk.map((it) => ({
+              id: it.title,
+              type: "selection:perk" as const,
+              image: it.image,
+              loading: false,
+            })),
+          ]);
+        }
         break;
       case "selection:perk":
         // set the perk filter
         filters.perk = button.id;
-        // add the perk to the stack
-        stack.push("perk");
         // refresh the button
         if (perkButton) {
           grid.updateButton(perkButton, {
