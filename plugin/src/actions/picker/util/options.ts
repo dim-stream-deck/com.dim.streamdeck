@@ -32,12 +32,20 @@ const Weapons = [
   { title: "MG", id: "machine-gun" },
 ];
 
-export const WeaponButtons = Weapons.map((item) => ({
-  ...item,
-  id: item.id.replace("-", ""),
-  type: "selection:weapon" as const,
-  image: `./imgs/canvas/picker/weapon/${item.id.toLowerCase()}.png`,
-}));
+export const WeaponButtons = [
+  {
+    id: "all",
+    image: "./imgs/canvas/picker/weapon/all.png",
+    type: "selection:weapon",
+    title: "All",
+  },
+  ...Weapons.map((item) => ({
+    ...item,
+    id: item.id.replace("-", ""),
+    type: "selection:weapon" as const,
+    image: `./imgs/canvas/picker/weapon/${item.id.toLowerCase()}.png`,
+  })),
+];
 
 export const CloseWeaponButton = {
   image: `./imgs/canvas/picker/weapon/all-off.png`,

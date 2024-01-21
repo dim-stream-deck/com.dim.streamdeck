@@ -123,18 +123,9 @@ export const FiltersSettings = ({ picked, value, onChange }: SettingsProps) => {
   return (
     <Checkbox.Group defaultValue={selected} onChange={onChange}>
       <Stack>
-        {filtersOptions
-          .filter((option) => !picked.includes(option))
-          .map((option) => (
-            <Checkbox
-              key={option}
-              style={{
-                textDecoration: "line-through",
-              }}
-              label={option}
-              value={option}
-            />
-          ))}
+        {filtersOptions.map((option) => (
+          <Checkbox key={option} label={option} value={option} />
+        ))}
       </Stack>
     </Checkbox.Group>
   );

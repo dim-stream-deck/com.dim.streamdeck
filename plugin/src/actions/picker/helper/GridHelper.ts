@@ -2,6 +2,7 @@ import { mod } from "@/util/cyclic";
 import { Loaders } from "@/util/images";
 import $, { Action, ActionEvent } from "@elgato/streamdeck";
 import { EventEmitter } from "events";
+import { ImageIcon } from "../util/ImageIcon";
 
 export interface Cell<Type> {
   id?: string;
@@ -166,7 +167,11 @@ export class GridHelper<Type> {
       return;
     }
 
-    const image = typeof btn.image === "function" ? btn.image() : btn.image;
+    let image = typeof btn.image === "function" ? btn.image() : btn.image;
+
+    if (typeof image === "string" && image.startsWith("/")) {
+      image = ImageIcon(image);
+    }
 
     // show a loader if the image is not ready
     if (typeof image !== "string" && btn.loadingType) {

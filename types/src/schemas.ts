@@ -12,7 +12,7 @@ export const GlobalSettingsSchema = z.object({
   checkpointPaste: z.boolean().default(true),
   enabledSoloService: z.boolean().default(false),
   authentication: z.record(z.string()).default({}),
-  setupDate: z.date().optional(),
+  setupDate: z.coerce.date().optional(),
   promptSupport: z.boolean().default(true),
 });
 
@@ -192,7 +192,18 @@ export const PickerSettingsSchema = z.object({
   options: z
     .object({
       weapon: z.string().array().optional(),
-      filters: z.string().array().optional(),
+      filters: z
+        .string()
+        .array()
+        .default([
+          "element",
+          "crafted",
+          "weapon",
+          "armor",
+          "class",
+          "perk",
+          "rarity",
+        ]),
       perk: z.string().array().optional(),
     })
     .default({}),

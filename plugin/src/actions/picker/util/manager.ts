@@ -14,9 +14,19 @@ import { ItemIcon } from "@/actions/pull-item/item-icon";
 import { ev } from "@/main";
 import $, { Action } from "@elgato/streamdeck";
 import { nextBy } from "@/util/cyclic";
-import { PickerCellType, PickerSettings } from "@plugin/types";
+import {
+  PickerCellType,
+  PickerFilterType,
+  PickerSettings,
+} from "@plugin/types";
 import { State } from "@/state";
 import { ImageIcon } from "./ImageIcon";
+
+type OptionCell = {
+  id?: string;
+  title?: string;
+  image: string;
+};
 
 export const onPickerActivate = (
   grid: GridHelper<PickerCellType>,
@@ -28,7 +38,7 @@ export const onPickerActivate = (
   const events = grid.init();
   const buttons = grid.lastRow;
 
-  const Options = {
+  const Options: Record<string, OptionCell[]> = {
     element: Elements,
     weapon: WeaponButtons,
     crafted: Crafted,
@@ -43,7 +53,7 @@ export const onPickerActivate = (
     const keys = new Set(
       settings.options.weapon.map((it) => it.replace("-", ""))
     );
-    Options.weapon = Options.weapon.filter((it) => keys.has(it.id));
+    Options.weapon = Options.weapon.filter((it) => it.id && keys.has(it.id));
   }
 
   const filters: Record<string, string | undefined> = Object.fromEntries(
@@ -54,16 +64,20 @@ export const onPickerActivate = (
     const id = filters[filter];
     grid.updateButton(buttons[i], {
       id,
-      image: `./imgs/canvas/picker/${filter}/${id}.png`,
+      image:
+        Options[filter]?.find((it) => it.id ?? it.title === id)?.image ??
+        `./imgs/canvas/picker/${filter}/${id}.png`,
       type: filter,
     });
   });
 
   let next;
-  let pickerOpen = false;
+  const stack = [] as string[];
 
   const updateItems = () => {
-    pickerOpen = false;
+    if (stack.includes("filters")) {
+      return;
+    }
     DIM.requestPickerItems({
       device,
       query: buildQuery(filters, settings.category),
@@ -93,6 +107,38 @@ export const onPickerActivate = (
 
   const weaponButton = buttons.find((it) => it.type === "weapon");
   const perkButton = buttons.find((it) => it.type === "perk");
+  const filtersButton = buttons.find((it) => it.type === "filters");
+
+  const fillFilters = () => {
+    if (filtersButton) {
+      grid.fill(
+        settings.options.filters?.map((filter) => {
+          const id = filters[filter] ?? "all";
+          const option = Options[filter]?.find(
+            (it) => (it.id ?? it.title) === id
+          );
+          return {
+            id,
+            image: option?.image ?? `./imgs/canvas/picker/${filter}/${id}.png`,
+            type: filter as PickerFilterType,
+            title: "",
+          };
+        })
+      );
+      grid.updateButton(filtersButton, {
+        image: `./imgs/canvas/picker/filters/all${stack.length > 0 ? "-off" : ""}.png`,
+      });
+    }
+  };
+
+  const updateFiltersGrid = () => {
+    stack.pop();
+    if (!stack.length) {
+      updateItems();
+    } else {
+      fillFilters();
+    }
+  };
 
   // listen for picker events (from the grid)
   events.on("press", (button: Cell<PickerCellType>) => {
@@ -114,17 +160,27 @@ export const onPickerActivate = (
         updateItems();
         break;
       case "weapon":
-        if (pickerOpen) {
+        grid.updateButton(
+          button,
+          stack.includes("weapon") ? CloseWeaponButton : OpenWeaponButton
+        );
+        if (stack.includes("weapon")) {
           filters.weapon = "";
           updateItems();
         } else {
           grid.fill(Options.weapon);
-          pickerOpen = true;
+          stack.push("weapon");
         }
-        grid.updateButton(
-          button,
-          pickerOpen ? CloseWeaponButton : OpenWeaponButton
-        );
+
+        break;
+      case "filters":
+        if (stack.includes("filters")) {
+          stack.length = 0;
+          updateFiltersGrid();
+        } else {
+          stack.push("filters");
+          fillFilters();
+        }
         break;
       case "perk":
         grid.fill([
@@ -136,7 +192,7 @@ export const onPickerActivate = (
           ...Options.perk.map((it) => ({
             id: it.title,
             type: "selection:perk" as const,
-            image: () => ImageIcon(it.image),
+            image: it.image,
             loading: false,
           })),
         ]);
@@ -144,6 +200,8 @@ export const onPickerActivate = (
       case "selection:perk":
         // set the perk filter
         filters.perk = button.id;
+        // add the perk to the stack
+        stack.push("perk");
         // refresh the button
         if (perkButton) {
           grid.updateButton(perkButton, {
@@ -151,7 +209,7 @@ export const onPickerActivate = (
           });
         }
         // update filters
-        updateItems();
+        updateFiltersGrid();
         break;
       case "selection:weapon":
         // set the weapon filter
@@ -167,8 +225,8 @@ export const onPickerActivate = (
             image: button.image,
           });
         }
-        // update the filter
-        updateItems();
+        // update filters
+        updateFiltersGrid();
         break;
       case "selection:item":
         DIM.pullItem({
