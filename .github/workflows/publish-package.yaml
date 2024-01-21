@@ -51,9 +51,9 @@ jobs:
         run: |
           mkdir -p plugin/com.dim.streamdeck.sdPlugin/solo-mode
           mkdir -p plugin/com.dim.streamdeck.sdPlugin/macro
-          mv service-installer/install-sd-solo-enabler.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
-          mv service-remover/remove-sd-solo-enabler.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
-          mv service/sd-solo-enabler.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
+          mv service-installer/install-sd-solo-mode.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
+          mv service-remover/remove-sd-solo-mode.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
+          mv service/sd-solo-mode.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
           mv macro/macro.exe plugin/com.dim.streamdeck.sdPlugin/macro/macro.exe
 
       - name: Build plugin

@@ -12,6 +12,7 @@
     "node_modules": true
   },
   "cSpell.words": [
+    "advfirewall",
     "aeeidfelonceeehdppacnjlimhoneige",
     "APPDATA",
     "bungify",
@@ -22,10 +23,13 @@
     "destinyitemmanager",
     "enigo",
     "msedge",
+    "netsh",
     "onwarn",
     "perkname",
     "pixmap",
     "randomroll",
+    "remoteport",
+    "rouille",
     "singlefile",
     "typer"
   ]

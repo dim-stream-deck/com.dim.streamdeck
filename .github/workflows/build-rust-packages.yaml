@@ -16,25 +16,25 @@ jobs:
           command: build
           args: --manifest-path solo-mode/Cargo.toml --release
 
-      - name: Temporary store install-sd-solo-enabler.exe
+      - name: Temporary store install-sd-solo-mode.exe
         uses: actions/upload-artifact@v3
         with:
           name: service-installer
-          path: ./solo-mode/target/release/install-sd-solo-enabler.exe
+          path: ./solo-mode/target/release/install-sd-solo-mode.exe
           retention-days: 365
 
-      - name: Temporary store remove-sd-solo-enabler.exe
+      - name: Temporary store remove-sd-solo-mode.exe
         uses: actions/upload-artifact@v3
         with:
           name: service-remover
-          path: ./solo-mode/target/release/remove-sd-solo-enabler.exe
+          path: ./solo-mode/target/release/remove-sd-solo-mode.exe
           retention-days: 365
 
-      - name: Temporary store sd-solo-enabler.exe
+      - name: Temporary store sd-solo-mode.exe
         uses: actions/upload-artifact@v3
         with:
           name: service
-          path: ./solo-mode/target/release/sd-solo-enabler.exe
+          path: ./solo-mode/target/release/sd-solo-mode.exe
           retention-days: 365
 
   build-macro-windows:

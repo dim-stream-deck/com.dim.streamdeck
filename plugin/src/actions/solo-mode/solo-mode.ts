@@ -8,9 +8,9 @@ import { exec } from "child_process";
 import { checkInstalledService } from "./service";
 import { KeyDown, WillAppear } from "@/settings";
 import { log } from "@/util/logger";
-import fs from "fs/promises";
 import { join } from "path";
 import { existsSync } from "fs";
+import { copyFile } from "fs/promises";
 
 interface PropertyInspectorData {
   action: "remove-service" | "install-service";
@@ -50,15 +50,15 @@ export class SoloMode extends SingletonAction {
       e.payload.action === "install-service" ? "install" : "remove";
 
     // calc the service path outside the plugin directory (to avoid issues on update)
-    const servicePath = join(process.env.APPDATA!, "./sd-solo-enabler.exe");
+    const servicePath = join(process.env.APPDATA!, "./sd-solo-mode.exe");
 
     // copy the service if it doesn't exist
     if (!existsSync(servicePath)) {
-      fs.copyFile("./solo-mode/sd-solo-enabler.exe", servicePath);
+      await copyFile("./solo-mode/sd-solo-mode.exe", servicePath);
     }
 
     // run the installer/remover
-    const p = exec(`start ./solo-mode/${prefix}-sd-solo-enabler.exe`);
+    const p = exec(`start ./solo-mode/${prefix}-sd-solo-mode.exe`);
 
     // verify and update the global settings
     p.on("exit", () =>

@@ -8,12 +8,15 @@ fn main() -> windows_service::Result<()> {
         service_manager::{ServiceManager, ServiceManagerAccess},
     };
 
-    let manager_access = ServiceManagerAccess::CONNECT | ServiceManagerAccess::CREATE_SERVICE;
-    let service_manager = ServiceManager::local_computer(None::<&str>, manager_access)?;
+    let mut service_binary_path = dirs::config_dir().unwrap();
 
-    let service_binary_path = dirs::config_dir()
-        .unwrap()
-        .with_file_name("sd-solo-enabler.exe");
+    service_binary_path.push("sd-solo-mode.exe");
+
+    let manager_access = ServiceManagerAccess::CONNECT | ServiceManagerAccess::CREATE_SERVICE;
+    let service_manager: ServiceManager =
+        ServiceManager::local_computer(None::<&str>, manager_access)?;
+
+    print!("Destiny 2 Solo Enabler > installing service... ");
 
     let service_info = ServiceInfo {
         name: OsString::from("sd_solo_enabler"),

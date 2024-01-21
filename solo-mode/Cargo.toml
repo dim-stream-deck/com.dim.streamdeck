@@ -15,14 +15,14 @@ lto = true
 codegen-units = 1
 
 [[bin]]
-name = "sd-solo-enabler"
+name = "sd-solo-mode"
 path = "src/main.rs"
 
 
 [[bin]]
-name = "install-sd-solo-enabler"
+name = "install-sd-solo-mode"
 path = "src/install.rs"
 
 [[bin]]
-name = "remove-sd-solo-enabler"
+name = "remove-sd-solo-mode"
 path = "src/remove.rs"
