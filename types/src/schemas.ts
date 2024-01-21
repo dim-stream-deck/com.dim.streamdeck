@@ -13,6 +13,7 @@ export const GlobalSettingsSchema = z.object({
   enabledSoloService: z.boolean().default(false),
   authentication: z.record(z.string()).default({}),
   setupDate: z.date().optional(),
+  promptSupport: z.boolean().default(true),
 });
 
 // Actions
