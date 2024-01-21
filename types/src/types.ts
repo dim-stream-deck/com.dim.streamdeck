@@ -24,7 +24,7 @@ export type GlobalSettings = z.infer<typeof GlobalSettingsSchema>;
 
 export type AppSettings = z.infer<typeof AppSettingsSchema>;
 
-export type AppType = AppSettings["type"];
+export type AppType = AppSettings["open"];
 
 // Metrics
 

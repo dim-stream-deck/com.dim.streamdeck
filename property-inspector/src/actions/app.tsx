@@ -1,7 +1,8 @@
-import { Divider, Group, SegmentedControl } from "@mantine/core";
+import { Divider, Group, SegmentedControl, Stack, Switch } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
 import {
   IconBrandChrome,
+  IconBrandEdge,
   IconBrandWindows,
   IconBrowser,
 } from "@tabler/icons-react";
@@ -9,27 +10,22 @@ import { AppType, AppTypeSchema, Schemas } from "@plugin/types";
 
 const Options = [
   {
-    value: "app-browser",
-    label: "app.destinyitemmanager.com",
+    value: "browser",
+    label: "Browser",
     icon: <IconBrowser />,
   },
   {
-    value: "beta-browser",
-    label: "beta.destinyitemmanager.com",
-    icon: <IconBrowser />,
-  },
-  {
-    value: "app-chrome",
-    label: "Chrome PWA",
+    value: "chrome",
+    label: "Chrome App",
     icon: <IconBrandChrome />,
   },
   {
-    value: "beta-chrome",
-    label: "Chrome PWA (Beta)",
-    icon: <IconBrandChrome />,
+    value: "edge",
+    label: "Edge App",
+    icon: <IconBrandEdge />,
   },
   {
-    value: "app-windows",
+    value: "windows",
     label: "Windows App",
     icon: <IconBrandWindows />,
   },
@@ -41,7 +37,6 @@ const Options = [
 
 export default () => {
   const { settings, setSettings } = useStreamDeck(Schemas.app);
-  const color = settings.type?.startsWith("beta") ? "cyan" : "dim";
 
   const data = Options.map((it) => ({
     ...it,
@@ -54,19 +49,28 @@ export default () => {
   }));
 
   return (
-    <div>
-      <Divider labelPosition="center" label="Flavor" mb="sm" />
+    <Stack gap="xs">
+      <Divider labelPosition="center" label="Open" />
       <SegmentedControl
         fullWidth
         orientation="vertical"
         onChange={(value) => {
-          const type = AppTypeSchema.parse(value);
-          setSettings({ type }, { replace: true });
+          const open = AppTypeSchema.parse(value);
+          setSettings({
+            open,
+            beta: open === "windows" ? false : settings.beta,
+          });
         }}
-        color={color}
+        color="dim"
         data={data}
-        value={settings.type}
+        value={settings.open}
       />
-    </div>
+      <Divider labelPosition="center" label="Flavor" />
+      <Switch
+        label="Beta"
+        checked={settings.beta}
+        onChange={(e) => setSettings({ beta: e.target.checked })}
+      />
+    </Stack>
   );
 };

@@ -1,5 +1,5 @@
 import $, { action, SingletonAction } from "@elgato/streamdeck";
-import { spawn } from "child_process";
+import { exec, spawn } from "child_process";
 import { Schemas } from "@plugin/types";
 import { KeyUp } from "@/settings";
 import { log } from "@/util/logger";
@@ -8,11 +8,14 @@ import { log } from "@/util/logger";
  * Open DIM application in Chrome
  * @param env of the application (beta or app)
  */
-const openChromeApp = (env: string) => {
-  const appId =
-    env === "beta"
-      ? "enmhfhfpkdkdgbhjafjkkfdmeopcfiig"
-      : "aeeidfelonceeehdppacnjlimhoneige";
+const openPWA = (beta: boolean, isEdge = false) => {
+  const appId = beta
+    ? "enmhfhfpkdkdgbhjafjkkfdmeopcfiig"
+    : "aeeidfelonceeehdppacnjlimhoneige";
+
+  if (isEdge) {
+    return exec(`start msedge --app-id=${appId}`, {});
+  }
 
   spawn("C:/Program Files/Google/Chrome/Application/chrome_proxy.exe", [
     "--profile-directory=Default",
@@ -37,19 +40,20 @@ export class App extends SingletonAction {
   async onKeyUp(e: KeyUp) {
     // validate settings
     const setting = Schemas.app(e.payload.settings);
-    // extract the env from type
-    const [env] = setting.type.split("-");
+    // extract the settings
+    const { open, beta } = setting;
     // open the app
-    switch (setting.type) {
-      case "app-browser":
-      case "beta-browser":
-        $.system.openUrl(`https://${env}.destinyitemmanager.com`);
+    switch (open) {
+      case "browser":
+        $.system.openUrl(
+          `https://${beta ? "beta" : "app"}.destinyitemmanager.com`
+        );
         break;
-      case "app-chrome":
-      case "beta-chrome":
-        openChromeApp(env);
+      case "chrome":
+      case "edge":
+        openPWA(beta, open === "edge");
         break;
-      case "app-windows":
+      case "windows":
         openWindowsApp();
     }
     // show ok icon

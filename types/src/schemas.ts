@@ -20,16 +20,11 @@ export const GlobalSettingsSchema = z.object({
 
 // App
 
-export const AppTypeSchema = z.enum([
-  "app-browser",
-  "beta-browser",
-  "app-chrome",
-  "beta-chrome",
-  "app-windows",
-]);
+export const AppTypeSchema = z.enum(["browser", "chrome", "edge", "windows"]);
 
 export const AppSettingsSchema = z.object({
-  type: AppTypeSchema.default("app-browser"),
+  open: AppTypeSchema.default("browser"),
+  beta: z.boolean().default(false),
 });
 
 // Metrics
