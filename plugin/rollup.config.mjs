@@ -41,10 +41,10 @@ const config = {
               process.env.CHECKPOINT_API
             ),
             "process.env.AXIOM_DATASET": JSON.stringify(
-              process.env.VITE_AXIOM_DATASET
+              process.env.AXIOM_DATASET
             ),
             "process.env.AXIOM_TOKEN": JSON.stringify(
-              process.env.VITE_AXIOM_TOKEN
+              process.env.AXIOM_TOKEN
             ),
             preventAssignment: true,
           }),

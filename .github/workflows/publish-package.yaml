@@ -61,6 +61,8 @@ jobs:
         run: pnpm build
         env:
           CHECKPOINT_API: ${{secrets.CHECKPOINT_API}}
+          AXIOM_DATASET: ${{secrets.VITE_AXIOM_DATASET}}
+          AXIOM_TOKEN: ${{secrets.VITE_AXIOM_TOKEN}}
 
       - name: Publish package
         uses: ncipollo/release-action@v1.13.0
