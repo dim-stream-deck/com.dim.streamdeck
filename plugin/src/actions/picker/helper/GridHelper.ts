@@ -109,7 +109,7 @@ export class GridHelper<Type> {
       }));
     } else {
       // fill close button (only for non Stream Deck+ devices)
-      Object.assign(this.lastRow[0], {
+      Object.assign(this.buttons[this.index.close], {
         image: this.icons.close,
         type: "close",
       });
@@ -138,11 +138,8 @@ export class GridHelper<Type> {
     for (let i = 0; i < Math.min(cells.length, this.index.free); i++) {
       Object.assign(
         this.buttons[i],
-        Object.assign(
-          {},
-          { image: "", title: "", loadingType: undefined },
-          cells[idx++]
-        )
+        { image: "", title: "", loadingType: undefined },
+        cells[idx++]
       );
     }
 
@@ -173,9 +170,10 @@ export class GridHelper<Type> {
 
     let image = typeof btn.image === "function" ? btn.image() : btn.image;
 
+    /*
     if (typeof image === "string" && image.startsWith("/")) {
       image = ImageIcon(image);
-    }
+    }*/
 
     // show a loader if the image is not ready
     if (typeof image !== "string" && btn.loadingType) {
