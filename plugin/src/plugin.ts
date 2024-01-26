@@ -1,8 +1,5 @@
-import $, { LogLevel } from "@elgato/streamdeck";
+import $ from "@elgato/streamdeck";
 import { ev } from "@/util/ev";
-
-// We can enable "trace" logging so that all messages between the Stream Deck, and the plugin are recorded. When storing sensitive information
-$.logger.setLevel(LogLevel.TRACE);
 
 // Register all the actions in the `actions` directory.
 import "@/actions";
