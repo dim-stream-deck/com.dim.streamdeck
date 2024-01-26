@@ -3,6 +3,7 @@ import { ev } from "@/util/ev";
 
 // Register all the actions in the `actions` directory.
 import "@/actions";
+import { rmdir } from "node:fs/promises";
 
 // Finally, connect to the Stream Deck.
 $.connect();
@@ -18,3 +19,6 @@ process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception: ", err);
   $.logger.error("Uncaught Exception: ", err);
 });
+
+// cleanup old logs
+rmdir("./logs").catch(() => {});
