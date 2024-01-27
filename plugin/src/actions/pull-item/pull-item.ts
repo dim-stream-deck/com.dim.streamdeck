@@ -86,7 +86,7 @@ export class PullItem extends SingletonAction {
       const isInSlots = Equipment.has(settings.item);
 
       // support toggle action
-      if (gesture === "single" && global.pullItemSingleToggle) {
+      if (type === "pull" && global.pullItemSingleToggle) {
         type = isInSlots ? "vault" : type;
       }
 

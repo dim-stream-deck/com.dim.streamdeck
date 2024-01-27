@@ -114,7 +114,7 @@ export default () => {
                         });
                       }}
                     />
-                    {i === 0 && (
+                    {globalSettings[it.key] === "pull" && (
                       <>
                         <Divider my="xs" />
                         <Group mt="xs" wrap="nowrap">
