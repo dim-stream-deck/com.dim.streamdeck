@@ -5,7 +5,13 @@ import {
   loadImage,
   loadImageFromUrl,
 } from "@/util/canvas";
-import { crafted, equippedMark, exotic, legendary } from "@/util/images";
+import {
+  bungify,
+  crafted,
+  equippedMark,
+  exotic,
+  legendary,
+} from "@/util/images";
 import { downloadAsArrayBuffer } from "@fcannizzaro/stream-deck-image";
 import { PullItemSettings } from "@plugin/types";
 import { EmulatedCanvas2DContext } from "canvaskit-wasm";
@@ -30,7 +36,7 @@ export const ItemIcon = async (
   }
 
   // Generate the image
-  const source = await downloadAsArrayBuffer(item.icon);
+  const source = await downloadAsArrayBuffer(bungify(item.icon));
   if (!source) return "";
   const Canvas = await CanvasKit;
   const canvas = Canvas.MakeCanvas(144, 144);

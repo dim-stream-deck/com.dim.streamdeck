@@ -1,6 +1,6 @@
 import { cache } from "@/util/cache";
 import { CanvasKit } from "@/util/canvas";
-import { shadow } from "@/util/images";
+import { bungify, shadow } from "@/util/images";
 import { downloadAsArrayBuffer } from "@fcannizzaro/stream-deck-image";
 
 export const ArtifactIcon = async (url: string) => {
@@ -12,7 +12,7 @@ export const ArtifactIcon = async (url: string) => {
   }
 
   // Generate the image
-  const source = await downloadAsArrayBuffer(url);
+  const source = await downloadAsArrayBuffer(bungify(url));
   if (!source) return "";
   const Canvas = await CanvasKit;
   const canvas = Canvas.MakeCanvas(72, 72);
