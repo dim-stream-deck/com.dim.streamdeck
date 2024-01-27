@@ -170,10 +170,9 @@ export class GridHelper<Type> {
 
     let image = typeof btn.image === "function" ? btn.image() : btn.image;
 
-    /*
     if (typeof image === "string" && image.startsWith("/")) {
       image = ImageIcon(image);
-    }*/
+    }
 
     // show a loader if the image is not ready
     if (typeof image !== "string" && btn.loadingType) {

@@ -1,16 +1,14 @@
 import { KeyDown } from "@/settings";
 import $, {
-  action,
-  PropertyInspectorDidAppearEvent,
-  SingletonAction,
+	action,
+	PropertyInspectorDidAppearEvent,
+	SingletonAction,
 } from "@elgato/streamdeck";
 import { registerPickerGrid } from "./helper/GridManager";
 import { onPickerActivate } from "./util/manager";
 import { Profiles } from "./util/options";
 import { Schemas } from "@plugin/types";
 import { DIM } from "@/dim/api";
-import { ev } from "@/util/ev";
-import { State } from "@/state";
 import { log } from "@/util/logger";
 
 /**
@@ -41,11 +39,6 @@ export class Picker extends SingletonAction {
   }
 
   onPropertyInspectorDidAppear(e: PropertyInspectorDidAppearEvent<{}>) {
-    ev.once("perks", () => {
-      e.action.sendToPropertyInspector({
-        perks: State.get("perks"),
-      });
-    });
     DIM.requestPerks();
   }
 }
