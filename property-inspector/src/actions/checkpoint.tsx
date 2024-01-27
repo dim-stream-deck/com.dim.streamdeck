@@ -32,8 +32,13 @@ export const checkpointDefinitions = async () => {
 };
 
 export default () => {
-  const { globalSettings, setGlobalSettings, settings, setSettings } =
-    useStreamDeck(Schemas.checkpoint);
+  const {
+    globalSettings,
+    setGlobalSettings,
+    settings,
+    overrideSettings,
+    setSettings,
+  } = useStreamDeck(Schemas.checkpoint);
 
   const { data = new Map<string, Checkpoint>() } = useQuery({
     queryKey: ["checkpoints"],
@@ -96,24 +101,19 @@ export default () => {
                 if (activity) {
                   const cp = data.get(activity);
                   const [step] = cp?.steps ?? [];
-                  setSettings(
-                    {
-                      activity,
-                      ...(step
-                        ? {
-                            step: step.title,
-                            image: step.image,
-                          }
-                        : {
-                            step: undefined,
-                            image: undefined,
-                          }),
-                      difficulty: cp?.difficulties?.[0],
-                    },
-                    {
-                      replace: true,
-                    }
-                  );
+                  overrideSettings({
+                    activity,
+                    ...(step
+                      ? {
+                          step: step.title,
+                          image: step.image,
+                        }
+                      : {
+                          step: undefined,
+                          image: undefined,
+                        }),
+                    difficulty: cp?.difficulties?.[0],
+                  });
                 }
               }}
             />

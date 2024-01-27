@@ -35,10 +35,7 @@ interface StreamDeckContext<TSettings> {
   os?: "windows" | "mac";
   log: (message: string) => void;
   settings: TSettings;
-  setSettings: (
-    settings: Partial<TSettings>,
-    options?: { replace?: boolean }
-  ) => void;
+  setSettings: (settings: Partial<TSettings>) => void;
   overrideSettings: (settings: Partial<TSettings>) => void;
   globalSettings: Partial<GlobalSettings>;
   setGlobalSettings: (settings: Partial<GlobalSettings>) => void;
