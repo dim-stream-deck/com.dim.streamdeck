@@ -76,7 +76,9 @@ export class PullItem extends SingletonAction {
         return e.action.showAlert();
       }
 
-      let type = global[GestureMapping[gesture]] ?? "pull";
+      const gestures = settings.keepGestureLocal ? settings : global;
+
+      let type = gestures[GestureMapping[gesture]] ?? "pull";
 
       // skip useless actions
       if (settings.isSubClass && type !== "equip") {
@@ -86,7 +88,7 @@ export class PullItem extends SingletonAction {
       const isInSlots = Equipment.has(settings.item);
 
       // support toggle action
-      if (type === "pull" && global.pullItemSingleToggle) {
+      if (type === "pull" && gestures.pullItemSingleToggle) {
         type = isInSlots ? "vault" : type;
       }
 

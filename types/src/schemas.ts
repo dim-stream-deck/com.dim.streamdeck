@@ -124,6 +124,12 @@ export const PullItemSettingsSchema = z.object({
   overlay: z.string().nullish(),
   subtitle: z.string().nullish(),
   element: z.string().nullish(),
+  // gestures
+  keepGestureLocal: z.boolean().default(false),
+  pullItemSinglePress: z.enum(["equip", "pull", "vault"]).default("equip"),
+  pullItemDoublePress: z.enum(["equip", "pull", "vault"]).default("pull"),
+  pullItemHoldPress: z.enum(["equip", "pull", "vault"]).default("vault"),
+  pullItemSingleToggle: z.boolean().default(true),
 });
 
 // Postmaster

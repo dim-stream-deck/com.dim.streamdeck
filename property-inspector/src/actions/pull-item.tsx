@@ -15,7 +15,7 @@ import { useStreamDeck } from "../StreamDeck";
 import { Droppable } from "../components/Droppable";
 import { IconAccessible, IconHandClick, IconX } from "@tabler/icons-react";
 import { DropText } from "../components/DropText";
-import { PullItemSettings } from "@plugin/types";
+import { Schemas } from "@plugin/types";
 
 export default () => {
   const {
@@ -25,7 +25,7 @@ export default () => {
     globalSettings,
     setGlobalSettings,
     sendToPlugin,
-  } = useStreamDeck<PullItemSettings>();
+  } = useStreamDeck(Schemas.pullItem);
 
   if (!settings || !globalSettings) {
     return;
@@ -45,6 +45,14 @@ export default () => {
       key: "pullItemHoldPress",
     },
   ] as const;
+
+  const gesturesSettings = settings.keepGestureLocal
+    ? settings
+    : globalSettings;
+
+  const setGestures = settings.keepGestureLocal
+    ? setSettings
+    : setGlobalSettings;
 
   return (
     <Stack gap="sm">
@@ -100,6 +108,18 @@ export default () => {
             </Accordion.Control>
             <Accordion.Panel>
               <Stack>
+                <Fieldset legend="Local Gestures">
+                  <Switch
+                    mt="sm"
+                    label="Apply only to this action"
+                    checked={settings?.keepGestureLocal ?? false}
+                    onChange={(e) =>
+                      setSettings({
+                        keepGestureLocal: e.currentTarget.checked,
+                      })
+                    }
+                  />
+                </Fieldset>
                 {gestures.map((it, i) => (
                   <Fieldset legend={it.label}>
                     <SegmentedControl
@@ -107,9 +127,9 @@ export default () => {
                       color="dim"
                       size="sm"
                       data={["equip", "pull", "vault"]}
-                      value={globalSettings[it.key]}
+                      value={gesturesSettings[it.key]}
                       onChange={(action) => {
-                        setGlobalSettings({
+                        setGestures({
                           [it.key]: action,
                         });
                       }}
@@ -119,9 +139,9 @@ export default () => {
                         <Divider my="xs" />
                         <Group mt="xs" wrap="nowrap">
                           <Switch
-                            checked={globalSettings.pullItemSingleToggle}
+                            checked={gesturesSettings.pullItemSingleToggle}
                             onChange={(e) =>
-                              setGlobalSettings({
+                              setGestures({
                                 pullItemSingleToggle: e.currentTarget.checked,
                               })
                             }
