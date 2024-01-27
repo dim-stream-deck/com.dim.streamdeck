@@ -8,8 +8,13 @@ import {
 import { State } from "@/state";
 import { log } from "@/util/logger";
 import { Watcher } from "@/util/watcher";
-import { Action, action, SingletonAction } from "@elgato/streamdeck";
-import { Schemas } from "@plugin/types";
+import {
+  Action,
+  action,
+  DidReceiveSettingsEvent,
+  SingletonAction,
+} from "@elgato/streamdeck";
+import { PostmasterSettings, Schemas } from "@plugin/types";
 
 /**
  * Show postmaster contents.
@@ -18,8 +23,9 @@ import { Schemas } from "@plugin/types";
 export class Postmaster extends SingletonAction {
   private watcher = Watcher("state");
 
-  private async update(e: Action) {
-    const { type, style } = Schemas.postmaster(await e.getSettings());
+  private async update(e: Action, settings?: PostmasterSettings) {
+    const { type, style } =
+      settings ?? Schemas.postmaster(await e.getSettings());
     const postmaster = State.get("postmaster");
     const current = postmaster?.[type] ?? "?";
     const value =
@@ -35,8 +41,8 @@ export class Postmaster extends SingletonAction {
     e.setState(state);
   }
 
-  onDidReceiveSettings(e: DidReceiveSettings) {
-    this.update(e.action);
+  onDidReceiveSettings(e: DidReceiveSettingsEvent<PostmasterSettings>) {
+    this.update(e.action, e.payload.settings);
   }
 
   onWillAppear(e: WillAppear) {
