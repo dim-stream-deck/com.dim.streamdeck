@@ -35,6 +35,7 @@ $.settings.getGlobalSettings<GlobalSettings>().then((settings) => {
     setGlobalSettings({ setupDate: new Date() });
     log("install", {
       os: $.info.application.platform,
+      version: manifest.Version,
     });
   }
 });
