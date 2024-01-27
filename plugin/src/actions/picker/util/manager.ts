@@ -25,11 +25,13 @@ type OptionCell = {
   image: string;
 };
 
-const deleteFrom = (items: string[], item: string) => {
-  const index = items.indexOf(item);
-  if (index > -1) {
-    items.splice(index, 1);
-  }
+const deleteFrom = (items: string[], ...remove: string[]) => {
+  remove.forEach((item) => {
+    const index = items.indexOf(item);
+    if (index > -1) {
+      items.splice(index, 1);
+    }
+  });
 };
 
 export const onPickerActivate = (
@@ -151,6 +153,7 @@ export const onPickerActivate = (
       case "class":
       case "rarity":
       case "crafted":
+        deleteFrom(stack, "weapon", "perk");
         // pick the options
         const options = Options[button.type];
         // cycle through elements
