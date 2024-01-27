@@ -68,7 +68,8 @@ jobs:
         uses: ncipollo/release-action@v1.13.0
         with:
           name: "${{ env.PLUGIN_VERSION }}"
-          prerelease: true
+          prerelease: false
+          makeLatest: true
           allowUpdates: true
           bodyFile: "./changelogs/${{ env.PLUGIN_VERSION }}.md"
           tag: "${{ env.PLUGIN_VERSION }}"
