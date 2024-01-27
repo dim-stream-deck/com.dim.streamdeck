@@ -53,6 +53,10 @@ export const onPickerActivate = (
     class: Classes,
   };
 
+  const updatePerks = () => {
+    Options.perk = State.get("perks") ?? [];
+  };
+
   if (settings.options.weapon) {
     const keys = new Set(
       settings.options.weapon.map((it) => it.replace("-", ""))
@@ -180,6 +184,7 @@ export const onPickerActivate = (
         }
         break;
       case "perk":
+        updatePerks();
         deleteFrom(stack, "weapon");
         if (!stack.includes("perk")) {
           stack.push("perk");
