@@ -1,13 +1,13 @@
-import { mod } from "@/util/cyclic";
 import { Loaders } from "@/util/images";
 import $, { Action, ActionEvent } from "@elgato/streamdeck";
 import { EventEmitter } from "events";
 import { ImageIcon } from "../util/ImageIcon";
+import { mod } from "@fcannizzaro/stream-deck-cycle";
 
 export interface Cell<Type> {
   id?: string;
   action?: Action;
-  image?: string | (() => Promise<string>);
+  image?: string | (() => Promise<string | undefined>);
   title?: string;
   type?: "close" | "next" | Type;
   loadingType?: "exotic" | "legendary";
@@ -35,6 +35,12 @@ type Size = {
   rows: number;
   cols: number;
 };
+
+type ImagePromised =
+  | string
+  | null
+  | undefined
+  | Promise<string | null | undefined>;
 
 export class GridHelper<Type> {
   constructor(
@@ -168,7 +174,8 @@ export class GridHelper<Type> {
       return;
     }
 
-    let image = typeof btn.image === "function" ? btn.image() : btn.image;
+    let image: ImagePromised =
+      typeof btn.image === "function" ? btn.image() : btn.image;
 
     if (typeof image === "string" && image.startsWith("/")) {
       image = ImageIcon(image);

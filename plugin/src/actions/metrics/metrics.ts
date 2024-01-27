@@ -1,23 +1,20 @@
-import { Cache } from "@/util/cache";
-import { next } from "@/util/cyclic";
 import { Watcher } from "@/util/watcher";
 import {
-  Action,
-  action,
-  DidReceiveSettingsEvent,
-  KeyDownEvent,
-  SingletonAction,
+	Action,
+	action,
+	DidReceiveSettingsEvent,
+	KeyDownEvent,
+	SingletonAction,
 } from "@elgato/streamdeck";
 import { ArtifactIcon } from "./artifact-icon";
 import { State } from "@/state";
 import { MetricsSettings, Schemas } from "@plugin/types";
 import {
-  DidReceiveSettings,
-  WillAppear,
-  WillDisappear,
-  KeyDown,
+	WillAppear,
+	WillDisappear
 } from "@/settings";
 import { log } from "@/util/logger";
+import { cycle } from "@fcannizzaro/stream-deck-cycle";
 
 /**
  * Show Destiny Metrics
@@ -68,7 +65,7 @@ export class Metrics extends SingletonAction {
       pinned,
       order,
       disabled,
-      metric: next(metric, metrics),
+      metric: cycle(metric, metrics),
     });
     // update button
     this.update(e.action);

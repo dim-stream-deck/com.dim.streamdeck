@@ -1,13 +1,13 @@
-import { Cache } from "@/util/cache";
+import { cache } from "@/util/cache";
 import { CanvasKit, grayscale } from "@/util/canvas";
-import { downloadAsArrayBuffer } from "@/util/images";
+import { downloadAsArrayBuffer } from "@fcannizzaro/stream-deck-image";
 
 export const CheckpointIcon = async (iconUrl: string, enabled: boolean) => {
   const cacheKey = [iconUrl, enabled];
 
   // Check if the image is already cached
-  if (Cache.has(cacheKey)) {
-    return Cache.get(cacheKey);
+  if (cache.has(cacheKey)) {
+    return cache.get(cacheKey);
   }
 
   // Generate the image
@@ -39,6 +39,6 @@ export const CheckpointIcon = async (iconUrl: string, enabled: boolean) => {
 
   // Cache the image
   const image = canvas.toDataURL();
-  Cache.set(cacheKey, image);
+  cache.set(cacheKey, image);
   return image;
 };

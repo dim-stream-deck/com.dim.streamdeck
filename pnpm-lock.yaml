@@ -11,6 +11,18 @@ importers:
       '@elgato/streamdeck':
         specifier: ^0.2.0
         version: 0.2.0
+      '@fcannizzaro/stream-deck-cache':
+        specifier: ^1.0.3
+        version: 1.0.3
+      '@fcannizzaro/stream-deck-cycle':
+        specifier: ^1.0.3
+        version: 1.0.3
+      '@fcannizzaro/stream-deck-gesture':
+        specifier: ^1.0.3
+        version: 1.0.3
+      '@fcannizzaro/stream-deck-image':
+        specifier: ^1.0.3
+        version: 1.0.3
       '@plugin/types':
         specifier: workspace:*
         version: link:../types
@@ -458,6 +470,27 @@ packages:
   /@fcannizzaro/rollup-stream-deck-package@1.0.4:
     resolution: {integrity: sha512-3Al8k6eoaLZxgyJSKUd3W0fAc/IMvN1bJfY+m7K1irEfhjnZCbgauhtyjwTr9ANP2b2w3b1C/d30clSaEX3CuQ==}
     dev: true
+
+  /@fcannizzaro/stream-deck-cache@1.0.3:
+    resolution: {integrity: sha512-K8FHwNhy7KCV9d6kk4Y9gs8ODkDJafQGk/qWTyeF342gbiMmxZu45MLSQFUuN2lndcaof74Px5CvNpjhRlOyRQ==}
+    dependencies:
+      lru-cache: 10.2.0
+      ms: 2.1.3
+    dev: false
+
+  /@fcannizzaro/stream-deck-cycle@1.0.3:
+    resolution: {integrity: sha512-DMU9sXC6pnd610Sd7Qi7rCov00JeLM9Fuh3P7o+4p6FFbmExaOoq3UHL1TwdajQVuo/c+GYoeEY3z+Mb0WIbCg==}
+    dev: false
+
+  /@fcannizzaro/stream-deck-gesture@1.0.3:
+    resolution: {integrity: sha512-cOI+SCiYlVjWViF1OnRC1EeyWiuH8O15Kbw16ymXkiYy4tgNuc6KP18hokLai4Fci4R+yiHYxTcXRCAyGAChPA==}
+    dev: false
+
+  /@fcannizzaro/stream-deck-image@1.0.3:
+    resolution: {integrity: sha512-FjtIIvK9W5TfJye/qxJ2kGSrMvlyLIQZBiKZcb0lnCrwMFg0juPnrrIVNEQOWCMlgTZmXmqKN6Zr8C+a8ua6kg==}
+    dependencies:
+      mime-types: 2.1.35
+    dev: false
 
   /@floating-ui/core@1.5.3:
     resolution: {integrity: sha512-O0WKDOo0yhJuugCx6trZQj5jVJ9yR0ystG2JaNAemYUWce+pmM6WUEFIibnWyEJKdrDxhm75NoSRME35FNaM/Q==}
@@ -1507,6 +1540,11 @@ packages:
     engines: {node: 14 || >=16.14}
     dev: false
 
+  /lru-cache@10.2.0:
+    resolution: {integrity: sha512-2bIM8x+VAf6JT4bKAljS1qUWgMsqZRPGJS6FSahIMPVvctcNhyVp7AJu7quxOW9jwkryBReKZY5tY5JYv2n/7Q==}
+    engines: {node: 14 || >=16.14}
+    dev: false
+
   /magic-string@0.30.5:
     resolution: {integrity: sha512-7xlpfBaQaP/T6Vh8MO/EqXSW5En6INHEvEXQiuff7Gku0PWjU3uf6w/j9o7O+SpB5fOAkrI5HeoNgwjEO0pFsA==}
     engines: {node: '>=12'}
@@ -1530,6 +1568,18 @@ packages:
       braces: 3.0.2
       picomatch: 2.3.1
     dev: true
+
+  /mime-db@1.52.0:
+    resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
+    engines: {node: '>= 0.6'}
+    dev: false
+
+  /mime-types@2.1.35:
+    resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
+    engines: {node: '>= 0.6'}
+    dependencies:
+      mime-db: 1.52.0
+    dev: false
 
   /mimic-fn@4.0.0:
     resolution: {integrity: sha512-vqiC06CuhBTUdZH+RYl8sFrL096vA45Ok5ISO6sE/Mr1jRbGH4Csnhi8f3wKVl7x8mO4Au7Ir9D3Oyv1VYMFJw==}

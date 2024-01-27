@@ -1,11 +1,12 @@
-import { Cache } from "@/util/cache";
-import { downloadAsArrayBuffer, toBase64 } from "@/util/images";
+import { cache } from "@/util/cache";
+import { downloadAsBase64 } from "@fcannizzaro/stream-deck-image";
 
 export const ImageIcon = async (icon: string) => {
   const key = [icon];
-  if (Cache.has(key)) return Cache.get(key);
-  const res = await downloadAsArrayBuffer(icon);
-  const image = toBase64(res, "image/png");
-  Cache.set(key, image);
+  if (cache.has(key)) return cache.get(key);
+  const image = await downloadAsBase64(icon);
+  if (image) {
+    cache.set(key, image);
+  }
   return image;
 };

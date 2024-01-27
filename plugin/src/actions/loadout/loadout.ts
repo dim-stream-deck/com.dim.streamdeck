@@ -1,5 +1,4 @@
 import { DIM } from "@/dim/api";
-import { Cache } from "@/util/cache";
 import {
   Action,
   action,
@@ -10,8 +9,9 @@ import { LoadoutIcon } from "./loadout-icon";
 import { splitTitle } from "@/util/canvas";
 import { WillAppear, KeyDown } from "@/settings";
 import { LoadoutSettings, Schemas } from "@plugin/types";
-import { downloadAsArrayBuffer, toBase64 } from "@/util/images";
+import { downloadAsBase64 } from "@fcannizzaro/stream-deck-image";
 import { log } from "@/util/logger";
+import { bungify } from "@/util/images";
 
 /**
  * Equip a loadout
@@ -25,11 +25,9 @@ export class Loadout extends SingletonAction {
     // update the title and image
     e.setTitle(splitTitle(label));
     e.setImage(
-      inGameIcon
+      (inGameIcon
         ? await LoadoutIcon(inGameIcon)
-        : icon
-          ? toBase64(await downloadAsArrayBuffer(icon), "image/png")
-          : undefined
+        : icon && (await downloadAsBase64(bungify(icon)))) ?? undefined
     );
   }
 

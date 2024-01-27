@@ -1,5 +1,5 @@
 import { DIM } from "@/dim/api";
-import { Gestures, GestureType } from "@/util/gestures";
+import { Gestures, GestureType } from "@fcannizzaro/stream-deck-gesture";
 import $, {
   Action,
   action,
@@ -8,7 +8,7 @@ import $, {
   SingletonAction,
 } from "@elgato/streamdeck";
 import { ItemIcon } from "./item-icon";
-import { Cache } from "@/util/cache";
+import { cache } from "@/util/cache";
 import { Watcher } from "@/util/watcher";
 import { splitTitle } from "@/util/canvas";
 import { PullItemSettings, Schemas } from "@plugin/types";
@@ -54,7 +54,7 @@ export class PullItem extends SingletonAction {
     });
 
     // show a loader if the image is not ready
-    if (!item.isSubClass && !Cache.has(cacheKey)) {
+    if (!item.isSubClass && !cache.has(cacheKey)) {
       const type = item.isExotic ? "exotic" : "legendary";
       await e.setImage(Loaders[`${type}Grayscale`]);
     }

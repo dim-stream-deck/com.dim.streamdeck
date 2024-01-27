@@ -1,17 +1,12 @@
-import { Cache } from "@/util/cache";
+import { cache } from "@/util/cache";
 import {
   CanvasKit,
   grayscale,
   loadImage,
   loadImageFromUrl,
 } from "@/util/canvas";
-import {
-  crafted,
-  downloadAsArrayBuffer,
-  equippedMark,
-  exotic,
-  legendary,
-} from "@/util/images";
+import { crafted, equippedMark, exotic, legendary } from "@/util/images";
+import { downloadAsArrayBuffer } from "@fcannizzaro/stream-deck-image";
 import { PullItemSettings } from "@plugin/types";
 import { EmulatedCanvas2DContext } from "canvaskit-wasm";
 
@@ -26,8 +21,8 @@ export const ItemIcon = async (
 ) => {
   // Check if the image is already cached
   const cacheKey = [item.icon, options?.grayscale, options?.equipped];
-  if (Cache.has(cacheKey)) {
-    return Cache.get(cacheKey);
+  if (cache.has(cacheKey)) {
+    return cache.get(cacheKey);
   }
 
   if (!item.icon) {
@@ -100,6 +95,6 @@ export const ItemIcon = async (
 
   // Cache the image
   const generated = canvas.toDataURL();
-  Cache.set(cacheKey, generated);
+  cache.set(cacheKey, generated);
   return generated;
 };

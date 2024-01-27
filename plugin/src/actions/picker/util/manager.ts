@@ -11,13 +11,13 @@ import {
 import { ItemIcon } from "@/actions/pull-item/item-icon";
 import { ev } from "@/util/ev";
 import $, { Action } from "@elgato/streamdeck";
-import { nextBy } from "@/util/cyclic";
 import {
   PickerCellType,
   PickerFilterType,
   PickerSettings,
 } from "@plugin/types";
 import { State } from "@/state";
+import { cycle } from "@fcannizzaro/stream-deck-cycle";
 
 type OptionCell = {
   id?: string;
@@ -53,7 +53,7 @@ export const onPickerActivate = (
     filters: [],
     rarity: Rarity,
     class: Classes,
-  };
+  } as const;
 
   const updatePerks = () => {
     Options.perk = State.get("perks") ?? [];
@@ -157,7 +157,10 @@ export const onPickerActivate = (
         // pick the options
         const options = Options[button.type];
         // cycle through elements
-        next = nextBy(button.id, "id", options, button.direction);
+        const next = cycle(button.id, options, {
+          direction: button.direction,
+          extractor: (it) => it.id,
+        });
         // refresh the button
         grid.updateButton(button, next);
         // update the filter

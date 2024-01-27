@@ -1,10 +1,9 @@
+import { downloadAsArrayBuffer } from "@fcannizzaro/stream-deck-image";
 import CanvasKitInit, {
   EmulatedCanvas2DContext,
   Image,
 } from "canvaskit-wasm/bin/canvaskit.js";
-import { Cache } from "./cache";
 import { splitEvery } from "ramda";
-import { downloadAsArrayBuffer } from "./images";
 
 export const CanvasKit = CanvasKitInit({
   locateFile: (file) => process.cwd() + "/" + file,

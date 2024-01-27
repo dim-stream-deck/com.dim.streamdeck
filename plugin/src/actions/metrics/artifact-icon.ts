@@ -1,13 +1,14 @@
-import { Cache } from "@/util/cache";
+import { cache } from "@/util/cache";
 import { CanvasKit } from "@/util/canvas";
-import { downloadAsArrayBuffer, shadow } from "@/util/images";
+import { shadow } from "@/util/images";
+import { downloadAsArrayBuffer } from "@fcannizzaro/stream-deck-image";
 
 export const ArtifactIcon = async (url: string) => {
   const cacheKey = [url];
 
   // Check if the image is already cached
-  if (Cache.has(cacheKey)) {
-    return Cache.get(cacheKey);
+  if (cache.has(cacheKey)) {
+    return cache.get(cacheKey);
   }
 
   // Generate the image
@@ -23,6 +24,6 @@ export const ArtifactIcon = async (url: string) => {
 
   // Cache the image
   const data = canvas.toDataURL();
-  Cache.set(cacheKey, data);
+  cache.set(cacheKey, data);
   return data;
 };

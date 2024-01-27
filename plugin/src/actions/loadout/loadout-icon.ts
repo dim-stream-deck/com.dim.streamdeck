@@ -1,6 +1,7 @@
-import { Cache } from "@/util/cache";
+import { cache } from "@/util/cache";
 import { CanvasKit } from "@/util/canvas";
-import { downloadAsArrayBuffer } from "@/util/images";
+import { bungify } from "@/util/images";
+import { downloadAsArrayBuffer } from "@fcannizzaro/stream-deck-image";
 
 interface IconDefinition {
   icon: string;
@@ -13,13 +14,13 @@ export const LoadoutIcon = async (def: IconDefinition) => {
   const cacheKey = [def.icon, def.background];
 
   // Check the cache
-  if (Cache.has(cacheKey)) {
-    return Cache.get(cacheKey);
+  if (cache.has(cacheKey)) {
+    return cache.get(cacheKey);
   }
 
   // Generate the image
-  const iconSource = await downloadAsArrayBuffer(def.icon);
-  const bgSource = await downloadAsArrayBuffer(def.background);
+  const iconSource = await downloadAsArrayBuffer(bungify(def.icon));
+  const bgSource = await downloadAsArrayBuffer(bungify(def.background));
   if (!iconSource || !bgSource) {
     return;
   }
@@ -33,6 +34,6 @@ export const LoadoutIcon = async (def: IconDefinition) => {
 
   // Cache the image
   const image = canvas.toDataURL();
-  Cache.set(cacheKey, image);
+  cache.set(cacheKey, image);
   return image;
 };

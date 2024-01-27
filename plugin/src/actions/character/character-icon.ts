@@ -1,17 +1,18 @@
 import { Character } from "@/state";
-import { Cache } from "@/util/cache";
+import { cache } from "@/util/cache";
 import { CanvasKit } from "@/util/canvas";
-import { classes, downloadAsArrayBuffer } from "@/util/images";
+import { bungify, classes } from "@/util/images";
+import { downloadAsArrayBuffer } from "@fcannizzaro/stream-deck-image";
 import { EmulatedCanvas2DContext } from "canvaskit-wasm";
 
 export const CharacterIcon = async (character: Character) => {
   const cacheKey = [character.class, character.icon];
 
-  if (Cache.has(cacheKey)) {
-    return Cache.get(cacheKey);
+  if (cache.has(cacheKey)) {
+    return cache.get(cacheKey);
   }
 
-  const iconRes = await downloadAsArrayBuffer(character.icon);
+  const iconRes = await downloadAsArrayBuffer(bungify(character.icon));
   const classRes = classes[character.class];
 
   if (!iconRes) {
@@ -33,6 +34,6 @@ export const CharacterIcon = async (character: Character) => {
   ctx.drawImage(classIcon, 0, 0, 144, 144);
 
   const image = canvas.toDataURL();
-  Cache.set(cacheKey, image);
+  cache.set(cacheKey, image);
   return image;
 };

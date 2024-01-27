@@ -22,6 +22,10 @@
   },
   "dependencies": {
     "@elgato/streamdeck": "^0.2.0",
+    "@fcannizzaro/stream-deck-cache": "^1.0.3",
+    "@fcannizzaro/stream-deck-cycle": "^1.0.3",
+    "@fcannizzaro/stream-deck-gesture": "^1.0.3",
+    "@fcannizzaro/stream-deck-image": "^1.0.3",
     "@plugin/types": "workspace:*",
     "canvaskit-wasm": "^0.39.1",
     "cheerio": "1.0.0-rc.12",

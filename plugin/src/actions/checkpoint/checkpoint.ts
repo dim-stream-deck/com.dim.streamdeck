@@ -5,7 +5,7 @@ import $, {
   SingletonAction,
 } from "@elgato/streamdeck";
 import { CheckpointManager } from "./manager";
-import { Cache } from "@/util/cache";
+import { cache } from "@/util/cache";
 import { CheckpointIcon } from "./checkpoint-icon";
 import clipboard from "clipboardy";
 import { Watcher } from "@/util/watcher";
