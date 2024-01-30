@@ -98,7 +98,7 @@ export const onPickerActivate = (
         layout: "picker-layout-full.json",
         image: "./imgs/canvas/picker/navigation.png",
         locked: true,
-        onTrigger: () =>
+        onPress: () =>
           !panel.opened ? () => grid.destroy() : () => panel.close(),
         onDialLeft: () => grid.pagination.previous(),
         onDialRight: () => grid.pagination.next(),
@@ -109,14 +109,14 @@ export const onPickerActivate = (
         type: "navigation",
         image: "./imgs/canvas/picker/close.png",
         locked: true,
-        onTrigger: !panel.opened ? () => grid.destroy() : () => panel.close(),
+        onPress: !panel.opened ? () => grid.destroy() : () => panel.close(),
       });
     } else if (grid.pagination.required) {
       grid.update("bottom-left", {
         type: "navigation",
         image: "./imgs/canvas/picker/prev.png",
         locked: true,
-        onTrigger: () => grid.pagination.previous(),
+        onPress: () => grid.pagination.previous(),
       });
     }
     if (grid.pagination.required) {
@@ -124,7 +124,7 @@ export const onPickerActivate = (
         type: "navigation",
         image: "./imgs/canvas/picker/next.png",
         locked: true,
-        onTrigger: () => grid.pagination.next(),
+        onPress: () => grid.pagination.next(),
       });
     } else {
       grid.reset("bottom-right");
