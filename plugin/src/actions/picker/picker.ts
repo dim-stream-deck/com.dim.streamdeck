@@ -1,24 +1,24 @@
 import { KeyDown } from "@/settings";
-import $, {
-  action,
-  PropertyInspectorDidAppearEvent,
-  SingletonAction,
-} from "@elgato/streamdeck";
-import { registerPickerGrid } from "./helper/GridManager";
-import { onPickerActivate } from "./util/manager";
+import $, { action, SingletonAction } from "@elgato/streamdeck";
 import { Profiles } from "./util/options";
 import { Schemas } from "@plugin/types";
 import { DIM } from "@/dim/api";
 import { log } from "@/util/logger";
 import ms from "ms";
+import { setupProfileGrid } from "@fcannizzaro/stream-deck-grid";
+import { ev } from "@/util/ev";
+import { onPickerActivate } from "./util/manager";
 
 let latestRequest = 0;
 
 const requestPerks = () => {
   const now = Date.now();
   if (now - latestRequest > ms("1m")) {
-    latestRequest = now;
-    DIM.requestPerks();
+    return new Promise((resolve) => {
+      latestRequest = now;
+      ev.once("perks", resolve);
+      DIM.requestPerks();
+    });
   }
 };
 
@@ -34,19 +34,42 @@ export class Picker extends SingletonAction {
     if (suffix === undefined || !size) {
       return;
     }
+
+    /*
+    const navigation = Navigation({
+      cyclic: true,
+      close: {
+        position: "bottom-left",
+        image: "./imgs/canvas/picker/close.png",
+      },
+      next: {
+        position: "bottom-right",
+        image: "./imgs/canvas/picker/next.png",
+        disabledImage: "./imgs/canvas/picker/next-off.png",
+      },
+    });*/
+
     // register the picker grid for this device
-    const grid = registerPickerGrid(
-      e.deviceId,
-      size.rows,
-      size.columns,
-      device.type === 7
-    );
+
+    const grid = setupProfileGrid({
+      streamDeck: $,
+      device: e.deviceId,
+      size,
+      profile: `DIM${suffix}`,
+      encoders: {
+        enabled: device.type === 7,
+        layout: "picker-layout.json",
+      },
+    });
+
+	// grid.lock.add("last-row");
+
     // get the picker settings
     const settings = Schemas.picker(e.payload.settings);
     // request perks
-    requestPerks();
+    await requestPerks();
     // start the picker
-    onPickerActivate(grid, device.id, `DIM${suffix}`, settings, e.action);
+    onPickerActivate(grid, device.id, settings, e.action);
     // log action
     log("picker");
   }

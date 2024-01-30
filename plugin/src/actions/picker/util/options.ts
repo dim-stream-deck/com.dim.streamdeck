@@ -39,12 +39,15 @@ export const WeaponButtons = [
     type: "selection:weapon",
     title: "All",
   },
-  ...Weapons.map((item) => ({
-    ...item,
-    id: item.id.replace("-", ""),
-    type: "selection:weapon" as const,
-    image: `./imgs/canvas/picker/weapon/${item.id.toLowerCase()}.png`,
-  })),
+  ...Weapons.map((item) => {
+    const id = item.id.replaceAll("-", "");
+    return {
+      ...item,
+      id,
+      type: "selection:weapon" as const,
+      image: `./imgs/canvas/picker/weapon/${id}.png`,
+    };
+  }),
 ];
 
 export const CloseWeaponButton = {

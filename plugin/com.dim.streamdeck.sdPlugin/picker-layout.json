@@ -2,7 +2,7 @@
   "id": "com.dim.streamdeck.layout",
   "items": [
     {
-      "key": "icon",
+      "key": "image",
       "type": "pixmap",
       "rect": [50, 0, 100, 100]
     }

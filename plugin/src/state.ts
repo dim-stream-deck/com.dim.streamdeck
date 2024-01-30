@@ -37,7 +37,7 @@ export type State = {
   metrics?: Record<Metric, number> & {
     artifactIcon: string;
   };
-  perks: {
+  perks?: {
     title: string;
     image: string;
   }[];
