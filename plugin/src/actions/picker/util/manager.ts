@@ -98,8 +98,7 @@ export const onPickerActivate = (
         layout: "picker-layout-full.json",
         image: "./imgs/canvas/picker/navigation.png",
         locked: true,
-        onPress: () =>
-          !panel.opened ? () => grid.destroy() : () => panel.close(),
+        onPress: !panel.opened ? () => grid.destroy() : () => panel.close(),
         onDialLeft: () => grid.pagination.previous(),
         onDialRight: () => grid.pagination.next(),
       });
