@@ -12,20 +12,20 @@ importers:
         specifier: ^0.2.0
         version: 0.2.0
       '@fcannizzaro/stream-deck-cache':
-        specifier: ^1.0.5
-        version: 1.0.5
+        specifier: ^1.0.6
+        version: 1.0.6
       '@fcannizzaro/stream-deck-cycle':
-        specifier: ^1.0.5
-        version: 1.0.5
+        specifier: ^1.0.6
+        version: 1.0.6
       '@fcannizzaro/stream-deck-gesture':
-        specifier: ^1.0.5
-        version: 1.0.5
+        specifier: ^1.0.6
+        version: 1.0.6
       '@fcannizzaro/stream-deck-grid':
-        specifier: ^1.0.5
-        version: 1.0.5
+        specifier: ^1.0.6
+        version: 1.0.6
       '@fcannizzaro/stream-deck-image':
-        specifier: ^1.0.5
-        version: 1.0.5
+        specifier: ^1.0.6
+        version: 1.0.6
       '@plugin/types':
         specifier: workspace:*
         version: link:../types
@@ -471,27 +471,27 @@ packages:
     resolution: {integrity: sha512-3Al8k6eoaLZxgyJSKUd3W0fAc/IMvN1bJfY+m7K1irEfhjnZCbgauhtyjwTr9ANP2b2w3b1C/d30clSaEX3CuQ==}
     dev: true
 
-  /@fcannizzaro/stream-deck-cache@1.0.5:
-    resolution: {integrity: sha512-XBH0IqMpNFgkLgx/p9aJ62rqjFfI3AQVc0gwhcUj7oJLOlkNuQHI+mzIka9vG8G7c6iCVQsaEmz6ccrMnCL+yg==}
+  /@fcannizzaro/stream-deck-cache@1.0.6:
+    resolution: {integrity: sha512-NSKv56tentu3QFYdqTHK+pdA/+EBXs4d3zj7jhEXNaGEfe8SebBIIBfzmhkj7aRoWz7KFU/gqQR1imdc/Zr2ow==}
     dependencies:
       lru-cache: 10.2.0
       ms: 2.1.3
     dev: false
 
-  /@fcannizzaro/stream-deck-cycle@1.0.5:
-    resolution: {integrity: sha512-DSQcbFRH2hIKtnF31CzZSoe4jwUWgdjLV1xUzMucXvFRRKs1vEjBhgC8nWAOVMRVMh1ULSDu/Kp/qOFxnfe+xQ==}
+  /@fcannizzaro/stream-deck-cycle@1.0.6:
+    resolution: {integrity: sha512-lnyP9R138LMvlLtCTLPmZOQPvD84C12KOCKEhJ3M5SFWEBcSm1xzKTtP11BDxR3nBnFYeD8j5Rj8Rg1ntf4Tzw==}
     dev: false
 
-  /@fcannizzaro/stream-deck-gesture@1.0.5:
-    resolution: {integrity: sha512-pdgZ5dM7201suY2chFHKHSXKKCQ0wVzcEJM45jP0+HLB8DTTEsjRgONOsExyLcj21W3DH4Z80OdsAe0oWp26jQ==}
+  /@fcannizzaro/stream-deck-gesture@1.0.6:
+    resolution: {integrity: sha512-ux0U8fjmSAQVo4Wz03LUzpLKC0BpxojX8y7TRRLNB4cpfOxk01jlKqDdcMWzhjO3Zpn7Ev9Dy3mAq+U5zYCm9w==}
     dev: false
 
-  /@fcannizzaro/stream-deck-grid@1.0.5:
-    resolution: {integrity: sha512-zZvAJyQ3R4fN+Bg6fm6FxxGAiuBSSlzuqnUphU2kQemvqF71UWjuiOCJgfGBWYV+f0UkxC3pklPsIX+1dihm9g==}
+  /@fcannizzaro/stream-deck-grid@1.0.6:
+    resolution: {integrity: sha512-gqTugh2rfk3lSUriEZzvmW7QXw5ru/SlqpckSN4QvgW7fdzqFhSQHU8LRHucXgCxOSNiM12WR9/R4U21yQtd4A==}
     dev: false
 
-  /@fcannizzaro/stream-deck-image@1.0.5:
-    resolution: {integrity: sha512-9rvcGFtJmGDcsMr5Lv33ZtUy9s1n0j8v8toN8erNg4apSXUZtkHIjDmt/MVrK4Io5UcCqHDL9RDUlhBRZbHvQw==}
+  /@fcannizzaro/stream-deck-image@1.0.6:
+    resolution: {integrity: sha512-NLB4XliVThImttB91TfWcxzkEfZiBxVgD50Jc6DBzVUesa+Aj4sr3Xhk01tn0ZOqYDK0PhvpKM997iZep98B7A==}
     dev: false
 
   /@floating-ui/core@1.6.0:
