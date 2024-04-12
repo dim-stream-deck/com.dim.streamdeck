@@ -56,7 +56,7 @@ interface SortableMetricProps {
   onStatusChange?: () => void;
 }
 
-const Metric = ({
+const MetricItem = ({
   icon,
   label,
   pinned,
@@ -118,7 +118,7 @@ const SortableMetric = ({ id, ...props }: SortableMetricProps) => {
 
   return (
     <div ref={setNodeRef} style={style}>
-      <Metric id={id} {...props} {...attributes} {...listeners} />
+      <MetricItem id={id} {...props} {...attributes} {...listeners} />
       <Divider />
     </div>
   );
@@ -202,7 +202,9 @@ export default () => {
             />
           ))}
         </SortableContext>
-        <DragOverlay>{dragged ? <Metric {...dragged} /> : null}</DragOverlay>
+        <DragOverlay>
+          {dragged ? <MetricItem {...dragged} /> : null}
+        </DragOverlay>
       </DndContext>
     </div>
   );
