@@ -1,5 +1,4 @@
 import { DIM } from "@/dim/api";
-import { Gestures, GestureType } from "@fcannizzaro/stream-deck-gesture";
 import $, {
   Action,
   action,
@@ -17,6 +16,7 @@ import { Equipment } from "@/state";
 import { ev } from "@/util/ev";
 import { Loaders } from "@/util/images";
 import { log } from "@/util/logger";
+import { Gestures } from "@/lib/gesture";
 
 const GestureMapping = {
   single: "pullItemSinglePress",
@@ -68,7 +68,7 @@ export class PullItem extends SingletonAction {
 
     this.watcher.start(e.action.id, () => this.update(e.action));
 
-    this.gestures.start(e.action.id, async (gesture: GestureType) => {
+    this.gestures.start(e.action.id, async (gesture) => {
       const global = Schemas.global(await $.settings.getGlobalSettings());
       const settings = Schemas.pullItem(await e.action.getSettings());
 

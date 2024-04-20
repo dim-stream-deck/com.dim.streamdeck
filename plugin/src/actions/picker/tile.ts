@@ -1,5 +1,5 @@
+import { GridAction } from "@/lib/grid";
 import { action } from "@elgato/streamdeck";
-import { GridAction } from "@fcannizzaro/stream-deck-grid";
 
 /**
  * dynamic tile

@@ -12,7 +12,7 @@ import {
   exotic,
   legendary,
 } from "@/util/images";
-import { downloadAsArrayBuffer } from "@fcannizzaro/stream-deck-image";
+import { downloadAsArrayBuffer } from "@/lib/image";
 import { PullItemSettings } from "@plugin/types";
 import { EmulatedCanvas2DContext } from "canvaskit-wasm";
 

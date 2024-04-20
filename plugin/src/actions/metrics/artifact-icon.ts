@@ -1,7 +1,7 @@
 import { cache } from "@/util/cache";
 import { CanvasKit } from "@/util/canvas";
 import { bungify, shadow } from "@/util/images";
-import { downloadAsArrayBuffer } from "@fcannizzaro/stream-deck-image";
+import { downloadAsArrayBuffer } from "@/lib/image";
 
 export const ArtifactIcon = async (url: string) => {
   const cacheKey = [url];

@@ -1,3 +1,4 @@
+import { Cycler } from "@/lib/cycle";
 import { WillAppear, WillDisappear } from "@/settings";
 import { State } from "@/state";
 import { log } from "@/util/logger";
@@ -9,7 +10,6 @@ import {
   KeyDownEvent,
   SingletonAction,
 } from "@elgato/streamdeck";
-import { cycle } from "@fcannizzaro/stream-deck-cycle";
 import { Schemas, VaultSettings, VaultTypeSchema } from "@plugin/types";
 
 /**
@@ -41,7 +41,7 @@ export class Vault extends SingletonAction {
   // cycle through the available items
   onKeyDown(e: KeyDownEvent<VaultSettings>) {
     const current = Schemas.vault(e.payload.settings);
-    const type = cycle(current.type, VaultTypeSchema.options);
+    const type = new Cycler(VaultTypeSchema.options).after(current.type);
     e.action.setSettings({ type });
     this.update(e.action);
     // log action

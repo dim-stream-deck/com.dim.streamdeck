@@ -9,9 +9,9 @@ import { LoadoutIcon } from "./loadout-icon";
 import { splitTitle } from "@/util/canvas";
 import { WillAppear, KeyDown } from "@/settings";
 import { LoadoutSettings, Schemas } from "@plugin/types";
-import { downloadAsBase64 } from "@fcannizzaro/stream-deck-image";
 import { log } from "@/util/logger";
 import { bungify } from "@/util/images";
+import { downloadAsBase64 } from "@/lib/image";
 
 /**
  * Equip a loadout

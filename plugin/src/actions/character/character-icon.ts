@@ -2,7 +2,7 @@ import { Character } from "@/state";
 import { cache } from "@/util/cache";
 import { CanvasKit } from "@/util/canvas";
 import { bungify, classes } from "@/util/images";
-import { downloadAsArrayBuffer } from "@fcannizzaro/stream-deck-image";
+import { downloadAsArrayBuffer } from "@/lib/image";
 import { EmulatedCanvas2DContext } from "canvaskit-wasm";
 
 export const CharacterIcon = async (character: Character) => {

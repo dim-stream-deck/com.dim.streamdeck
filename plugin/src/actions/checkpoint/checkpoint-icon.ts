@@ -1,6 +1,6 @@
 import { cache } from "@/util/cache";
 import { CanvasKit, grayscale } from "@/util/canvas";
-import { downloadAsArrayBuffer } from "@fcannizzaro/stream-deck-image";
+import { downloadAsArrayBuffer } from "@/lib/image";
 
 export const CheckpointIcon = async (iconUrl: string, enabled: boolean) => {
   const cacheKey = [iconUrl, enabled];

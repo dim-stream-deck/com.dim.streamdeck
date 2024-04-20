@@ -12,10 +12,10 @@ import { ev } from "@/util/ev";
 import { Action } from "@elgato/streamdeck";
 import { PickerFilterType, PickerSettings } from "@plugin/types";
 import { State } from "@/state";
-import { cycle } from "@fcannizzaro/stream-deck-cycle";
-import { Cell, GridHelper } from "@fcannizzaro/stream-deck-grid";
 import { Loaders } from "@/util/images";
 import { ImageIcon } from "./ImageIcon";
+import { Cycler } from "@/lib/cycle";
+import { Cell, GridHelper } from "@/lib/grid";
 
 type OptionCell = {
   id?: string;
@@ -206,11 +206,10 @@ export const onPickerActivate = (
         // pick the options
         const options = Options[button.type];
         // cycle through elements
-        const next = cycle(button.id, options, {
-          // direction: button.direction,
-          extractor: (it) => it.id,
-          direction: button.clockwise === false ? "left" : "right",
-        });
+        const cycler = new Cycler(options, (it) => it.id);
+        const next = cycler[button.clockwise === false ? "before" : "after"](
+          button.id
+        );
         // update the filter
         filters[button.type] = next.id;
         // refresh the button

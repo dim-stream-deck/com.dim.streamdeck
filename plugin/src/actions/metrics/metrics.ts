@@ -1,20 +1,17 @@
 import { Watcher } from "@/util/watcher";
 import {
-	Action,
-	action,
-	DidReceiveSettingsEvent,
-	KeyDownEvent,
-	SingletonAction,
+  Action,
+  action,
+  DidReceiveSettingsEvent,
+  KeyDownEvent,
+  SingletonAction,
 } from "@elgato/streamdeck";
 import { ArtifactIcon } from "./artifact-icon";
 import { State } from "@/state";
 import { MetricsSettings, Schemas } from "@plugin/types";
-import {
-	WillAppear,
-	WillDisappear
-} from "@/settings";
+import { WillAppear, WillDisappear } from "@/settings";
 import { log } from "@/util/logger";
-import { cycle } from "@fcannizzaro/stream-deck-cycle";
+import { Cycler } from "@/lib/cycle";
 
 /**
  * Show Destiny Metrics
@@ -59,13 +56,16 @@ export class Metrics extends SingletonAction {
       return;
     }
     // filter out disabled items
-    const metrics = order.filter((metric) => !disabled?.includes(metric));
+    const metrics = new Cycler(
+      order.filter((metric) => !disabled?.includes(metric))
+    );
+
     // cycle through the available items
     e.action.setSettings({
       pinned,
       order,
       disabled,
-      metric: cycle(metric, metrics),
+      metric: metrics.after(metric),
     });
     // update button
     this.update(e.action);

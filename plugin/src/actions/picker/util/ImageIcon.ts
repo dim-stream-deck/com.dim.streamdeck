@@ -1,6 +1,6 @@
 import { cache } from "@/util/cache";
 import { bungify } from "@/util/images";
-import { downloadAsBase64 } from "@fcannizzaro/stream-deck-image";
+import { downloadAsBase64 } from "@/lib/image";
 
 export const ImageIcon = async (icon: string) => {
   const key = [icon];

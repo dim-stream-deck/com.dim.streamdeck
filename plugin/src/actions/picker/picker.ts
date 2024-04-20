@@ -5,9 +5,9 @@ import { Schemas } from "@plugin/types";
 import { DIM } from "@/dim/api";
 import { log } from "@/util/logger";
 import ms from "ms";
-import { setupProfileGrid } from "@fcannizzaro/stream-deck-grid";
 import { ev } from "@/util/ev";
 import { onPickerActivate } from "./util/manager";
+import { setupProfileGrid } from "@/lib/grid";
 
 let latestRequest = 0;
 
@@ -62,7 +62,7 @@ export class Picker extends SingletonAction {
       },
     });
 
-	// grid.lock.add("last-row");
+    // grid.lock.add("last-row");
 
     // get the picker settings
     const settings = Schemas.picker(e.payload.settings);

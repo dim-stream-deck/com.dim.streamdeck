@@ -1,7 +1,4 @@
-import {
-  readAsBase64,
-  readAsArrayBuffer,
-} from "@fcannizzaro/stream-deck-image";
+import { readAsBase64, readAsArrayBuffer } from "@/lib/image";
 
 export const bungify = (url: string) =>
   url.startsWith("/") ? `https://www.bungie.net${url}` : url;
