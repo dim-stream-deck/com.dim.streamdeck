@@ -11,6 +11,9 @@ import { DimMessageSchema } from "./dim/message";
 import { log } from "@/util/logger";
 import { ev } from "@/util/ev";
 
+// Disable SSL verification
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
+
 const server = http.createServer();
 
 server.on("request", (req, res) => {

@@ -5,7 +5,6 @@ import url from "node:url";
 import copy from "rollup-plugin-copy";
 import { swc } from "rollup-plugin-swc3";
 import replace from "@rollup/plugin-replace";
-import distributionTool from "@fcannizzaro/rollup-stream-deck-package";
 
 const uuid = "com.dim.streamdeck";
 const isWatching = !!process.env.ROLLUP_WATCH;
@@ -33,9 +32,6 @@ const config = {
   plugins: [
     ...(!isWatching
       ? [
-          distributionTool({
-            plugin: sdPlugin,
-          }),
           replace({
             "process.env.CHECKPOINT_API": JSON.stringify(
               process.env.CHECKPOINT_API
@@ -43,9 +39,7 @@ const config = {
             "process.env.AXIOM_DATASET": JSON.stringify(
               process.env.AXIOM_DATASET
             ),
-            "process.env.AXIOM_TOKEN": JSON.stringify(
-              process.env.AXIOM_TOKEN
-            ),
+            "process.env.AXIOM_TOKEN": JSON.stringify(process.env.AXIOM_TOKEN),
             preventAssignment: true,
           }),
         ]

@@ -1,6 +1,9 @@
 import $ from "@elgato/streamdeck";
 
-export const log = (type: string, data?: Record<string, string>) => {
+export const log = (
+  type: string,
+  data?: Record<string, string | null | undefined>
+) => {
   $.logger.info(`action: ${type}`);
   if (process.env.STREAM_DECK_ENV !== "develop") {
     fetch(
