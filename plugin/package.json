@@ -1,4 +1,5 @@
 {
+  "name": "plugin",
   "scripts": {
     "build": "tsc --noEmit && rollup -c && streamdeck pack --force-update-check  -f ./com.dim.streamdeck.sdPlugin",
     "dev": "rollup -c -w --watch.onEnd=\"streamdeck restart com.dim.streamdeck\""
@@ -8,13 +9,14 @@
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.7",
-    "@swc/core": "^1.7.3",
+    "@swc/core": "^1.7.5",
     "@tsconfig/node20": "^20.1.4",
     "@types/ms": "^0.7.34",
-    "@types/node": "20.14.12",
+    "@types/node": "22.1.0",
     "@types/ramda": "^0.30.1",
-    "@types/ws": "^8.5.11",
-    "rollup": "^4.19.1",
+    "@types/ws": "^8.5.12",
+    "property-inspector": "workspace:*",
+    "rollup": "^4.19.2",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-swc3": "^0.11.2",
     "typescript": "^5.5.4"

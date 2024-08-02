@@ -30,17 +30,6 @@ jobs:
           version: 8
           run_install: true
 
-      - name: Build property inspector
-        working-directory: ./property-inspector/
-        run: pnpm build
-        env:
-          VITE_DISCORD: ${{secrets.VITE_DISCORD}}
-          VITE_PATREON: ${{secrets.VITE_PATREON}}
-          VITE_AXIOM_DATASET: ${{secrets.VITE_AXIOM_DATASET}}
-          VITE_AXIOM_TOKEN: ${{secrets.VITE_AXIOM_TOKEN}}
-          VITE_CHECKPOINTS_GIST: ${{secrets.VITE_CHECKPOINTS_GIST}}
-          VITE_CHECKPOINTS: ${{secrets.VITE_CHECKPOINTS}}
-
       - name: Download rust artifacts
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -56,10 +45,16 @@ jobs:
           mv service/sd-solo-mode.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
           mv macro/macro.exe plugin/com.dim.streamdeck.sdPlugin/macro/macro.exe
 
-      - name: Build plugin
-        working-directory: ./plugin
+      - name: Build
+        working-directory: .
         run: pnpm build
         env:
+          VITE_DISCORD: ${{secrets.VITE_DISCORD}}
+          VITE_PATREON: ${{secrets.VITE_PATREON}}
+          VITE_AXIOM_DATASET: ${{secrets.VITE_AXIOM_DATASET}}
+          VITE_AXIOM_TOKEN: ${{secrets.VITE_AXIOM_TOKEN}}
+          VITE_CHECKPOINTS_GIST: ${{secrets.VITE_CHECKPOINTS_GIST}}
+          VITE_CHECKPOINTS: ${{secrets.VITE_CHECKPOINTS}}
           CHECKPOINT_API: ${{secrets.CHECKPOINT_API}}
           AXIOM_DATASET: ${{secrets.VITE_AXIOM_DATASET}}
           AXIOM_TOKEN: ${{secrets.VITE_AXIOM_TOKEN}}

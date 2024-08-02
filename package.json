@@ -1,0 +1,17 @@
+{
+  "name": "com.dim.streamdeck",
+  "version": "1.0.0",
+  "description": "A Stream Deck plugin to interact with Destiny Item Manager",
+  "main": "index.js",
+  "dependencies": {
+    "prettier": "^3.3.3"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.11"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build"
+  },
+  "packageManager": "pnpm@9.6.0+sha256.dae0f7e822c56b20979bb5965e3b73b8bdabb6b8b8ef121da6d857508599ca35"
+}
