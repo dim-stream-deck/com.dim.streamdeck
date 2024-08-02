@@ -74,8 +74,6 @@ export const MaxPowerSettingsSchema = z.object({
 
 // Checkpoint
 
-export const CheckpointDifficultySchema = z.enum(["normal", "master"]);
-
 export const CheckpointsSchema = z
   .object({
     activity: z.string(),
@@ -86,7 +84,7 @@ export const CheckpointsSchema = z
         image: z.string(),
       })
       .array(),
-    difficulties: CheckpointDifficultySchema.array().default([]),
+    difficulties: z.string().array().default([]),
   })
   .array();
 
@@ -94,7 +92,7 @@ export const CheckpointSettingsSchema = z.object({
   activity: z.string().optional(),
   step: z.string().optional(),
   image: z.string().optional(),
-  difficulty: CheckpointDifficultySchema.nullish(),
+  difficulty: z.string().nullish(),
 });
 
 // Vault

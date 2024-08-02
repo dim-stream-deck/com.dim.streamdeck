@@ -7,13 +7,19 @@ import { CheckpointSettings } from "@plugin/types";
 interface Checkpoint {
   activity: string;
   image?: string;
-  difficulty?: "normal" | "master";
+  difficulty?: string;
   step: string;
   copyId: string;
 }
 
 let lastQuery: number;
 let items: Checkpoint[] = [];
+
+const mapping: Record<string, string> = {
+  normal: "normal",
+  standard: "normal",
+  master: "master",
+};
 
 /**
  * Query the checkpoints endpoint and update the list
@@ -30,15 +36,16 @@ const queryCheckpoints = async () => {
   items = Array.from(
     dom(".col .card").map((_, el) => {
       const $el = dom(el);
-      const [activity, difficulty] = $el
+      const [activity, diff] = $el
         .find(".card-title")
         .text()
         .split(":")
         .map((s) => s.trim());
+      const difficulty = diff?.toLowerCase()?.trim();
       return {
         activity,
         image: $el.find("img").attr("src"),
-        difficulty: difficulty?.toLowerCase()?.trim() as "normal" | "master",
+        difficulty: difficulty ? mapping[difficulty] : undefined,
         step: $el.find(".card-subtitle").text().trim(),
         copyId: $el.find(".card-text").text().trim(),
       };
