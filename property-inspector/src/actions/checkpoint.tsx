@@ -18,7 +18,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import {
   Checkpoint,
-  CheckpointDifficultySchema,
   CheckpointsSchema,
   Schemas,
 } from "@plugin/types";
@@ -154,9 +153,9 @@ export default () => {
                   w="100%"
                   data={difficulties}
                   value={settings.difficulty ?? undefined}
-                  onChange={(value) =>
+                  onChange={(difficulty) =>
                     setSettings({
-                      difficulty: CheckpointDifficultySchema.parse(value),
+                      difficulty,
                     })
                   }
                 />
