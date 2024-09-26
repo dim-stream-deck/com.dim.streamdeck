@@ -9,13 +9,14 @@ import {
 } from "./options";
 import { ItemIcon } from "@/actions/pull-item/item-icon";
 import { ev } from "@/util/ev";
-import { Action } from "@elgato/streamdeck";
+import { Action, KeyDownEvent } from "@elgato/streamdeck";
 import { PickerFilterType, PickerSettings } from "@plugin/types";
 import { State } from "@/state";
 import { Loaders } from "@/util/images";
 import { ImageIcon } from "./ImageIcon";
 import { Cycler } from "@/lib/cycle";
 import { Cell, GridHelper } from "@/lib/grid";
+import { KeyDown } from "node_modules/@elgato/streamdeck/types/api";
 
 type OptionCell = {
   id?: string;
@@ -56,7 +57,7 @@ export const onPickerActivate = (
   grid: GridHelper,
   device: string,
   settings: PickerSettings,
-  action: Action
+  action: KeyDownEvent["action"]
 ) => {
   // init the grid
   grid.init();

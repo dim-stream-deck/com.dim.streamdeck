@@ -1,13 +1,13 @@
 import { DIM } from "@/dim/api";
-import { DidReceiveSettings, WillAppear, WillDisappear } from "@/settings";
 import { State } from "@/state";
 import { log } from "@/util/logger";
 import { Watcher } from "@/util/watcher";
 import {
-  Action,
-  action,
-  DidReceiveSettingsEvent,
-  SingletonAction,
+	action,
+	DidReceiveSettingsEvent,
+	SingletonAction,
+	WillAppearEvent,
+	WillDisappearEvent
 } from "@elgato/streamdeck";
 import { MaxPowerSettings, Schemas } from "@plugin/types";
 
@@ -18,18 +18,18 @@ import { MaxPowerSettings, Schemas } from "@plugin/types";
 export class MaxPower extends SingletonAction {
   private watcher = Watcher("state");
 
-  private async update(action: Action, settings?: MaxPowerSettings) {
+  private async update(action: WillAppearEvent["action"], settings?: MaxPowerSettings) {
     const maxPower = State.get("maxPower");
     const { type } = settings ?? Schemas.maxPower(await action.getSettings());
     action.setImage(`./imgs/canvas/max-power/${type}.png`);
     action.setTitle(`${maxPower?.[type] ?? "?"}`);
   }
 
-  onWillAppear(e: WillAppear) {
+  onWillAppear(e: WillAppearEvent) {
     this.watcher.start(e.action.id, () => this.update(e.action));
   }
 
-  onWillDisappear(e: WillDisappear) {
+  onWillDisappear(e: WillDisappearEvent) {
     this.watcher.stop(e.action.id);
   }
 

@@ -2,7 +2,7 @@ import CanvasKitInit, {
   EmulatedCanvas2DContext,
   Image,
 } from "canvaskit-wasm/bin/canvaskit.js";
-import { splitEvery } from "ramda";
+import { splitAt } from "remeda";
 import { bungify } from "./images";
 import { downloadAsArrayBuffer } from "@/lib/image";
 
@@ -48,4 +48,9 @@ export const grayscale = (ctx: EmulatedCanvas2DContext) => {
 };
 
 export const splitTitle = (text?: string | null) =>
-  text ? splitEvery(6, text).join("\n") : undefined;
+  text
+    ? splitAt(Array.from(text), 6)
+        .map((it) => it.join(""))
+        .join("\n")
+        .trim()
+    : "";

@@ -1,8 +1,18 @@
-import { Action, ActionEvent } from "@elgato/streamdeck";
+import {
+  DialAction,
+  DialDownEvent,
+  DialRotateEvent,
+  KeyAction,
+  KeyDownEvent,
+  KeyUpEvent,
+  TouchTapEvent,
+  WillAppearEvent,
+} from "@elgato/streamdeck";
 import { EventEmitter } from "events";
 import { ButtonPosition, ResetAction, idxByPosition } from "./util/util";
 import { LockManager } from "./util/LockManager";
 import { PaginationManager } from "./util/PaginationManager";
+import { Action } from "@/settings";
 
 export type ImageOrPromise = string | Promise<string | undefined>;
 
@@ -119,7 +129,16 @@ export class GridHelper {
     this.hooks.onPostRender = cb;
   }
 
-  sub2Idx(e: ActionEvent<any>, fromEncoder = false) {
+  sub2Idx(
+    e:
+      | WillAppearEvent
+      | KeyDownEvent
+      | DialDownEvent
+      | KeyUpEvent
+      | TouchTapEvent
+      | DialRotateEvent,
+    fromEncoder = false
+  ) {
     const coords = e.payload as unknown as ActionCoordinates;
     return (
       (fromEncoder ? this.size.rows - 1 : coords.coordinates.row) *
@@ -207,14 +226,16 @@ export class GridHelper {
     }
 
     if (btn.layout) {
-      btn.action.setFeedbackLayout(btn.layout);
-      btn.action.setFeedback({
+      const action = btn.action as DialAction;
+      action.setFeedbackLayout(btn.layout);
+      action.setFeedback({
         image,
         title: btn.title ?? "",
       });
     } else {
-      btn.action.setImage(image);
-      btn.action.setTitle(btn.title);
+      const action = btn.action as KeyAction;
+      action.setImage(image);
+      action.setTitle(btn.title);
     }
 
     lastUpdates.set(btn.id!, now);
@@ -250,7 +271,7 @@ export class GridHelper {
    * @param e the event with the action
    * @param fromEncoder if the action comes from an encoder
    */
-  link(e: ActionEvent<any>, fromEncoder = false) {
+  link(e: WillAppearEvent, fromEncoder = false) {
     const idx = this.sub2Idx(e, fromEncoder);
     const button = this.buttons[idx];
     // update the action
@@ -300,7 +321,10 @@ export class GridHelper {
    * @param e the event
    * @param fromEncoder if the action comes from an encoder
    */
-  onPress(e: ActionEvent<any>, fromEncoder = false) {
+  onPress(
+    e: KeyDownEvent | DialDownEvent | KeyUpEvent | TouchTapEvent,
+    fromEncoder = false
+  ) {
     const idx = this.sub2Idx(e, fromEncoder);
     const btn = this.buttons[idx];
 
@@ -317,7 +341,7 @@ export class GridHelper {
    * @param e the event
    * @param clockwise if the dial is rotated clockwise
    */
-  onDial(e: ActionEvent<any>, clockwise: boolean) {
+  onDial(e: DialRotateEvent, clockwise: boolean) {
     const idx = this.sub2Idx(e, true);
     const btn = this.buttons[idx];
     if (clockwise && btn.onDialRight) {

@@ -1,14 +1,14 @@
 import { Cycler } from "@/lib/cycle";
-import { WillAppear, WillDisappear } from "@/settings";
 import { State } from "@/state";
 import { log } from "@/util/logger";
 import { Watcher } from "@/util/watcher";
 import {
-  Action,
-  action,
-  DidReceiveSettingsEvent,
-  KeyDownEvent,
-  SingletonAction,
+	action,
+	DidReceiveSettingsEvent,
+	KeyDownEvent,
+	SingletonAction,
+	WillAppearEvent,
+	WillDisappearEvent
 } from "@elgato/streamdeck";
 import { Schemas, VaultSettings, VaultTypeSchema } from "@plugin/types";
 
@@ -19,7 +19,10 @@ import { Schemas, VaultSettings, VaultTypeSchema } from "@plugin/types";
 export class Vault extends SingletonAction {
   private watcher = Watcher("state");
 
-  private async update(action: Action, settings?: VaultSettings) {
+  private async update(
+    action: WillAppearEvent["action"],
+    settings?: VaultSettings
+  ) {
     const vault = State.get("vault");
     const { type } = settings ?? Schemas.vault(await action.getSettings());
     action.setImage(`./imgs/canvas/vault/${type}.png`);
@@ -30,11 +33,11 @@ export class Vault extends SingletonAction {
     this.update(e.action, e.payload.settings);
   }
 
-  onWillAppear(e: WillAppear) {
+  onWillAppear(e: WillAppearEvent) {
     this.watcher.start(e.action.id, () => this.update(e.action));
   }
 
-  onWillDisappear(e: WillDisappear) {
+  onWillDisappear(e: WillDisappearEvent) {
     this.watcher.stop(e.action.id);
   }
 

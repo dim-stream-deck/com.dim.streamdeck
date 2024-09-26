@@ -5,6 +5,7 @@ import url from "node:url";
 import copy from "rollup-plugin-copy";
 import { swc } from "rollup-plugin-swc3";
 import replace from "@rollup/plugin-replace";
+import json from "@rollup/plugin-json";
 
 const uuid = "com.dim.streamdeck";
 const isWatching = !!process.env.ROLLUP_WATCH;
@@ -73,6 +74,7 @@ const config = {
         },
       },
     }),
+    json(),
     nodeResolve({
       browser: false,
       exportConditions: ["node"],

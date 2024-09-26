@@ -1,20 +1,20 @@
 import {
-  Action,
-  action,
-  SendToPluginEvent,
-  SingletonAction,
+	action,
+	KeyDownEvent,
+	SendToPluginEvent,
+	SingletonAction,
+	WillAppearEvent
 } from "@elgato/streamdeck";
 import { exec } from "child_process";
 import { checkInstalledService } from "./service";
-import { KeyDown, WillAppear } from "@/settings";
 import { log } from "@/util/logger";
 import { join } from "path";
 import { existsSync } from "fs";
 import { copyFile } from "fs/promises";
 
-interface PropertyInspectorData {
+type PropertyInspectorData = {
   action: "remove-service" | "install-service";
-}
+};
 
 type ServiceAction = "status" | "toggle";
 
@@ -24,7 +24,10 @@ type ServiceAction = "status" | "toggle";
 @action({ UUID: "com.dim.streamdeck.solo-mode" })
 export class SoloMode extends SingletonAction {
   // update the state of the button
-  private updateState = async (e: Action, action: ServiceAction) => {
+  private updateState = async (
+    e: WillAppearEvent["action"],
+    action: ServiceAction
+  ) => {
     const status = await this.invoke(action);
     e.setImage(`./imgs/canvas/solo-mode/${status ? "on" : "off"}.png`);
   };
@@ -35,17 +38,17 @@ export class SoloMode extends SingletonAction {
     return status === "true";
   }
 
-  onWillAppear(e: WillAppear) {
+  onWillAppear(e: WillAppearEvent) {
     this.updateState(e.action, "status");
   }
 
-  onKeyDown(e: KeyDown) {
+  onKeyDown(e: KeyDownEvent) {
     this.updateState(e.action, "toggle");
     // log action
     log("solo-mode");
   }
 
-  async onSendToPlugin(e: SendToPluginEvent<PropertyInspectorData, {}>) {
+  async onSendToPlugin(e: SendToPluginEvent<PropertyInspectorData, any>) {
     const prefix =
       e.payload.action === "install-service" ? "install" : "remove";
 
@@ -65,7 +68,7 @@ export class SoloMode extends SingletonAction {
       setTimeout(
         async () =>
           (await checkInstalledService()) &&
-          this.updateState(e.action, "status"),
+          this.updateState(e.action as WillAppearEvent["action"], "status"),
         1500
       )
     );

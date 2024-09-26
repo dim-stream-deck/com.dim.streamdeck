@@ -35,7 +35,7 @@ $.settings.getGlobalSettings<GlobalSettings>().then((settings) => {
   });
   // Setup install date
   if (!settings.setupDate) {
-    setGlobalSettings({ setupDate: new Date() });
+    setGlobalSettings({ setupDate: new Date().toString() });
     log("install", {
       os: $.info.application.platform,
       version: manifest.Version,

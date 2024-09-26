@@ -1,15 +1,15 @@
 import { Watcher } from "@/util/watcher";
 import {
-  Action,
   action,
   DidReceiveSettingsEvent,
   KeyDownEvent,
   SingletonAction,
+  WillAppearEvent,
+  WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { ArtifactIcon } from "./artifact-icon";
 import { State } from "@/state";
 import { MetricsSettings, Schemas } from "@plugin/types";
-import { WillAppear, WillDisappear } from "@/settings";
 import { log } from "@/util/logger";
 import { Cycler } from "@/lib/cycle";
 
@@ -20,7 +20,10 @@ import { Cycler } from "@/lib/cycle";
 export class Metrics extends SingletonAction {
   private watcher = Watcher("state");
 
-  private async update(action: Action, settings?: MetricsSettings) {
+  private async update(
+    action: WillAppearEvent["action"],
+    settings?: MetricsSettings
+  ) {
     const { metric } = settings ?? Schemas.metrics(await action.getSettings());
     const metrics = State.get("metrics");
 
@@ -39,11 +42,11 @@ export class Metrics extends SingletonAction {
     this.update(e.action, e.payload.settings);
   }
 
-  onWillAppear(e: WillAppear) {
+  onWillAppear(e: WillAppearEvent) {
     this.watcher.start(e.action.id, () => this.update(e.action));
   }
 
-  onWillDisappear(e: WillDisappear) {
+  onWillDisappear(e: WillDisappearEvent) {
     this.watcher.stop(e.action.id);
   }
 

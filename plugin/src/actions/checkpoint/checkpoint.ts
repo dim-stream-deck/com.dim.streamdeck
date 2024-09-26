@@ -1,18 +1,18 @@
 import $, {
-  Action,
-  action,
-  DidReceiveSettingsEvent,
-  SingletonAction,
+	action,
+	DidReceiveSettingsEvent,
+	KeyDownEvent,
+	SingletonAction,
+	WillAppearEvent,
+	WillDisappearEvent
 } from "@elgato/streamdeck";
 import { CheckpointManager } from "./manager";
-import { cache } from "@/util/cache";
 import { CheckpointIcon } from "./checkpoint-icon";
 import clipboard from "clipboardy";
 import { Watcher } from "@/util/watcher";
 import { exec, spawn } from "child_process";
 import { splitTitle } from "@/util/canvas";
 import { CheckpointSettings, GlobalSettings, Schemas } from "@plugin/types";
-import { KeyDown, WillAppear, WillDisappear } from "@/settings";
 import { log } from "@/util/logger";
 
 /**
@@ -51,7 +51,7 @@ const sendCommand = () => {
 export class Checkpoint extends SingletonAction {
   private watcher = Watcher("checkpoints");
 
-  private async update(e: Action, settings?: CheckpointSettings) {
+  private async update(e: WillAppearEvent["action"], settings?: CheckpointSettings) {
     const cp = settings ?? Schemas.checkpoint(await e.getSettings());
     // update the step title
     e.setTitle(splitTitle(cp.step));
@@ -64,16 +64,16 @@ export class Checkpoint extends SingletonAction {
     }
   }
 
-  async onWillAppear(e: WillAppear) {
+  async onWillAppear(e: WillAppearEvent) {
     await CheckpointManager.refresh();
     this.watcher.start(e.action.id, () => this.update(e.action));
   }
 
-  async onWillDisappear(e: WillDisappear) {
+  async onWillDisappear(e: WillDisappearEvent) {
     this.watcher.stop(e.action.id);
   }
 
-  async onKeyDown(e: KeyDown) {
+  async onKeyDown(e: KeyDownEvent) {
     await CheckpointManager.refresh();
     const cp = CheckpointManager.search(e.payload.settings);
     if (cp?.copyId) {

@@ -1,7 +1,6 @@
 import { DIM } from "@/dim/api";
-import { KeyDown } from "@/settings";
 import { log } from "@/util/logger";
-import { action, SingletonAction } from "@elgato/streamdeck";
+import { action, KeyDownEvent, SingletonAction } from "@elgato/streamdeck";
 import { Schemas } from "@plugin/types";
 
 /**
@@ -9,7 +8,7 @@ import { Schemas } from "@plugin/types";
  */
 @action({ UUID: "com.dim.streamdeck.randomize" })
 export class Randomize extends SingletonAction {
-  onKeyDown(e: KeyDown) {
+  onKeyDown(e: KeyDownEvent) {
     const { weaponsOnly } = Schemas.randomize(e.payload.settings);
     DIM.randomize({ weaponsOnly });
     // log action

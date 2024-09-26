@@ -1,7 +1,6 @@
 import { DIM } from "@/dim/api";
-import { action, SingletonAction } from "@elgato/streamdeck";
+import { action, KeyDownEvent, SingletonAction } from "@elgato/streamdeck";
 import { Schemas } from "@plugin/types";
-import { KeyDown } from "@/settings";
 import { log } from "@/util/logger";
 
 /**
@@ -9,7 +8,7 @@ import { log } from "@/util/logger";
  */
 @action({ UUID: "com.dim.streamdeck.search" })
 export class Search extends SingletonAction {
-  async onKeyDown(e: KeyDown) {
+  async onKeyDown(e: KeyDownEvent) {
     const { query, behavior, page } = Schemas.search(e.payload.settings);
     DIM.search({
       query,

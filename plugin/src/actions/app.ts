@@ -1,7 +1,6 @@
-import $, { action, SingletonAction } from "@elgato/streamdeck";
+import $, { action, KeyUpEvent, SingletonAction } from "@elgato/streamdeck";
 import { exec, spawn } from "child_process";
 import { Schemas } from "@plugin/types";
-import { KeyUp } from "@/settings";
 import { log } from "@/util/logger";
 
 /**
@@ -37,7 +36,7 @@ const openWindowsApp = () => {
  */
 @action({ UUID: "com.dim.streamdeck.app" })
 export class App extends SingletonAction {
-  async onKeyUp(e: KeyUp) {
+  async onKeyUp(e: KeyUpEvent) {
     // validate settings
     const setting = Schemas.app(e.payload.settings);
     // extract the settings

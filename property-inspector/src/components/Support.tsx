@@ -10,18 +10,15 @@ import {
 import { useStreamDeck } from "../StreamDeck";
 import patreon from "../assets/patreon.png";
 import { log } from "../logger";
-
-const DAY = 1000 * 3600 * 24;
+import dayjs from "dayjs";
 
 export const Support = () => {
   const { globalSettings, openURL, setGlobalSettings } = useStreamDeck();
+  const { setupDate, promptSupport } = globalSettings;
 
-  if (globalSettings.setupDate) {
-    const setupDate = new Date(globalSettings.setupDate).getTime();
-    const diff = new Date().getTime() - setupDate;
-    const days = Math.floor(diff / DAY);
-
-    if (globalSettings.promptSupport && days > 3) {
+  if (setupDate) {
+    const days = dayjs().diff(dayjs(setupDate), "day");
+    if (promptSupport && days > 3) {
       return (
         <Card mb="md">
           <CardSection bg="white">
@@ -65,7 +62,7 @@ export const Support = () => {
                 // add 3 days to the setup date
                 log("support:remind");
                 setGlobalSettings({
-                  setupDate: new Date(setupDate + 3 * DAY),
+                  setupDate: dayjs(setupDate).add(3, "day").toISOString(),
                 });
               }}
             >

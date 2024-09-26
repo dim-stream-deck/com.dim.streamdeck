@@ -1,8 +1,12 @@
 import { Watcher } from "@/util/watcher";
-import { Action, action, SingletonAction } from "@elgato/streamdeck";
+import {
+	action, SingletonAction,
+	WillAppearEvent,
+	WillDisappearEvent
+} from "@elgato/streamdeck";
 import { CharacterIcon } from "./character-icon";
 import { State } from "@/state";
-import { WillAppear, WillDisappear } from "@/settings";
+import { Action } from "@/settings";
 
 /**
  * Show character character
@@ -17,11 +21,11 @@ export class Character extends SingletonAction {
     e.setImage(await CharacterIcon(character));
   }
 
-  onWillAppear(e: WillAppear) {
+  onWillAppear(e: WillAppearEvent) {
     this.watcher.start(e.action.id, () => this.update(e.action));
   }
 
-  onWillDisappear(e: WillDisappear) {
+  onWillDisappear(e: WillDisappearEvent) {
     this.watcher.stop(e.action.id);
   }
 }

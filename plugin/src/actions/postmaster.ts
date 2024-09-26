@@ -1,20 +1,18 @@
 import { DIM } from "@/dim/api";
-import {
-  DidReceiveSettings,
-  KeyDown,
-  WillAppear,
-  WillDisappear,
-} from "@/settings";
 import { State } from "@/state";
 import { log } from "@/util/logger";
 import { Watcher } from "@/util/watcher";
 import {
-  Action,
-  action,
-  DidReceiveSettingsEvent,
-  SingletonAction,
+	action,
+	DidReceiveSettingsEvent,
+	KeyDownEvent,
+	SingletonAction,
+	WillAppearEvent,
+	WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { PostmasterSettings, Schemas } from "@plugin/types";
+
+type Action = KeyDownEvent["action"];
 
 /**
  * Show postmaster contents.
@@ -42,18 +40,18 @@ export class Postmaster extends SingletonAction {
   }
 
   onDidReceiveSettings(e: DidReceiveSettingsEvent<PostmasterSettings>) {
-    this.update(e.action, e.payload.settings);
+    this.update(e.action as Action, e.payload.settings);
   }
 
-  onWillAppear(e: WillAppear) {
-    this.watcher.start(e.action.id, () => this.update(e.action));
+  onWillAppear(e: WillAppearEvent) {
+    this.watcher.start(e.action.id, () => this.update(e.action as Action));
   }
 
-  onWillDisappear(e: WillDisappear) {
+  onWillDisappear(e: WillDisappearEvent) {
     this.watcher.stop(e.action.id);
   }
 
-  onKeyDown(e: KeyDown) {
+  onKeyDown(e: KeyDownEvent) {
     const settings = Schemas.postmaster(e.payload.settings);
     if (settings.type === "total" && settings.collectPostmaster) {
       DIM.collectPostmaster();

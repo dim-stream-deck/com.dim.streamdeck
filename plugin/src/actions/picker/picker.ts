@@ -1,5 +1,4 @@
-import { KeyDown } from "@/settings";
-import $, { action, SingletonAction } from "@elgato/streamdeck";
+import $, { action, KeyDownEvent, SingletonAction } from "@elgato/streamdeck";
 import { Profiles } from "./util/options";
 import { Schemas } from "@plugin/types";
 import { DIM } from "@/dim/api";
@@ -27,9 +26,9 @@ const requestPerks = () => {
  */
 @action({ UUID: "com.dim.streamdeck.picker" })
 export class Picker extends SingletonAction {
-  async onKeyDown(e: KeyDown) {
-    const device = $.devices.getDeviceById(e.deviceId)!;
-    const suffix = Profiles[device.type!];
+  async onKeyDown(e: KeyDownEvent) {
+    const device = e.action.device;
+    const suffix = Profiles[device.type];
     const size = device.size;
     if (suffix === undefined || !size) {
       return;
@@ -53,7 +52,7 @@ export class Picker extends SingletonAction {
 
     const grid = setupProfileGrid({
       streamDeck: $,
-      device: e.deviceId,
+      device: e.action.device.id,
       size,
       profile: `DIM${suffix}`,
       encoders: {

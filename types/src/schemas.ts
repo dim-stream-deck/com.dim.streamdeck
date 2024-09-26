@@ -12,7 +12,7 @@ export const GlobalSettingsSchema = z.object({
   checkpointPaste: z.boolean().default(true),
   enabledSoloService: z.boolean().default(false),
   authentication: z.record(z.string()).default({}),
-  setupDate: z.coerce.date().optional(),
+  setupDate: z.string().optional(),
   promptSupport: z.boolean().default(true),
 });
 

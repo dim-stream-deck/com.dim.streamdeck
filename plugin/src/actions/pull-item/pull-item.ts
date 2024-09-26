@@ -1,17 +1,18 @@
 import { DIM } from "@/dim/api";
 import $, {
-  Action,
   action,
   DidReceiveSettingsEvent,
-  SendToPluginEvent,
+  KeyDownEvent,
+  KeyUpEvent,
   SingletonAction,
+  WillAppearEvent,
+  WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { ItemIcon } from "./item-icon";
 import { cache } from "@/util/cache";
 import { Watcher } from "@/util/watcher";
 import { splitTitle } from "@/util/canvas";
 import { PullItemSettings, Schemas } from "@plugin/types";
-import { KeyDown, KeyUp, WillAppear, WillDisappear } from "@/settings";
 import { Equipment } from "@/state";
 import { ev } from "@/util/ev";
 import { Loaders } from "@/util/images";
@@ -32,7 +33,10 @@ export class PullItem extends SingletonAction {
   private gestures = Gestures();
   private watcher = Watcher("equipmentStatus");
 
-  private async update(e: Action, settings?: PullItemSettings) {
+  private async update(
+    e: WillAppearEvent["action"],
+    settings?: PullItemSettings
+  ) {
     const { item: id, ...item } =
       settings ?? Schemas.pullItem(await e.getSettings());
 
@@ -59,11 +63,11 @@ export class PullItem extends SingletonAction {
       await e.setImage(Loaders[`${type}Grayscale`]);
     }
 
-    e.setTitle(item.isSubClass ? splitTitle(item.label) : undefined);
+    e.setTitle(item.isSubClass ? splitTitle(item.label) : "");
     e.setImage(await image);
   }
 
-  onWillAppear(e: WillAppear) {
+  onWillAppear(e: WillAppearEvent) {
     this.update(e.action);
 
     this.watcher.start(e.action.id, () => this.update(e.action));
@@ -98,11 +102,11 @@ export class PullItem extends SingletonAction {
         type,
       });
 
-      e.action.showOk();
+      (e.action as KeyUpEvent["action"]).showOk();
     });
   }
 
-  onWillDisappear(e: WillDisappear) {
+  onWillDisappear(e: WillDisappearEvent) {
     this.gestures.stop(e.action.id);
     this.watcher.stop(e.action.id);
   }
@@ -111,11 +115,11 @@ export class PullItem extends SingletonAction {
     this.update(e.action, e.payload.settings);
   }
 
-  onKeyUp(e: KeyUp) {
+  onKeyUp(e: KeyUpEvent) {
     this.gestures.keyUp(e.action.id);
   }
 
-  onKeyDown(e: KeyDown) {
+  onKeyDown(e: KeyDownEvent) {
     this.gestures.keyDown(e.action.id);
     // log action
     log("pull-item");
@@ -129,7 +133,7 @@ export class PullItem extends SingletonAction {
     DIM.selection();
   }
 
-  onSendToPlugin(e: SendToPluginEvent<{}, {}>) {
+  onSendToPlugin() {
     ev.emit("equipmentStatus");
   }
 }

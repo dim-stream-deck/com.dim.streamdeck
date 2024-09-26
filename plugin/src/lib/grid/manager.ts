@@ -1,4 +1,12 @@
-import $, { type ActionEvent } from "@elgato/streamdeck";
+import $, {
+	DialDownEvent,
+	DialRotateEvent,
+	KeyDownEvent,
+	KeyUpEvent,
+	TouchTapEvent,
+	WillAppearEvent,
+	WillDisappearEvent,
+} from "@elgato/streamdeck";
 import { GridHelper, Encoders, Size } from "./helper";
 
 const grids = new Map<string, GridHelper>();
@@ -38,6 +46,15 @@ export const setupProfileGrid = ({
   return grids.get(device)!;
 };
 
-export const getGrid = (e: ActionEvent<any>) => {
-  return grids.get(e.deviceId);
+export const getGrid = (
+  e:
+    | WillAppearEvent
+    | WillDisappearEvent
+    | KeyUpEvent
+    | TouchTapEvent
+    | DialDownEvent
+    | DialRotateEvent
+    | KeyDownEvent
+) => {
+  return grids.get(e.action.device.id);
 };

@@ -1,13 +1,13 @@
 import { DIM } from "@/dim/api";
 import {
-  Action,
   action,
   DidReceiveSettingsEvent,
+  KeyDownEvent,
   SingletonAction,
+  WillAppearEvent,
 } from "@elgato/streamdeck";
 import { LoadoutIcon } from "./loadout-icon";
 import { splitTitle } from "@/util/canvas";
-import { WillAppear, KeyDown } from "@/settings";
 import { LoadoutSettings, Schemas } from "@plugin/types";
 import { log } from "@/util/logger";
 import { bungify } from "@/util/images";
@@ -18,7 +18,10 @@ import { downloadAsBase64 } from "@/lib/image";
  */
 @action({ UUID: "com.dim.streamdeck.loadout" })
 export class Loadout extends SingletonAction {
-  private async update(e: Action, settings?: LoadoutSettings) {
+  private async update(
+    e: WillAppearEvent["action"],
+    settings?: LoadoutSettings
+  ) {
     // load settings
     const { label, inGameIcon, icon } =
       settings ?? Schemas.loadout(await e.getSettings());
@@ -31,11 +34,11 @@ export class Loadout extends SingletonAction {
     );
   }
 
-  onWillAppear(e: WillAppear) {
+  onWillAppear(e: WillAppearEvent) {
     this.update(e.action);
   }
 
-  onKeyDown(e: KeyDown) {
+  onKeyDown(e: KeyDownEvent) {
     const settings = Schemas.loadout(e.payload.settings);
     if (!settings.loadout || !settings.character) {
       return e.action.showAlert();
