@@ -46,7 +46,7 @@ Enter the `./plugin/com.dim.streamdeck.sdPlugin` directory and
 * run `streamdeck link`
 * run `streamdeck dev`
 
-You're ready, you can now test your changes using only `cd .. && pnpm dev`.
+You're ready, you can now test your changes using only `cd ../.. && pnpm dev`.
 
 Usually actions on the plugin have a relative code also on [DIM](https://github.com/DestinyItemManager/DIM), follow their [contributing guidelines](https://github.com/DestinyItemManager/DIM/blob/master/docs/CONTRIBUTING.md) to setup your local instance.
 
@@ -54,4 +54,4 @@ Usually actions on the plugin have a relative code also on [DIM](https://github.
 
 This step will build the plugin and generate the .streamDeckPackage file.
 
-* Run `pnpm build`
+* Run `pnpm build` (from the root)
