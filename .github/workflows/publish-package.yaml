@@ -33,7 +33,7 @@ jobs:
       - name: Download rust artifacts
         uses: dawidd6/action-download-artifact@v2
         with:
-          github_token: ${{secrets.SECRET_TOKEN}}
+          github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: build-rust-packages.yaml
 
       - name: Prepare plugin directory
