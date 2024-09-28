@@ -22,7 +22,7 @@ jobs:
         id: version
         working-directory: ./plugin
         run: echo "PLUGIN_VERSION=$(jq .Version com.dim.streamdeck.sdPlugin/manifest.json -r)" | rev | cut -c3- | rev >> $GITHUB_ENV
-		
+
       - uses: pnpm/action-setup@v2
         name: Install pnpm
         id: pnpm-install
