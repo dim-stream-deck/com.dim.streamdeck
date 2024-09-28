@@ -10,6 +10,7 @@ import { GlobalSettings } from "@plugin/types";
 import { DimMessageSchema } from "./dim/message";
 import { log } from "@/util/logger";
 import { ev } from "@/util/ev";
+import { setProperty } from "dot-prop";
 
 // Disable SSL verification
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
@@ -120,5 +121,24 @@ ev.on("connect", async (data) => {
     authentication: {
       [instance]: token,
     },
+  });
+});
+
+const Booleans = ["true", "false"];
+
+ev.on("selection", (params: Record<string, string>) => {
+  const data: Record<string, string | boolean> = {};
+
+  for (const [key, value] of Object.entries(params)) {
+    if (key.includes(".")) {
+      setProperty(data, key, value);
+    } else {
+      data[key] = Booleans.includes(value) ? value === "true" : value;
+    }
+  }
+
+  $.ui.current?.sendToPropertyInspector({
+    action: "selection",
+    data,
   });
 });

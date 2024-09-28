@@ -12,10 +12,17 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
-import { Droppable } from "../components/Droppable";
+import { PickerCard } from "../components/PickerCard";
 import { IconAccessible, IconHandClick, IconX } from "@tabler/icons-react";
 import { DropText } from "../components/DropText";
 import { Schemas } from "@plugin/types";
+import { useEffect } from "react";
+import { z } from "zod";
+
+const CommunicationSchema = z.object({
+  action: z.literal("selection"),
+  data: z.record(z.any()),
+});
 
 export default () => {
   const {
@@ -24,6 +31,7 @@ export default () => {
     setSettings,
     globalSettings,
     setGlobalSettings,
+    communication,
     sendToPlugin,
   } = useStreamDeck(Schemas.pullItem);
 
@@ -54,17 +62,17 @@ export default () => {
     ? setSettings
     : setGlobalSettings;
 
+  useEffect(() => {
+    const parsed = CommunicationSchema.safeParse(communication);
+    if (parsed.data) {
+      const data = parsed.data.data;
+      setSettings({ ...data, element: data.element ?? null });
+    }
+  }, [communication]);
+
   return (
     <Stack gap="sm">
-      <Droppable
-        type="item"
-        onError={(error, dt) =>
-          log(`[error-drop] pull-item ${error.message} - dt: "${dt}"`)
-        }
-        onSelect={(data) =>
-          setSettings({ ...data, element: data.element ?? null })
-        }
-      >
+      <PickerCard>
         <Group gap="sm">
           {settings?.icon ? (
             <Image
@@ -98,7 +106,7 @@ export default () => {
             <DropText type="item" selected={Boolean(settings.label)} />
           </Stack>
         </Group>
-      </Droppable>
+      </PickerCard>
 
       <Collapse in={!settings.isSubClass && !!settings.item}>
         <Accordion>

@@ -6,13 +6,22 @@ interface DropTextProps {
 }
 
 export const DropText = ({ selected, type }: DropTextProps) => (
-  <Text
-    size="sm"
-    c="dimmed"
-    style={{ textAlign: selected ? "left" : "center" }}
-  >
-    Drop here to
-    {selected ? " " : <br />}
-    <strong>select</strong> or <strong>change {type}</strong>
-  </Text>
+  <div>
+    <Text
+      size="sm"
+      c="dimmed"
+      style={{ textAlign: selected ? "left" : "center" }}
+    >
+      Click "Open on Stream Deck" on DIM to select a new ${type}
+    </Text>
+    <br />
+    <Text
+      size="xs"
+      c="dimmed"
+      style={{ textAlign: selected ? "left" : "center" }}
+    >
+      You can find this button in the{" "}
+      {type === "loadout" ? "loadout view / loadout menu" : "item sidebar"}
+    </Text>
+  </div>
 );

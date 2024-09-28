@@ -27,6 +27,7 @@
     "canvaskit-wasm": "^0.39.1",
     "cheerio": "1.0.0",
     "clipboardy": "^4.0.0",
+    "dot-prop": "^9.0.0",
     "lowdb": "^7.0.1",
     "lru-cache": "^11.0.1",
     "ms": "^2.1.3",

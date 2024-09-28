@@ -1,22 +1,31 @@
 import { Group, Image, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
-import { Droppable } from "../components/Droppable";
+import { PickerCard } from "../components/PickerCard";
 import { DropText } from "../components/DropText";
 import { IconX } from "@tabler/icons-react";
 import { Schemas } from "@plugin/types";
+import { z } from "zod";
+import { useEffect } from "react";
+
+const CommunicationSchema = z.object({
+  action: z.literal("selection"),
+  data: z.record(z.any()),
+});
 
 export default () => {
-  const { log, settings, overrideSettings } = useStreamDeck(Schemas.loadout);
+  const { log, settings, communication, overrideSettings } = useStreamDeck(
+    Schemas.loadout
+  );
+
+  useEffect(() => {
+    const parsed = CommunicationSchema.safeParse(communication);
+    if (parsed.data) {
+      overrideSettings(parsed.data.data);
+    }
+  }, [communication]);
+
   return (
-    <Droppable
-      type="loadout"
-      onError={(error, dt) =>
-        log(`[error-drop] loadout ${error.message} - dt: "${dt}"`)
-      }
-      onSelect={(data) =>
-        overrideSettings(data)
-      }
-    >
+    <PickerCard>
       <Stack gap="sm">
         <Group wrap="nowrap">
           {settings?.icon ? (
@@ -57,6 +66,6 @@ export default () => {
           </Stack>
         </Group>
       </Stack>
-    </Droppable>
+    </PickerCard>
   );
 };
