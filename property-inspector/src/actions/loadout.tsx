@@ -1,7 +1,7 @@
 import { Group, Image, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useStreamDeck } from "../StreamDeck";
 import { PickerCard } from "../components/PickerCard";
-import { DropText } from "../components/DropText";
+import { PickSubText, PickText } from "../components/PickText";
 import { IconX } from "@tabler/icons-react";
 import { Schemas } from "@plugin/types";
 import { z } from "zod";
@@ -26,7 +26,7 @@ export default () => {
 
   return (
     <PickerCard>
-      <Stack gap="sm">
+      <div>
         <Group wrap="nowrap">
           {settings?.icon ? (
             <Image
@@ -62,10 +62,11 @@ export default () => {
                 </Text>
               </Group>
             )}
-            <DropText type="loadout" selected={Boolean(settings.label)} />
+            <PickText type="loadout" selected={Boolean(settings.label)} />
           </Stack>
         </Group>
-      </Stack>
+        <PickSubText type="loadout" />
+      </div>
     </PickerCard>
   );
 };

@@ -14,7 +14,7 @@ import {
 import { useStreamDeck } from "../StreamDeck";
 import { PickerCard } from "../components/PickerCard";
 import { IconAccessible, IconHandClick, IconX } from "@tabler/icons-react";
-import { DropText } from "../components/DropText";
+import { PickSubText, PickText } from "../components/PickText";
 import { Schemas } from "@plugin/types";
 import { useEffect } from "react";
 import { z } from "zod";
@@ -103,9 +103,10 @@ export default () => {
                 {settings.label}
               </Text>
             )}
-            <DropText type="item" selected={Boolean(settings.label)} />
+            <PickText type="item" selected={Boolean(settings.label)} />
           </Stack>
         </Group>
+        <PickSubText type="item" />
       </PickerCard>
 
       <Collapse in={!settings.isSubClass && !!settings.item}>
