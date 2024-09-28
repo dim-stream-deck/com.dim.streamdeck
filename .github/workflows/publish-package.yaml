@@ -30,20 +30,20 @@ jobs:
           version: 9.5
           run_install: true
 
-      - name: Download rust artifacts
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: build-rust-packages.yaml
+    #   - name: Download rust artifacts
+    #     uses: dawidd6/action-download-artifact@v2
+    #     with:
+    #       github_token: ${{secrets.GITHUB_TOKEN}}
+    #       workflow: build-rust-packages.yaml
 
       - name: Prepare plugin directory
         run: |
           mkdir -p plugin/com.dim.streamdeck.sdPlugin/solo-mode
           mkdir -p plugin/com.dim.streamdeck.sdPlugin/macro
-          mv service-installer/install-sd-solo-mode.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
-          mv service-remover/remove-sd-solo-mode.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
-          mv service/sd-solo-mode.exe plugin/com.dim.streamdeck.sdPlugin/solo-mode/
-          mv macro/macro.exe plugin/com.dim.streamdeck.sdPlugin/macro/macro.exe
+          wget https://github.com/dim-stream-deck/prebuilt-binaries/raw/refs/heads/main/prebuilt/install-sd-solo-mode.exe -P plugin/com.dim.streamdeck.sdPlugin/solo-mode/
+          wget https://github.com/dim-stream-deck/prebuilt-binaries/raw/refs/heads/main/prebuilt/remove-sd-solo-mode.exe -P plugin/com.dim.streamdeck.sdPlugin/solo-mode/
+          wget https://github.com/dim-stream-deck/prebuilt-binaries/raw/refs/heads/main/prebuilt/sd-solo-mode.exe -P plugin/com.dim.streamdeck.sdPlugin/solo-mode/
+          wget https://github.com/dim-stream-deck/prebuilt-binaries/raw/refs/heads/main/prebuilt/macro.exe -P plugin/com.dim.streamdeck.sdPlugin/macro/
 
       - name: Build
         working-directory: .
