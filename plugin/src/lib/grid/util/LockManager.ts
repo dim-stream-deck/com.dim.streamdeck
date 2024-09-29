@@ -46,7 +46,7 @@ export const LockManager = (helper: GridHelper) => {
     lock: Lock,
     { start, count }: { start?: number; count?: number }
   ) => {
-    const buttons = get(lock).slice(start ?? 0, count ? count + 1 : undefined);
+    const buttons = get(lock).slice(start ?? 0, count ? count + 1 : undefined).filter(Boolean);
     buttons.forEach((btn) => {
       btn.locked = true;
     });

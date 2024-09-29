@@ -251,9 +251,10 @@ export class GridHelper {
       button = this.buttons[button];
     } else if (typeof button === "string") {
       button = this.buttons[idxByPosition(button, this.size)];
-    } else {
+    } else if (button) {
       button = this.buttons[button.idx!];
     }
+    if (!button) return;
     Object.assign(button, update);
     return this.renderButton(button);
   }
