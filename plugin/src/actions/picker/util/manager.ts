@@ -11,7 +11,7 @@ import { ItemIcon } from "@/actions/pull-item/item-icon";
 import { ev } from "@/util/ev";
 import { Action, KeyDownEvent } from "@elgato/streamdeck";
 import { PickerFilterType, PickerSettings } from "@plugin/types";
-import { State } from "@/state";
+import { Equipment, State } from "@/state";
 import { Loaders } from "@/util/images";
 import { ImageIcon } from "./ImageIcon";
 import { Cycler } from "@/lib/cycle";
@@ -265,7 +265,7 @@ export const onPickerActivate = (
       case "selection:item":
         DIM.pullItem({
           itemId: button.id!,
-          type: "pull",
+          type: Equipment.has(button.id!) ? "vault" : "pull",
         });
         action.showOk();
         break;

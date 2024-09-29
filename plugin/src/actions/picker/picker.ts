@@ -34,20 +34,6 @@ export class Picker extends SingletonAction {
       return;
     }
 
-    /*
-    const navigation = Navigation({
-      cyclic: true,
-      close: {
-        position: "bottom-left",
-        image: "./imgs/canvas/picker/close.png",
-      },
-      next: {
-        position: "bottom-right",
-        image: "./imgs/canvas/picker/next.png",
-        disabledImage: "./imgs/canvas/picker/next-off.png",
-      },
-    });*/
-
     // register the picker grid for this device
 
     const grid = setupProfileGrid({
@@ -60,8 +46,6 @@ export class Picker extends SingletonAction {
         layout: "picker-layout.json",
       },
     });
-
-    // grid.lock.add("last-row");
 
     // get the picker settings
     const settings = Schemas.picker(e.payload.settings);
