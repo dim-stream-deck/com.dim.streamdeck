@@ -3,16 +3,15 @@ import { State } from "@/state";
 import { log } from "@/util/logger";
 import { Watcher } from "@/util/watcher";
 import {
-	action,
-	DidReceiveSettingsEvent,
-	KeyDownEvent,
-	SingletonAction,
-	WillAppearEvent,
-	WillDisappearEvent,
+  action,
+  DidReceiveSettingsEvent,
+  KeyAction,
+  KeyDownEvent,
+  SingletonAction,
+  WillAppearEvent,
+  WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { PostmasterSettings, Schemas } from "@plugin/types";
-
-type Action = KeyDownEvent["action"];
 
 /**
  * Show postmaster contents.
@@ -21,7 +20,7 @@ type Action = KeyDownEvent["action"];
 export class Postmaster extends SingletonAction {
   private watcher = Watcher("state");
 
-  private async update(e: Action, settings?: PostmasterSettings) {
+  private async update(e: KeyAction, settings?: PostmasterSettings) {
     const { type, style } =
       settings ?? Schemas.postmaster(await e.getSettings());
     const postmaster = State.get("postmaster");
@@ -40,11 +39,15 @@ export class Postmaster extends SingletonAction {
   }
 
   onDidReceiveSettings(e: DidReceiveSettingsEvent<PostmasterSettings>) {
-    this.update(e.action as Action, e.payload.settings);
+    if (e.action.isKey()) {
+      this.update(e.action, e.payload.settings);
+    }
   }
 
   onWillAppear(e: WillAppearEvent) {
-    this.watcher.start(e.action.id, () => this.update(e.action as Action));
+    if (e.action.isKey()) {
+      this.watcher.start(e.action.id, () => this.update(e.action as KeyAction));
+    }
   }
 
   onWillDisappear(e: WillDisappearEvent) {

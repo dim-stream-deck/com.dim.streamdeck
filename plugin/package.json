@@ -16,7 +16,7 @@
     "@types/node": "22.7.4",
     "@types/ws": "^8.5.12",
     "property-inspector": "workspace:*",
-    "rollup": "^4.22.5",
+    "rollup": "^4.23.0",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-swc3": "^0.11.2",
     "typescript": "^5.6.2"

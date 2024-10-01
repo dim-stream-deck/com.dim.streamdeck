@@ -1,12 +1,13 @@
 import { Watcher } from "@/util/watcher";
 import {
-	action, SingletonAction,
-	WillAppearEvent,
-	WillDisappearEvent
+  action,
+  KeyAction,
+  SingletonAction,
+  WillAppearEvent,
+  WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { CharacterIcon } from "./character-icon";
 import { State } from "@/state";
-import { Action } from "@/settings";
 
 /**
  * Show character character
@@ -15,14 +16,17 @@ import { Action } from "@/settings";
 export class Character extends SingletonAction {
   private watcher = Watcher("state");
 
-  private async update(e: Action) {
+  private async update(e: KeyAction) {
     const character = State.get("character");
     if (!character) return;
     e.setImage(await CharacterIcon(character));
   }
 
   onWillAppear(e: WillAppearEvent) {
-    this.watcher.start(e.action.id, () => this.update(e.action));
+    if (e.action.isKey()) {
+      this.update(e.action);
+      this.watcher.start(e.action.id, () => this.update(e.action as KeyAction));
+    }
   }
 
   onWillDisappear(e: WillDisappearEvent) {
