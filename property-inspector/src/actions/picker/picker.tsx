@@ -1,20 +1,20 @@
 import {
-	Accordion,
-	Collapse,
-	Divider,
-	Group,
-	SegmentedControl,
-	Select,
-	SimpleGrid,
-	Stack,
-	Text,
+  Accordion,
+  Collapse,
+  Divider,
+  Group,
+  SegmentedControl,
+  Select,
+  SimpleGrid,
+  Stack,
+  Text,
 } from "@mantine/core";
 import { useSize, useStreamDeck } from "../../hooks/useStreamDeck";
 import {
-	PickerCategorySchema,
-	PickerFilterSchema,
-	PickerFilterType,
-	Schemas,
+  PickerCategorySchema,
+  PickerFilterSchema,
+  PickerFilterType,
+  Schemas,
 } from "@plugin/types";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { Filters } from "./Filters";

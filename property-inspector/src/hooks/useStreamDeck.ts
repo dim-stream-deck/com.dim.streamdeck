@@ -25,13 +25,12 @@ export const useStreamDeck = <Settings extends JsonObject>(
   const [action] = useAtom(actionInfoAtom);
   const client = useQueryClient();
 
-  const { data: settings } = useSuspenseQuery({
-    queryKey: ["settings"],
-    queryFn: async () => {
-      const settings = await $.settings.getSettings<Settings>();
-      return validator ? validator(settings) : settings;
-    },
+  const { data } = useSuspenseQuery({
+    queryKey: ["settings", validator],
+    queryFn: () => $.settings.getSettings<Settings>(),
   });
+
+  const settings = validator ? validator(data) : data;
 
   const { data: globalSettings } = useSuspenseQuery({
     queryKey: ["global-settings"],
@@ -41,9 +40,7 @@ export const useStreamDeck = <Settings extends JsonObject>(
   useEffect(() => {
     $.settings.onDidReceiveSettings<Settings>((e) => {
       console.log("onDidReceiveSettings", e.payload.settings);
-      const value = e.payload.settings;
-      const settings = validator ? validator(value) : value;
-      client.setQueryData(["settings"], settings);
+      client.setQueryData(["settings"], e.payload.settings);
     });
     $.settings.onDidReceiveGlobalSettings<GlobalSettings>((e) => {
       console.log("onDidReceiveGlobalSettings", e.settings);
