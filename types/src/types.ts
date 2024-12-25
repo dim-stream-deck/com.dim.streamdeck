@@ -50,9 +50,22 @@ export type MaxPowerType = MaxPowerSettings["type"];
 
 // Checkpoint
 
-export type Checkpoint = z.infer<typeof CheckpointsSchema>[number];
-
 export type CheckpointSettings = z.infer<typeof CheckpointSettingsSchema>;
+
+export type Checkpoint = {
+  name: string;
+  encounters: string[];
+  ids: {
+    standard: string;
+    master: string;
+  };
+  images: string;
+};
+
+export type CheckpointGroup = {
+  group: string;
+  items: Checkpoint[];
+};
 
 // Vault
 

@@ -1,7 +1,8 @@
 import { Autocomplete, Divider, Group, SegmentedControl } from "@mantine/core";
 import { IconArrowBackUp, IconHandGrab, IconSearch } from "@tabler/icons-react";
-import { useStreamDeck } from "../StreamDeck";
+import { useStreamDeck } from "../hooks/useStreamDeck";
 import { Schemas, SearchBehavior } from "@plugin/types";
+import React from "react";
 
 const Behaviors = [
   {
@@ -21,7 +22,7 @@ const Behaviors = [
   },
 ] satisfies Array<{
   label: string;
-  icon: JSX.Element;
+  icon: React.ReactNode;
   value: SearchBehavior;
 }>;
 

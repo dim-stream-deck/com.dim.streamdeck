@@ -132,8 +132,4 @@ export class PullItem extends SingletonAction {
   onPropertyInspectorDidDisappear() {
     DIM.selection();
   }
-
-  onSendToPlugin() {
-    ev.emit("equipmentStatus");
-  }
 }

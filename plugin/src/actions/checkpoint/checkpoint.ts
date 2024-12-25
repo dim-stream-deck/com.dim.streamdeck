@@ -1,12 +1,12 @@
 import $, {
-	action,
-	DidReceiveSettingsEvent,
-	KeyDownEvent,
-	SingletonAction,
-	WillAppearEvent,
-	WillDisappearEvent
+  action,
+  DidReceiveSettingsEvent,
+  KeyDownEvent,
+  SingletonAction,
+  WillAppearEvent,
+  WillDisappearEvent,
+  route,
 } from "@elgato/streamdeck";
-import { CheckpointManager } from "./manager";
 import { CheckpointIcon } from "./checkpoint-icon";
 import clipboard from "clipboardy";
 import { Watcher } from "@/util/watcher";
@@ -14,6 +14,11 @@ import { exec, spawn } from "child_process";
 import { splitTitle } from "@/util/canvas";
 import { CheckpointSettings, GlobalSettings, Schemas } from "@plugin/types";
 import { log } from "@/util/logger";
+import {
+  definitions,
+  getActivitiesDefinitions,
+  searchCheckpoint,
+} from "./manager";
 
 /**
  * Generate the command to join the checkpoint
@@ -51,21 +56,35 @@ const sendCommand = () => {
 export class Checkpoint extends SingletonAction {
   private watcher = Watcher("checkpoints");
 
-  private async update(e: WillAppearEvent["action"], settings?: CheckpointSettings) {
-    const cp = settings ?? Schemas.checkpoint(await e.getSettings());
+  private async update(
+    e: WillAppearEvent["action"],
+    settings?: CheckpointSettings
+  ) {
+    const { id, encounter } =
+      settings ?? Schemas.checkpoint(await e.getSettings());
+
+    if (!id) return;
+
+    const definition = definitions.get(id);
+
+    console.log(definition, id, encounter);
+
+    if (!definition) return;
+
+    const image = `${definition.images}/${encounter}.webp`;
+
     // update the step title
-    e.setTitle(splitTitle(cp.step));
+    e.setTitle(splitTitle(definition.encounters[encounter]));
     // update the image
-    if (cp.image) {
-      const enabled = Boolean(CheckpointManager.search(cp));
-      e.setImage(await CheckpointIcon(cp.image, enabled));
+    if (image) {
+      const enabled = Boolean(searchCheckpoint({ id, encounter }));
+      e.setImage(await CheckpointIcon(image, enabled));
     } else {
       e.setImage();
     }
   }
 
   async onWillAppear(e: WillAppearEvent) {
-    await CheckpointManager.refresh();
     this.watcher.start(e.action.id, () => this.update(e.action));
   }
 
@@ -73,11 +92,10 @@ export class Checkpoint extends SingletonAction {
     this.watcher.stop(e.action.id);
   }
 
-  async onKeyDown(e: KeyDownEvent) {
-    await CheckpointManager.refresh();
-    const cp = CheckpointManager.search(e.payload.settings);
-    if (cp?.copyId) {
-      const { command, paste } = await joinCommand(cp.copyId);
+  async onKeyDown(e: KeyDownEvent<CheckpointSettings>) {
+    const cp = searchCheckpoint(e.payload.settings);
+    if (cp) {
+      const { command, paste } = await joinCommand(cp);
       await clipboard.write(command);
       paste && sendCommand();
       e.action.showOk();
@@ -86,6 +104,11 @@ export class Checkpoint extends SingletonAction {
     }
     // log action
     log("checkpoint");
+  }
+
+  @route("checkpoints-activities")
+  async getDefinitions() {
+    return getActivitiesDefinitions();
   }
 
   onDidReceiveSettings(e: DidReceiveSettingsEvent<CheckpointSettings>) {

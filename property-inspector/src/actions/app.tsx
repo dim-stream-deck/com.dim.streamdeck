@@ -1,5 +1,5 @@
 import { Divider, Group, SegmentedControl, Stack, Switch } from "@mantine/core";
-import { useStreamDeck } from "../StreamDeck";
+import { useStreamDeck } from "../hooks/useStreamDeck";
 import {
   IconBrandChrome,
   IconBrandEdge,

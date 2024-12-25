@@ -89,10 +89,8 @@ export const CheckpointsSchema = z
   .array();
 
 export const CheckpointSettingsSchema = z.object({
-  activity: z.string().optional(),
-  step: z.string().optional(),
-  image: z.string().optional(),
-  difficulty: z.string().nullish(),
+  id: z.string().optional(),
+  encounter: z.number().default(0),
 });
 
 // Vault

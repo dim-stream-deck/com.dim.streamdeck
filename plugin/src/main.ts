@@ -137,8 +137,5 @@ ev.on("selection", (params: Record<string, string>) => {
     }
   }
 
-  $.ui.current?.sendToPropertyInspector({
-    action: "selection",
-    data,
-  });
+  $.ui.current?.fetch("/selection", data);
 });

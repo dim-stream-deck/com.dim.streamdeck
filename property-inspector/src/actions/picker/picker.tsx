@@ -1,20 +1,20 @@
 import {
-  Accordion,
-  Collapse,
-  Divider,
-  Group,
-  SegmentedControl,
-  Select,
-  SimpleGrid,
-  Stack,
-  Text,
+	Accordion,
+	Collapse,
+	Divider,
+	Group,
+	SegmentedControl,
+	Select,
+	SimpleGrid,
+	Stack,
+	Text,
 } from "@mantine/core";
-import { useStreamDeck } from "../../StreamDeck";
+import { useSize, useStreamDeck } from "../../hooks/useStreamDeck";
 import {
-  PickerCategorySchema,
-  PickerFilterSchema,
-  PickerFilterType,
-  Schemas,
+	PickerCategorySchema,
+	PickerFilterSchema,
+	PickerFilterType,
+	Schemas,
 } from "@plugin/types";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { Filters } from "./Filters";
@@ -38,9 +38,9 @@ const Categories = [
 ];
 
 export default () => {
-  const { settings, size, setSettings, communication } = useStreamDeck(
-    Schemas.picker
-  );
+  const { settings, setSettings } = useStreamDeck(Schemas.picker);
+  const size = useSize();
+
   const slots = size.columns - 2;
   const picked = settings.filters;
 

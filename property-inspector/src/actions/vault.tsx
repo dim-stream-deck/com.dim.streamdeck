@@ -1,5 +1,5 @@
 import { Avatar, Divider, Group, SegmentedControl, Text } from "@mantine/core";
-import { useStreamDeck } from "../StreamDeck";
+import { useStreamDeck } from "../hooks/useStreamDeck";
 import shards from "../assets/vault/shards.png";
 import dust from "../assets/vault/dust.png";
 import glimmer from "../assets/vault/glimmer.png";

@@ -53,7 +53,6 @@ jobs:
           VITE_PATREON: ${{secrets.VITE_PATREON}}
           VITE_AXIOM_DATASET: ${{secrets.VITE_AXIOM_DATASET}}
           VITE_AXIOM_TOKEN: ${{secrets.VITE_AXIOM_TOKEN}}
-          VITE_CHECKPOINTS_GIST: ${{secrets.VITE_CHECKPOINTS_GIST}}
           VITE_CHECKPOINTS: ${{secrets.VITE_CHECKPOINTS}}
           CHECKPOINT_API: ${{secrets.CHECKPOINT_API}}
           AXIOM_DATASET: ${{secrets.VITE_AXIOM_DATASET}}

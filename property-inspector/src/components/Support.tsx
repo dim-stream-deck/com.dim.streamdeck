@@ -7,13 +7,14 @@ import {
   Image,
   Text,
 } from "@mantine/core";
-import { useStreamDeck } from "../StreamDeck";
+import { useStreamDeck } from "../hooks/useStreamDeck";
 import patreon from "../assets/patreon.png";
 import { log } from "../logger";
 import dayjs from "dayjs";
+import $ from "@elgato/streamdeck";
 
 export const Support = () => {
-  const { globalSettings, openURL, setGlobalSettings } = useStreamDeck();
+  const { globalSettings, setGlobalSettings } = useStreamDeck();
   const { setupDate, promptSupport } = globalSettings;
 
   if (setupDate) {
@@ -43,7 +44,7 @@ export const Support = () => {
             mt="md"
             radius="md"
             onClick={() => {
-              openURL(import.meta.env.VITE_PATREON);
+              $.system.openUrl(import.meta.env.VITE_PATREON);
               log("support:open");
               setGlobalSettings({
                 promptSupport: false,

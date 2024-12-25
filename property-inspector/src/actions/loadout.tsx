@@ -1,38 +1,31 @@
 import { Group, Image, Stack, Text, ThemeIcon } from "@mantine/core";
-import { useStreamDeck } from "../StreamDeck";
+import { useStreamDeck } from "../hooks/useStreamDeck";
 import { PickerCard } from "../components/PickerCard";
 import { PickSubText, PickText } from "../components/PickText";
 import { IconX } from "@tabler/icons-react";
 import { Schemas } from "@plugin/types";
-import { z } from "zod";
 import { useEffect } from "react";
-
-const CommunicationSchema = z.object({
-  action: z.literal("selection"),
-  data: z.record(z.any()),
-});
+import $ from "@elgato/streamdeck";
 
 export default () => {
-  const { log, settings, communication, overrideSettings } = useStreamDeck(
-    Schemas.loadout
-  );
+  const { settings, overrideSettings } = useStreamDeck(Schemas.loadout);
 
   useEffect(() => {
-    const parsed = CommunicationSchema.safeParse(communication);
-    if (parsed.data) {
-      overrideSettings(parsed.data.data);
-    }
-  }, [communication]);
+    $.plugin.registerRoute("/selection", (req, res) => {
+      overrideSettings(req.body as any);
+      res.send(200);
+    });
+  }, []);
 
   return (
     <PickerCard>
       <div>
-        <Group wrap="nowrap">
-          {settings?.icon ? (
+        <Group>
+          {settings.icon ? (
             <Image
               radius="md"
-              width={64}
-              height={64}
+              w={64}
+              h={64}
               src={`https://bungie.net${settings.icon}`}
             />
           ) : settings.inGameIcon ? (
@@ -42,8 +35,8 @@ export default () => {
               }}
               radius="md"
               draggable={false}
-              width={64}
-              height={64}
+              w={64}
+              h={64}
               src={`https://bungie.net${settings.inGameIcon.icon}`}
             />
           ) : (
@@ -51,7 +44,7 @@ export default () => {
               <IconX />
             </ThemeIcon>
           )}
-          <Stack gap="sm">
+          <Stack gap="sm" flex={1}>
             {settings.label && (
               <Group gap={4}>
                 <Text fw="bold" c="white" size="sm">

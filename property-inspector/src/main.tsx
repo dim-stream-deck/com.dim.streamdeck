@@ -1,6 +1,5 @@
 import { FC, Suspense, lazy } from "react";
 import { render } from "./util";
-import { StreamDeck, useStreamDeck } from "./StreamDeck";
 import "./index.css";
 import { ActionIcon, Center, Group, Loader } from "@mantine/core";
 import {
@@ -10,6 +9,10 @@ import {
 } from "@tabler/icons-react";
 import { NoSetting } from "./components/NoSettings";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import streamDeck from "@elgato/streamdeck";
+import { GlobalSettings } from "@plugin/types";
+import { createStore, Provider } from "jotai";
+import { actionInfoAtom, globalsSettingsAtom, infoAtom } from "./atoms";
 
 const client = new QueryClient();
 
@@ -48,13 +51,14 @@ const components = {
 
 type Action = keyof typeof components;
 
+const store = createStore();
+
 const Links = () => {
-  const { openURL } = useStreamDeck();
   return (
     <Group mt="sm" justify="center" wrap="nowrap">
       <ActionIcon
         title="Donate on Patreon"
-        onClick={() => openURL(import.meta.env.VITE_PATREON)}
+        onClick={() => streamDeck.system.openUrl(import.meta.env.VITE_PATREON)}
         color="gray"
         variant="default"
         radius="xl"
@@ -64,7 +68,7 @@ const Links = () => {
       </ActionIcon>
       <ActionIcon
         title="Discord Server"
-        onClick={() => openURL(import.meta.env.VITE_DISCORD)}
+        onClick={() => streamDeck.system.openUrl(import.meta.env.VITE_DISCORD)}
         ml="sm"
         color="gray"
         variant="default"
@@ -75,7 +79,9 @@ const Links = () => {
       </ActionIcon>
       <ActionIcon
         title="Website"
-        onClick={() => openURL("https://dimstreamdeck.vercel.app")}
+        onClick={() =>
+          streamDeck.system.openUrl("https://dimstreamdeck.vercel.app")
+        }
         ml="sm"
         color="gray"
         variant="default"
@@ -111,28 +117,22 @@ const App: FC<AppProps> = ({ action }) => {
   );
 };
 
-window.connectElgatoStreamDeckSocket = (
-  port: number,
-  uuid: string,
-  event: string,
-  info: any,
-  action: any
-) => {
-  action = JSON.parse(action);
-  info = JSON.parse(info);
-  render(
-    <StreamDeck
-      {...{
-        port,
-        uuid,
-        event,
-        action,
-        info,
-      }}
-    >
-      <QueryClientProvider client={client}>
-        <App action={action} />
-      </QueryClientProvider>
-    </StreamDeck>
+streamDeck.onConnected(async (info, actionInfo) => {
+  // init store
+  store.set(
+    globalsSettingsAtom,
+    await streamDeck.settings.getGlobalSettings<GlobalSettings>()
   );
-};
+
+  store.set(actionInfoAtom, actionInfo);
+  store.set(infoAtom, info);
+  render(
+    <Suspense>
+      <Provider store={store}>
+        <QueryClientProvider client={client}>
+          <App action={actionInfo} />
+        </QueryClientProvider>
+      </Provider>
+    </Suspense>
+  );
+});

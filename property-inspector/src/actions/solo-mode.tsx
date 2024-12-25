@@ -1,20 +1,18 @@
 import { Alert, Button, Divider, Group, Text } from "@mantine/core";
 import { IconApps, IconBrandWindows, IconX } from "@tabler/icons-react";
-import { useStreamDeck } from "../StreamDeck";
-import { useEffect, useState } from "react";
+import { useStreamDeck } from "../hooks/useStreamDeck";
+import streamDeck from "@elgato/streamdeck";
+import { useMutation } from "@tanstack/react-query";
 
 export default () => {
-  const { openURL, os, globalSettings, sendToPlugin } = useStreamDeck();
+  const { os, globalSettings } = useStreamDeck();
   const { enabledSoloService = false } = globalSettings;
-  const [prev, setPrev] = useState(enabledSoloService);
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (prev !== enabledSoloService) {
-      setLoading(false);
-      setPrev(enabledSoloService);
-    }
-  }, [enabledSoloService, prev]);
+  const { isPending, mutate } = useMutation({
+    mutationKey: ["solo-mode", enabledSoloService],
+    mutationFn: async (action: string) =>
+      streamDeck.plugin.fetch("update-solo-service", action),
+  });
 
   return (
     <div>
@@ -54,7 +52,7 @@ export default () => {
                 fw="bold"
                 style={{ cursor: "pointer" }}
                 onClick={() =>
-                  openURL(
+                  streamDeck.system.openUrl(
                     "https://github.com/dim-stream-deck/com.dim.streamdeck/wiki/Solo-Mode-(Action)"
                   )
                 }
@@ -68,15 +66,8 @@ export default () => {
           <Button
             variant="filled"
             color={enabledSoloService ? "#202020" : "dim"}
-            loading={loading}
-            onClick={() => {
-              setLoading(true);
-              sendToPlugin({
-                action: enabledSoloService
-                  ? "remove-service"
-                  : "install-service",
-              });
-            }}
+            loading={isPending}
+            onClick={() => mutate(enabledSoloService ? "remove" : "install")}
             fullWidth
             leftSection={
               enabledSoloService ? <IconX size={20} /> : <IconApps size={20} />

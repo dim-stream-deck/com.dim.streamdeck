@@ -3,9 +3,13 @@ import { ev } from "@/util/ev";
 
 // Register all the actions in the `actions` directory.
 import "@/actions";
+import { loadActivities } from "./actions/checkpoint/manager";
 
-// Finally, connect to the Stream Deck.
-$.connect();
+/// Load activities for checkpoints
+loadActivities().then(() => {
+  // Finally, connect to the Stream Deck.
+  $.connect();
+});
 
 // Propagate the deep link to internal event emitter
 $.system.onDidReceiveDeepLink((link) => {

@@ -13,74 +13,99 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { useStreamDeck } from "../StreamDeck";
+import { useStreamDeck } from "../hooks/useStreamDeck";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
-import {
-  Checkpoint,
-  CheckpointsSchema,
-  Schemas,
-} from "@plugin/types";
+import { useEffect, useMemo, useState } from "react";
+import { Schemas, CheckpointGroup } from "@plugin/types";
+import $ from "@elgato/streamdeck";
 
-export const checkpointDefinitions = async () => {
-  const res = await fetch(import.meta.env.VITE_CHECKPOINTS_GIST);
-  return CheckpointsSchema.parse(await res.json()).reduce((acc, checkpoint) => {
-    acc.set(checkpoint.activity, checkpoint);
-    return acc;
-  }, new Map<string, Checkpoint>());
+const loadDefinitions = async () => {
+  const res = await $.plugin.fetch("checkpoints-activities");
+  if (!res.ok) return [];
+  return res.body as unknown as CheckpointGroup[];
 };
+
+const difficulties = [
+  { label: "Standard", value: "standard" },
+  { label: "Master", value: "master" },
+];
 
 export default () => {
   const {
     globalSettings,
+    overrideSettings,
     setGlobalSettings,
     settings,
-    overrideSettings,
     setSettings,
   } = useStreamDeck(Schemas.checkpoint);
 
-  const { data = new Map<string, Checkpoint>() } = useQuery({
+  const { data = [] } = useQuery({
     queryKey: ["checkpoints"],
-    queryFn: checkpointDefinitions,
+    queryFn: loadDefinitions,
     staleTime: Infinity,
   });
 
-  const checkpoint = settings.activity ? data.get(settings.activity) : null;
+  const activityById = Object.fromEntries(
+    data.flatMap((group) =>
+      group.items.flatMap((item) =>
+        Object.entries(item.ids).map(([key, value]) => [
+          value,
+          {
+            ...item,
+            difficulty: key,
+          },
+        ])
+      )
+    )
+  );
 
-  const activities = useMemo(() => {
-    const groups = new Map<string, string[]>();
-    data.forEach((checkpoint) => {
-      const group = groups.get(checkpoint.group) ?? [];
-      group.push(checkpoint.activity);
-      groups.set(checkpoint.group, group);
-    });
-    return Array.from(groups.entries()).map(([group, items]) => ({
+  const [difficulty, setDifficulty] = useState("standard");
+
+  const items = useMemo(() => {
+    return data.map(({ group, items }) => ({
       group,
-      items,
+      items: items
+        .filter((item) =>
+          difficulty === "master" ? item.ids.master : item.ids.standard
+        )
+        .map((item) => ({
+          label: item.name,
+          value: item.ids[difficulty as "standard" | "master"],
+        })),
     }));
-  }, [data]);
+  }, [data, difficulty]);
 
-  const difficulties = checkpoint?.difficulties ?? [];
+  const checkpoint = settings.id ? activityById[settings.id] : null;
 
-  const steps = checkpoint?.steps ?? [];
+  console.log(items, checkpoint);
 
-  const stepTitles = steps.map((step) => step.title);
+  const encounters = checkpoint
+    ? checkpoint.encounters.map((label, value) => ({
+        label,
+        value: value.toString(),
+      }))
+    : [];
 
-  const stepImagesByTitle = steps.reduce((acc, step) => {
-    acc.set(step.title, step.image);
-    return acc;
-  }, new Map<string, string>());
+  useEffect(() => {
+    if (checkpoint) {
+      setDifficulty(checkpoint.difficulty);
+    }
+  }, [checkpoint]);
+
+  const image = checkpoint
+    ? `${checkpoint.images}/${settings.encounter}.webp`
+    : undefined;
 
   return (
     <Stack gap="sm" mb="sm">
       <Divider labelPosition="center" label="Activity" mb="sm" />
       <Card withBorder radius="md">
-        {settings.image && (
+        {image && (
           <CardSection pb="md">
             <Image
               draggable={false}
               alt="Step image"
-              src={settings.image}
+              src={image}
               width="100%"
               height="auto"
             />
@@ -89,79 +114,63 @@ export default () => {
         <Grid align="center" gutter="sm">
           <Grid.Col span={4}>
             <Text size="sm" fw="bold">
+              Difficulty
+            </Text>
+          </Grid.Col>
+          <Grid.Col span={8}>
+            <SegmentedControl
+              color="dim"
+              size="sm"
+              w="100%"
+              data={difficulties}
+              value={difficulty}
+              onChange={(difficulty) => {
+                setDifficulty(difficulty);
+                overrideSettings({});
+              }}
+            />
+          </Grid.Col>
+          <Grid.Col span={4}>
+            <Text size="sm" fw="bold">
               Activity
             </Text>
           </Grid.Col>
           <Grid.Col span={8}>
             <Select
-              data={activities}
-              value={settings.activity}
+              data={items}
+              clearable
+              value={settings.id ?? null}
               onChange={(activity) => {
                 if (activity) {
-                  const cp = data.get(activity);
-                  const [step] = cp?.steps ?? [];
-                  overrideSettings({
-                    activity,
-                    ...(step
-                      ? {
-                          step: step.title,
-                          image: step.image,
-                        }
-                      : {
-                          step: undefined,
-                          image: undefined,
-                        }),
-                    difficulty: cp?.difficulties?.[0],
-                  });
+                  setSettings({ id: activity, encounter: 0 });
+                } else {
+                  overrideSettings({});
                 }
               }}
             />
           </Grid.Col>
-          {steps.length > 0 && (
+          {encounters.length > 0 && (
             <>
               <Grid.Col span={4}>
                 <Text size="sm" fw="bold">
-                  Step
+                  Encounter
                 </Text>
               </Grid.Col>
               <Grid.Col span={8}>
                 <Select
                   style={{ flex: 1 }}
-                  data={stepTitles}
-                  value={settings.step}
-                  onChange={(step) => {
-                    if (step) {
-                      const image = stepImagesByTitle.get(step);
-                      setSettings({ step, image });
+                  data={encounters}
+                  value={settings.encounter?.toString() ?? null}
+                  onChange={(encounter) => {
+                    if (encounter !== null) {
+                      setSettings({ encounter: +encounter });
                     }
                   }}
                 />
               </Grid.Col>
             </>
           )}
-          {difficulties.length > 0 && (
-            <>
-              <Grid.Col span={4}>
-                <Text size="sm" fw="bold">
-                  Difficulty
-                </Text>
-              </Grid.Col>
-              <Grid.Col span={8}>
-                <SegmentedControl
-                  color="dim"
-                  size="sm"
-                  w="100%"
-                  data={difficulties}
-                  value={settings.difficulty ?? undefined}
-                  onChange={(difficulty) =>
-                    setSettings({
-                      difficulty,
-                    })
-                  }
-                />
-              </Grid.Col>
-            </>
-          )}
+          {difficulties.length > 0 && <></>}
         </Grid>
       </Card>
       <Divider labelPosition="center" label="Chat command" />

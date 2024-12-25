@@ -1,5 +1,5 @@
 import { ActionIcon, Divider, Group, Text, Tooltip } from "@mantine/core";
-import { useStreamDeck } from "../StreamDeck";
+import { useStreamDeck } from "../hooks/useStreamDeck";
 import Vanguard from "../assets/metrics/vanguard.png";
 import Crucible from "../assets/metrics/crucible.png";
 import Osiris from "../assets/metrics/osiris.png";

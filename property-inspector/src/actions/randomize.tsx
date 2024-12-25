@@ -1,5 +1,5 @@
 import { Divider, Group, SegmentedControl, Title } from "@mantine/core";
-import { useStreamDeck } from "../StreamDeck";
+import { useStreamDeck } from "../hooks/useStreamDeck";
 import { Icon } from "../icon/Icon";
 import { Schemas } from "@plugin/types";
 

@@ -5,35 +5,35 @@
     "dev": "rollup -c -w --watch.onEnd=\"streamdeck restart com.dim.streamdeck\""
   },
   "devDependencies": {
-    "@elgato/cli": "^1.0.0",
-    "@rollup/plugin-commonjs": "^28.0.0",
+    "@elgato/cli": "^1.1.0",
+    "@rollup/plugin-commonjs": "^28.0.2",
     "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^15.3.0",
-    "@rollup/plugin-replace": "^6.0.1",
-    "@swc/core": "^1.7.28",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-replace": "^6.0.2",
+    "@swc/core": "^1.10.1",
     "@tsconfig/node20": "^20.1.4",
     "@types/ms": "^0.7.34",
-    "@types/node": "22.7.4",
-    "@types/ws": "^8.5.12",
+    "@types/node": "22.10.2",
+    "@types/ws": "^8.5.13",
     "property-inspector": "workspace:*",
-    "rollup": "^4.23.0",
+    "rollup": "^4.29.1",
     "rollup-plugin-copy": "^3.5.0",
-    "rollup-plugin-swc3": "^0.11.2",
-    "typescript": "^5.6.2"
+    "rollup-plugin-swc3": "^0.12.1",
+    "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@elgato/streamdeck": "^1.0.1",
+    "@elgato/streamdeck": "^1.2.1",
     "@plugin/types": "workspace:*",
     "canvaskit-wasm": "^0.39.1",
     "cheerio": "1.0.0",
     "clipboardy": "^4.0.0",
     "dot-prop": "^9.0.0",
     "lowdb": "^7.0.1",
-    "lru-cache": "^11.0.1",
+    "lru-cache": "^11.0.2",
     "ms": "^2.1.3",
-    "remeda": "^2.14.0",
+    "remeda": "^2.19.0",
     "ws": "^8.18.0",
-    "zod": "^3.23.8"
+    "zod": "^3.24.1"
   },
   "packageManager": "pnpm@9.6.0+sha256.dae0f7e822c56b20979bb5965e3b73b8bdabb6b8b8ef121da6d857508599ca35"
 }

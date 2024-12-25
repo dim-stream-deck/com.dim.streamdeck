@@ -9,6 +9,7 @@
       "type": "node",
       "request": "attach",
       "port": 9999,
+      "restart": true,
       "outFiles": ["${workspaceFolder}/plugin/bin/**/*.js"],
       "resolveSourceMapLocations": ["${workspaceFolder}/plugin/**"]
     }

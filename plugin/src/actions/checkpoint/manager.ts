@@ -1,70 +1,54 @@
-import { load } from "cheerio";
 import { ev } from "@/util/ev";
-import $ from "@elgato/streamdeck";
-import ms from "ms";
-import { CheckpointSettings } from "@plugin/types";
+import { WebSocket } from "ws";
+import { CheckpointSettings, CheckpointGroup, Checkpoint } from "@plugin/types";
 
-interface Checkpoint {
-  activity: string;
-  image?: string;
-  difficulty?: string;
-  step: string;
-  copyId: string;
-}
+const cps = new Map<string, string>();
 
-let lastQuery: number;
-let items: Checkpoint[] = [];
+const activities: CheckpointGroup[] = [];
 
-const mapping: Record<string, string> = {
-  normal: "normal",
-  standard: "normal",
-  master: "master",
-};
+export const definitions = new Map<string, Checkpoint>();
 
-/**
- * Query the checkpoints endpoint and update the list
- * @returns the checkpoints list
- */
-const queryCheckpoints = async () => {
-  // update only if the last query was more than 2 minutes ago
-  if (lastQuery && Date.now() - lastQuery < ms("2m")) {
-    return;
-  }
-  const body = await fetch(process.env.CHECKPOINT_API!);
-  const text = await body.text();
-  const dom = load(text);
-  items = Array.from(
-    dom(".col .card").map((_, el) => {
-      const $el = dom(el);
-      const [activity, diff] = $el
-        .find(".card-title")
-        .text()
-        .split(":")
-        .map((s) => s.trim());
-      const difficulty = diff?.toLowerCase()?.trim();
-      return {
-        activity,
-        image: $el.find("img").attr("src"),
-        difficulty: difficulty ? mapping[difficulty] : undefined,
-        step: $el.find(".card-subtitle").text().trim(),
-        copyId: $el.find(".card-text").text().trim(),
-      };
-    })
-  );
-  lastQuery = Date.now();
-  // log the number of checkpoints loaded
-  $.logger.info(`Loaded ${items.length} checkpoints`);
-  //   // emit the checkpoints to the event emitter
+const endpoint = process.env.CHECKPOINT_API ?? "http://localhost:3000";
+
+const client = new WebSocket(
+  process.env.CHECKPOINT_API
+    ? process.env.CHECKPOINT_API.replace("http", "ws")
+    : "ws://localhost:3000"
+);
+
+client.onmessage = (event) => {
+  console.log(event.data);
+  const data = JSON.parse(event.data.toString()) as Record<string, string>;
+  Object.entries(data).forEach(([key, value]) => cps.set(key, value));
   ev.emit("checkpoints");
 };
 
-export const CheckpointManager = {
-  // This is the function that is called when a button is pressed or is loaded
-  refresh: () => queryCheckpoints(),
-  search: (settings: CheckpointSettings) =>
-    items.find(
-      (it) =>
-        it.step === settings.step &&
-        (!it.difficulty || it.difficulty === settings.difficulty)
-    ),
+export const loadActivities = async () => {
+  try {
+    const response = await fetch(`${endpoint}/definitions.json`);
+    const data = (await response.json()) as CheckpointGroup[];
+    activities.length = 0;
+    activities.push(...data);
+    console.log(activities);
+    activities.forEach((group) => {
+      group.items.forEach((activity) => {
+        Object.entries(activity.ids ?? {}).forEach(([_, id]) => {
+          definitions.set(id, activity);
+        });
+      });
+    });
+  } catch (e) {
+    console.error(e);
+  }
 };
+
+export const searchCheckpoint = (settings: CheckpointSettings) => {
+  const { id, encounter } = settings;
+  const key = `${id}:${encounter}`;
+  return cps.get(key);
+};
+
+export const getActivitiesDefinitions = () =>
+  [...activities.values()].map((activity) => ({
+    ...activity,
+  }));

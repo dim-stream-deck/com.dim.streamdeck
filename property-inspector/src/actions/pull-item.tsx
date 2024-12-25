@@ -11,33 +11,33 @@ import {
   Text,
   ThemeIcon,
 } from "@mantine/core";
-import { useStreamDeck } from "../StreamDeck";
+import { useStreamDeck } from "../hooks/useStreamDeck";
 import { PickerCard } from "../components/PickerCard";
 import { IconAccessible, IconHandClick, IconX } from "@tabler/icons-react";
 import { PickSubText, PickText } from "../components/PickText";
 import { Schemas } from "@plugin/types";
 import { useEffect } from "react";
-import { z } from "zod";
-
-const CommunicationSchema = z.object({
-  action: z.literal("selection"),
-  data: z.record(z.any()),
-});
+import $ from "@elgato/streamdeck";
 
 export default () => {
   const {
-    log,
     settings,
+    overrideSettings,
     setSettings,
     globalSettings,
     setGlobalSettings,
-    communication,
-    sendToPlugin,
   } = useStreamDeck(Schemas.pullItem);
 
   if (!settings || !globalSettings) {
     return;
   }
+
+  useEffect(() => {
+    $.plugin.registerRoute("/selection", (req, res) => {
+      overrideSettings(req.body as any);
+      res.send(200);
+    });
+  }, []);
 
   const gestures = [
     {
@@ -61,14 +61,6 @@ export default () => {
   const setGestures = settings.keepGestureLocal
     ? setSettings
     : setGlobalSettings;
-
-  useEffect(() => {
-    const parsed = CommunicationSchema.safeParse(communication);
-    if (parsed.data) {
-      const data = parsed.data.data;
-      setSettings({ ...data, element: data.element ?? null });
-    }
-  }, [communication]);
 
   return (
     <Stack gap="sm">
@@ -179,9 +171,6 @@ export default () => {
                 onChange={(e) => {
                   setGlobalSettings({
                     equipmentGrayscale: e.currentTarget.checked,
-                  });
-                  sendToPlugin({
-                    action: "updateSettings",
                   });
                 }}
               />

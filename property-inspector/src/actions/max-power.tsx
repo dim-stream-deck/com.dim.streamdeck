@@ -1,5 +1,5 @@
 import { Divider, Group, Image, SegmentedControl, Text } from "@mantine/core";
-import { useStreamDeck } from "../StreamDeck";
+import { useStreamDeck } from "../hooks/useStreamDeck";
 import Artifact from "../assets/max-power/artifact.png";
 import Total from "../assets/max-power/total.png";
 import Base from "../assets/max-power/helmet.png";

@@ -7,7 +7,7 @@ import {
   Switch,
   Text,
 } from "@mantine/core";
-import { useStreamDeck } from "../StreamDeck";
+import { useStreamDeck } from "../hooks/useStreamDeck";
 import Shard from "../assets/postmaster/shard.jpg";
 import Spoils from "../assets/postmaster/spoils.jpg";
 import Prism from "../assets/postmaster/Prism.jpg";
