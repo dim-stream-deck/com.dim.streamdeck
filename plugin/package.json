@@ -2,7 +2,8 @@
   "name": "plugin",
   "scripts": {
     "build": "tsc --noEmit && rollup -c && streamdeck pack --force-update-check  -f ./com.dim.streamdeck.sdPlugin",
-    "dev": "rollup -c -w --watch.onEnd=\"streamdeck restart com.dim.streamdeck\""
+    "dev": "rollup -c -w --watch.onEnd=\"streamdeck restart com.dim.streamdeck\"",
+    "link": "streamdeck link com.dim.streamdeck.sdPlugin"
   },
   "devDependencies": {
     "@elgato/cli": "^1.1.0",

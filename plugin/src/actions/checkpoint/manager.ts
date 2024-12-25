@@ -8,13 +8,9 @@ const activities: CheckpointGroup[] = [];
 
 export const definitions = new Map<string, Checkpoint>();
 
-const endpoint = process.env.CHECKPOINT_API ?? "http://localhost:3000";
+const endpoint = process.env.CHECKPOINT_API!;
 
-const client = new WebSocket(
-  process.env.CHECKPOINT_API
-    ? process.env.CHECKPOINT_API.replace("http", "ws")
-    : "ws://localhost:3000"
-);
+const client = new WebSocket(endpoint.replace("http", "ws"));
 
 client.onmessage = (event) => {
   console.log(event.data);
