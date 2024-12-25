@@ -30,12 +30,6 @@ jobs:
           version: 9.5
           run_install: true
 
-    #   - name: Download rust artifacts
-    #     uses: dawidd6/action-download-artifact@v2
-    #     with:
-    #       github_token: ${{secrets.GITHUB_TOKEN}}
-    #       workflow: build-rust-packages.yaml
-
       - name: Prepare plugin directory
         run: |
           mkdir -p plugin/com.dim.streamdeck.sdPlugin/solo-mode
