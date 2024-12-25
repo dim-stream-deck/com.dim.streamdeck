@@ -26,7 +26,7 @@ export const useStreamDeck = <Settings extends JsonObject>(
   const client = useQueryClient();
 
   const { data } = useSuspenseQuery({
-    queryKey: ["settings", validator],
+    queryKey: ["settings"],
     queryFn: () => $.settings.getSettings<Settings>(),
   });
 
