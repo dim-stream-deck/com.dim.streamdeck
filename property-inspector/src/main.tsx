@@ -1,18 +1,20 @@
-import { FC, Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import { render } from "./util";
 import "./index.css";
 import { ActionIcon, Center, Group, Loader } from "@mantine/core";
 import {
-  IconBrandDiscord,
-  IconBrandPatreon,
-  IconWorldWww,
+	IconBrandDiscord,
+	IconBrandPatreon,
+	IconWorldWww,
 } from "@tabler/icons-react";
 import { NoSetting } from "./components/NoSettings";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+	QueryClient,
+	QueryClientProvider
+} from "@tanstack/react-query";
 import streamDeck from "@elgato/streamdeck";
-import { GlobalSettings } from "@plugin/types";
-import { createStore, Provider } from "jotai";
-import { actionInfoAtom, globalsSettingsAtom, infoAtom } from "./atoms";
+import { createStore, Provider, useAtom } from "jotai";
+import { actionInfoAtom, infoAtom } from "./atoms";
 
 const client = new QueryClient();
 
@@ -29,10 +31,6 @@ const pullItem = lazy(() => import("./actions/pull-item"));
 const maxPower = lazy(() => import("./actions/max-power"));
 const picker = lazy(() => import("./actions/picker/picker"));
 const soloMode = lazy(() => import("./actions/solo-mode"));
-
-export interface AppProps {
-  action: any;
-}
 
 const components = {
   search,
@@ -94,8 +92,20 @@ const Links = () => {
   );
 };
 
-const App: FC<AppProps> = ({ action }) => {
-  const id: Action = action.action.slice("com.dim.streamdeck.".length);
+const Loading = (
+  <Center py="md">
+    <Loader size="md" c="dim" />
+  </Center>
+);
+
+const App = () => {
+  const [action] = useAtom(actionInfoAtom);
+
+  if (!action) {
+    return Loading;
+  }
+
+  const id = action.action.slice("com.dim.streamdeck.".length) as Action;
   const Component: any = components[id];
 
   return (
@@ -103,36 +113,23 @@ const App: FC<AppProps> = ({ action }) => {
       <Suspense>
         <Support />
       </Suspense>
-      <Suspense
-        fallback={
-          <Center py="md">
-            <Loader size="md" c="dim" />
-          </Center>
-        }
-      >
-        {!Component ? <NoSetting /> : <Component />}
-      </Suspense>
+      {!Component ? <NoSetting /> : <Component />}
       <Links />
     </>
   );
 };
 
-streamDeck.onConnected(async (info, actionInfo) => {
-  // init store
-  store.set(
-    globalsSettingsAtom,
-    await streamDeck.settings.getGlobalSettings<GlobalSettings>()
-  );
+render(
+  <Suspense fallback={Loading}>
+    <Provider store={store}>
+      <QueryClientProvider client={client}>
+        <App />
+      </QueryClientProvider>
+    </Provider>
+  </Suspense>
+);
 
+streamDeck.onConnected((info, actionInfo) => {
   store.set(actionInfoAtom, actionInfo);
   store.set(infoAtom, info);
-  render(
-    <Suspense>
-      <Provider store={store}>
-        <QueryClientProvider client={client}>
-          <App action={actionInfo} />
-        </QueryClientProvider>
-      </Provider>
-    </Suspense>
-  );
 });
