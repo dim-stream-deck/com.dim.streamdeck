@@ -20,7 +20,13 @@ import { Schemas, CheckpointGroup } from "@plugin/types";
 import $ from "@elgato/streamdeck";
 
 const loadDefinitions = async () => {
-  const res = await $.plugin.fetch("checkpoints-activities");
+  const res = await $.plugin.fetch("checkpoints-activities", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${import.meta.env.VITE_CHECKPOINTS_TOKEN}`,
+    },
+  });
   if (!res.ok) return [];
   return res.body as unknown as CheckpointGroup[];
 };
