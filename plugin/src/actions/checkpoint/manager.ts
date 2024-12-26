@@ -13,9 +13,10 @@ const endpoint = process.env.CHECKPOINT_API!;
 const client = new WebSocket(endpoint.replace("http", "ws"));
 
 client.onmessage = (event) => {
-  console.log(event.data);
   const data = JSON.parse(event.data.toString()) as Record<string, string>;
-  Object.entries(data).forEach(([key, value]) => cps.set(key, value));
+  Object.entries(data).forEach(([key, value]) =>
+    cps.set(key, value.replace("$", "CheckpointBot#"))
+  );
   ev.emit("checkpoints");
 };
 
