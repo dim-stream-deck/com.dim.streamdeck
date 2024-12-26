@@ -67,8 +67,6 @@ export class Checkpoint extends SingletonAction {
 
     const definition = definitions.get(id);
 
-    console.log(definition, id, encounter);
-
     if (!definition) return;
 
     const image = `${definition.images}/${encounter}.webp`;

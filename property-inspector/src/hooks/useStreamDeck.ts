@@ -39,11 +39,9 @@ export const useStreamDeck = <Settings extends JsonObject>(
 
   useEffect(() => {
     $.settings.onDidReceiveSettings<Settings>((e) => {
-      console.log("onDidReceiveSettings", e.payload.settings);
       client.setQueryData(["settings"], e.payload.settings);
     });
     $.settings.onDidReceiveGlobalSettings<GlobalSettings>((e) => {
-      console.log("onDidReceiveGlobalSettings", e.settings);
       client.setQueryData(["global-settings"], e.settings);
     });
   }, []);

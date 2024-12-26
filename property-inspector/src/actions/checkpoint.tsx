@@ -77,8 +77,6 @@ export default () => {
 
   const checkpoint = settings.id ? activityById[settings.id] : null;
 
-  console.log(items, checkpoint);
-
   const encounters = checkpoint
     ? checkpoint.encounters.map((label, value) => ({
         label,

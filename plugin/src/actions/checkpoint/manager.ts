@@ -34,7 +34,6 @@ export const loadActivities = async () => {
     const data = (await response.json()) as CheckpointGroup[];
     activities.length = 0;
     activities.push(...data);
-    console.log(activities);
     activities.forEach((group) => {
       group.items.forEach((activity) => {
         Object.entries(activity.ids ?? {}).forEach(([_, id]) => {
