@@ -24,7 +24,7 @@ const loadDefinitions = async () => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `${import.meta.env.VITE_CHECKPOINTS_TOKEN}`,
+      Authorization: `${import.meta.env.VITE_CHECKPOINT_API_KEY}`,
     },
   });
   if (!res.ok) return [];
