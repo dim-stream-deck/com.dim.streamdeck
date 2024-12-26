@@ -37,6 +37,9 @@ const config = {
             "process.env.CHECKPOINT_API": JSON.stringify(
               process.env.CHECKPOINT_API
             ),
+            "process.env.CHECKPOINT_API_KEY": JSON.stringify(
+              process.env.CHECKPOINT_API_KEY
+            ),
             "process.env.AXIOM_DATASET": JSON.stringify(
               process.env.AXIOM_DATASET
             ),

@@ -10,7 +10,11 @@ export const definitions = new Map<string, Checkpoint>();
 
 const endpoint = process.env.CHECKPOINT_API!;
 
-const client = new WebSocket(endpoint.replace("http", "ws"));
+const client = new WebSocket(endpoint.replace("http", "ws"), {
+  headers: {
+    Authorization: process.env.CHECKPOINT_API_KEY,
+  },
+});
 
 client.onmessage = (event) => {
   const data = JSON.parse(event.data.toString()) as Record<string, string>;

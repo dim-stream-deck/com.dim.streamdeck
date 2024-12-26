@@ -49,6 +49,7 @@ jobs:
           VITE_AXIOM_TOKEN: ${{secrets.VITE_AXIOM_TOKEN}}
           VITE_CHECKPOINTS: ${{secrets.VITE_CHECKPOINTS}}
           CHECKPOINT_API: ${{secrets.CHECKPOINT_API}}
+          CHECKPOINT_API_KEY: ${{secrets.CHECKPOINT_API_KEY}}
           AXIOM_DATASET: ${{secrets.VITE_AXIOM_DATASET}}
           AXIOM_TOKEN: ${{secrets.VITE_AXIOM_TOKEN}}
 
