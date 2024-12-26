@@ -26,7 +26,11 @@ client.onmessage = (event) => {
 
 export const loadActivities = async () => {
   try {
-    const response = await fetch(`${endpoint}/definitions.json`);
+    const response = await fetch(`${endpoint}/definitions.json`, {
+      headers: {
+        Authorization: process.env.CHECKPOINT_API_KEY!,
+      },
+    });
     const data = (await response.json()) as CheckpointGroup[];
     activities.length = 0;
     activities.push(...data);
