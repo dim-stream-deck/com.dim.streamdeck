@@ -1,6 +1,7 @@
 import { ev } from "@/util/ev";
 import { WebSocket } from "ws";
 import { CheckpointSettings, CheckpointGroup, Checkpoint } from "@plugin/types";
+import $ from "@elgato/streamdeck";
 
 const cps = new Map<string, string>();
 
@@ -10,18 +11,32 @@ export const definitions = new Map<string, Checkpoint>();
 
 const endpoint = process.env.CHECKPOINT_API!;
 
-const client = new WebSocket(endpoint.replace("http", "ws"), {
-  headers: {
-    Authorization: process.env.CHECKPOINT_API_KEY,
-  },
-});
+const createClient = () => {
+  const client = new WebSocket(endpoint.replace("http", "ws"), {
+    headers: {
+      Authorization: process.env.CHECKPOINT_API_KEY,
+    },
+  });
+  client.onmessage = (event) => {
+    const data = JSON.parse(event.data.toString()) as Record<string, string>;
+    Object.entries(data).forEach(([key, value]) =>
+      cps.set(key, value.replace("$", "CheckpointBot#"))
+    );
+    ev.emit("checkpoints");
+  };
+  client.onclose = () => {
+    $.logger.error("Connection closed for checkpoint API");
+    setTimeout(() => {
+      if (instances.client.readyState === WebSocket.CLOSED) {
+        instances.client = createClient();
+      }
+    }, 5000);
+  };
+  return client;
+};
 
-client.onmessage = (event) => {
-  const data = JSON.parse(event.data.toString()) as Record<string, string>;
-  Object.entries(data).forEach(([key, value]) =>
-    cps.set(key, value.replace("$", "CheckpointBot#"))
-  );
-  ev.emit("checkpoints");
+const instances = {
+  client: createClient(),
 };
 
 export const loadActivities = async () => {
