@@ -29,6 +29,7 @@
     "cheerio": "1.0.0",
     "clipboardy": "^4.0.0",
     "dot-prop": "^9.0.0",
+    "eventsource": "^3.0.2",
     "lowdb": "^7.0.1",
     "lru-cache": "^11.0.2",
     "ms": "^2.1.3",
