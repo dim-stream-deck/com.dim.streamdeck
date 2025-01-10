@@ -12,7 +12,7 @@ Download the stream-deck plugin from
 the [releases](https://github.com/dim-stream-deck/com.dim.streamdeck/releases/latest)
 or from below:
 
-[![install plugin](https://dimstreamdeck.vercel.app/download.png)](https://marketplace.elgato.com/product/dim-stream-deck-11883ba5-c8db-4e3a-915f-612c5ba1b2e4)
+[![get it on marketplace](https://docs.elgato.com/img/badges/marketplace-dark.png "Get Wave Link on Marketplace")](https://marketplace.elgato.com/product/dim-stream-deck-11883ba5-c8db-4e3a-915f-612c5ba1b2e4)
 
 ## Features
 
