@@ -1,6 +1,6 @@
 import { ev } from "@/util/ev";
+import { WebSocket } from "ws";
 import { CheckpointSettings, CheckpointGroup, Checkpoint } from "@plugin/types";
-import { EventSource } from "eventsource";
 
 const cps = new Map<string, string>();
 
@@ -10,23 +10,37 @@ export const definitions = new Map<string, Checkpoint>();
 
 const endpoint = process.env.CHECKPOINT_API!;
 
-const es = new EventSource(`${endpoint}/cps`, {
-  withCredentials: true,
-  fetch: (input, init) =>
-    fetch(input, {
-      ...init,
-      headers: {
-        Authorization: process.env.CHECKPOINT_API_KEY!,
-      },
-    }),
-});
+const wsEndpoint = endpoint.replace("https://", "wss://");
 
-es.onmessage = (event) => {
-  const data = JSON.parse(event.data as string) as Record<string, string>;
-  Object.entries(data).forEach(([key, value]) =>
-    cps.set(key, value.replace("$", "CheckpointBot#"))
-  );
-  ev.emit("checkpoints");
+const createClient = () => {
+  const client = new WebSocket(`${wsEndpoint}/ws-cps`, {
+    headers: {
+      Authorization: process.env.CHECKPOINT_API_KEY!,
+    },
+  });
+
+  client.onmessage = (event) => {
+    const data = JSON.parse(event.data.toString()) as Record<string, string>;
+    Object.entries(data).forEach(([key, value]) =>
+      cps.set(key, value.replace("$", "CheckpointBot#"))
+    );
+    ev.emit("checkpoints");
+  };
+
+  client.onclose = () => {
+    console.log("Connection closed");
+    setTimeout(() => {
+      if (instances.client.readyState === WebSocket.CLOSED) {
+        instances.client = createClient();
+      }
+    }, 5000);
+  };
+
+  return client;
+};
+
+const instances = {
+  client: createClient(),
 };
 
 export const loadActivities = async () => {
