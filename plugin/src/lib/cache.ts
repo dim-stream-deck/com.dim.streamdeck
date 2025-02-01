@@ -5,7 +5,7 @@ import { createHash } from "node:crypto";
 import { createBrotliCompress, createBrotliDecompress } from "node:zlib";
 import { createWriteStream, createReadStream } from "node:fs";
 import { Readable } from "node:stream";
-import ms from "ms";
+import ms, { StringValue } from "ms";
 
 export const stream2buffer = async (stream: Stream) => {
   return new Promise<Buffer>((resolve, reject) => {
@@ -40,7 +40,7 @@ interface Options<TCacheType> {
         /**
          * How often to save the cache to disk (ms format)
          */
-        every?: string;
+        every?: StringValue;
         /**
          * Path to the cache file
          */
