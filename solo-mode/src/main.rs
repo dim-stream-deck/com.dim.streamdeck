@@ -25,7 +25,7 @@ fn enable(dir: &str, protocol: &str) -> bool {
     let child = Command::new("cmd")
         .args([
             "/C",
-            &format!( "netsh advfirewall firewall add rule name=stream-deck-destiny-solo dir={} action=block protocol={} remoteport=27000-27200,3097", dir, protocol)
+            &format!( "netsh advfirewall firewall add rule name=stream-deck-destiny-solo dir={} action=block protocol={} remoteport=27000-27202,3097", dir, protocol)
         ])
         .status();
     match child {
