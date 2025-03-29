@@ -9,14 +9,13 @@ import {
 } from "./options";
 import { ItemIcon } from "@/actions/pull-item/item-icon";
 import { ev } from "@/util/ev";
-import { Action, KeyDownEvent } from "@elgato/streamdeck";
+import { KeyDownEvent } from "@elgato/streamdeck";
 import { PickerFilterType, PickerSettings } from "@plugin/types";
 import { Equipment, State } from "@/state";
 import { Loaders } from "@/util/images";
 import { ImageIcon } from "./ImageIcon";
 import { Cycler } from "@/lib/cycle";
 import { Cell, GridHelper } from "@/lib/grid";
-import { KeyDown } from "node_modules/@elgato/streamdeck/types/api";
 
 type OptionCell = {
   id?: string;
