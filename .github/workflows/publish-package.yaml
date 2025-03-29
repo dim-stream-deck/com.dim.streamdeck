@@ -11,24 +11,13 @@ jobs:
     env:
       PLUGIN_VERSION:
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
 
       - name: Extract version
         id: version
         working-directory: ./plugin
         run: echo "PLUGIN_VERSION=$(jq .Version com.dim.streamdeck.sdPlugin/manifest.json -r)" | rev | cut -c3- | rev >> $GITHUB_ENV
-
-      - uses: pnpm/action-setup@v2
-        name: Install pnpm
-        id: pnpm-install
-        with:
-          version: 9.5
-          run_install: true
 
       - name: Prepare plugin directory
         run: |
@@ -41,7 +30,7 @@ jobs:
 
       - name: Build
         working-directory: .
-        run: pnpm build
+        run: bun run build
         env:
           VITE_DISCORD: ${{secrets.VITE_DISCORD}}
           VITE_PATREON: ${{secrets.VITE_PATREON}}
@@ -50,6 +39,7 @@ jobs:
           VITE_CHECKPOINTS: ${{secrets.VITE_CHECKPOINTS}}
           CHECKPOINT_API: ${{secrets.CHECKPOINT_API}}
           CHECKPOINT_API_KEY: ${{secrets.CHECKPOINT_API_KEY}}
+          CHECKPOINT_HOST: ${{secrets.CHECKPOINT_HOST}}
           AXIOM_DATASET: ${{secrets.VITE_AXIOM_DATASET}}
           AXIOM_TOKEN: ${{secrets.VITE_AXIOM_TOKEN}}
 

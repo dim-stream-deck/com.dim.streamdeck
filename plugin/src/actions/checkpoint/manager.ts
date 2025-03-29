@@ -1,6 +1,7 @@
 import { ev } from "@/util/ev";
-import { WebSocket } from "ws";
 import { CheckpointSettings, CheckpointGroup, Checkpoint } from "@plugin/types";
+import axios from "axios";
+import { z } from "zod";
 
 const cps = new Map<string, string>();
 
@@ -10,37 +11,54 @@ export const definitions = new Map<string, Checkpoint>();
 
 const endpoint = process.env.CHECKPOINT_API!;
 
-const wsEndpoint = endpoint.replace("https://", "wss://");
+const checkpointHost = process.env.CHECKPOINT_HOST!;
 
-const createClient = () => {
-  const client = new WebSocket(`${wsEndpoint}/ws-cps`, {
-    headers: {
-      Authorization: process.env.CHECKPOINT_API_KEY!,
-    },
-  });
+const BotsSchema = z
+  .object({
+    name: z.string(),
+    activityHash: z.number(),
+    encounter: z.number(),
+    acquired: z.boolean(),
+  })
+  .array();
 
-  client.onmessage = (event) => {
-    const data = JSON.parse(event.data.toString()) as Record<string, string>;
-    Object.entries(data).forEach(([key, value]) =>
-      cps.set(key, value.replace("$", "CheckpointBot#"))
-    );
-    ev.emit("checkpoints");
-  };
-
-  client.onclose = () => {
-    console.log("Connection closed");
-    setTimeout(() => {
-      if (instances.client.readyState === WebSocket.CLOSED) {
-        instances.client = createClient();
+export const fetchBots = async () => {
+  try {
+    console.log("Fetching bots");
+    const res = await axios.post(
+      `https://${checkpointHost}/_actions/bots.getBotsFromDb`,
+      {
+        headers: {
+          Host: "d2checkpoint.com",
+          Origin: `https://${checkpointHost}`,
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+          Accept:
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+          "Accept-Language": "en-US,en;q=0.5",
+          Connection: "keep-alive",
+        },
       }
-    }, 5000);
-  };
+    );
 
-  return client;
-};
+    const [indexes, ...data] = res.data;
 
-const instances = {
-  client: createClient(),
+    const bots = indexes.map((idx: number) => {
+      const bot = data[idx - 1];
+      const activityHash = data[bot.activityHash - 1];
+      return {
+        name: data[bot.name - 1],
+        activityHash,
+        encounter: data[bot.encounter - 1],
+        acquired: activityHash !== 0,
+      };
+    });
+
+    return BotsSchema.parse(bots);
+  } catch (e) {
+    console.error(" >> Failed to fetch bots", e);
+    return Promise.resolve([]);
+  }
 };
 
 export const loadActivities = async () => {
@@ -68,8 +86,21 @@ export const loadActivities = async () => {
 export const searchCheckpoint = (settings: CheckpointSettings) => {
   const { id, encounter } = settings;
   const key = `${id}:${encounter}`;
+  console.log(key, cps.get(key));
   return cps.get(key);
 };
+
+export const updateCheckpointsBots = async () => {
+  const bots = await fetchBots();
+  console.log(bots);
+  for (const bot of bots) {
+    const key = `${bot.activityHash}:${bot.encounter}`;
+    cps.set(key, bot.name);
+  }
+  ev.emit("checkpoints");
+};
+
+setInterval(updateCheckpointsBots, 1000 * 60 * 5);
 
 export const getActivitiesDefinitions = () =>
   [...activities.values()].map((activity) => ({

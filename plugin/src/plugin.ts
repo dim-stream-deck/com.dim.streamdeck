@@ -3,12 +3,16 @@ import { ev } from "@/util/ev";
 
 // Register all the actions in the `actions` directory.
 import "@/actions";
-import { loadActivities } from "./actions/checkpoint/manager";
+import {
+  loadActivities,
+  updateCheckpointsBots,
+} from "./actions/checkpoint/manager";
 
 /// Load activities for checkpoints
-loadActivities().then(() => {
+loadActivities().then(async () => {
   // Finally, connect to the Stream Deck.
-  $.connect();
+  await $.connect();
+  await updateCheckpointsBots();
 });
 
 // Propagate the deep link to internal event emitter

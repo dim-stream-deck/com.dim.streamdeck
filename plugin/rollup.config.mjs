@@ -6,6 +6,7 @@ import copy from "rollup-plugin-copy";
 import { swc } from "rollup-plugin-swc3";
 import replace from "@rollup/plugin-replace";
 import json from "@rollup/plugin-json";
+import dotenv from "rollup-plugin-dotenv";
 
 const uuid = "com.dim.streamdeck";
 const isWatching = !!process.env.ROLLUP_WATCH;
@@ -31,23 +32,25 @@ const config = {
     warn(warning);
   },
   plugins: [
-    ...(!isWatching
-      ? [
-          replace({
-            "process.env.CHECKPOINT_API": JSON.stringify(
-              process.env.CHECKPOINT_API
-            ),
-            "process.env.CHECKPOINT_API_KEY": JSON.stringify(
-              process.env.CHECKPOINT_API_KEY
-            ),
-            "process.env.AXIOM_DATASET": JSON.stringify(
-              process.env.AXIOM_DATASET
-            ),
-            "process.env.AXIOM_TOKEN": JSON.stringify(process.env.AXIOM_TOKEN),
-            preventAssignment: true,
-          }),
-        ]
-      : []),
+    dotenv(),
+    replace({
+      // Axiom
+      "process.env.AXIOM_DATASET": JSON.stringify(process.env.AXIOM_DATASET),
+      "process.env.AXIOM_TOKEN": JSON.stringify(process.env.AXIOM_TOKEN),
+      // Checkpoint
+      "process.env.CHECKPOINT_API": JSON.stringify(process.env.CHECKPOINT_API),
+      "process.env.CHECKPOINT_API_KEY": JSON.stringify(
+        process.env.CHECKPOINT_API_KEY
+      ),
+      "process.env.CHECKPOINT_HOST": JSON.stringify(
+        process.env.CHECKPOINT_HOST
+      ),
+      // Env
+      "process.env.STREAM_DECK_ENV": JSON.stringify(
+        process.env.STREAM_DECK_ENV
+      ),
+      preventAssignment: true,
+    }),
     copy({
       copyOnce: true,
       hook: "buildStart",
