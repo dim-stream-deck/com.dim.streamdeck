@@ -30,7 +30,7 @@ jobs:
 
       - name: Build
         working-directory: .
-        run: bun run build
+        run: bun i && bun run build
         env:
           VITE_DISCORD: ${{secrets.VITE_DISCORD}}
           VITE_PATREON: ${{secrets.VITE_PATREON}}
