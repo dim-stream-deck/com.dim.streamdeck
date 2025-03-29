@@ -56,11 +56,11 @@ const config = {
       hook: isWatching ? "buildStart" : "writeBundle",
       targets: [
         {
-          src: "./node_modules/clipboardy/fallbacks/windows",
+          src: "../node_modules/clipboardy/fallbacks/windows",
           dest: `${sdPlugin}/fallbacks/`,
         },
         {
-          src: "./node_modules/canvaskit-wasm/bin/canvaskit.wasm",
+          src: "../node_modules/canvaskit-wasm/bin/canvaskit.wasm",
           dest: sdPlugin,
         },
       ],
