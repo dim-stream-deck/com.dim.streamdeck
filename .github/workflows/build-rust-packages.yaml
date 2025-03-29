@@ -17,21 +17,21 @@ jobs:
           args: --manifest-path solo-mode/Cargo.toml --release
 
       - name: Temporary store install-sd-solo-mode.exe
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: service-installer
           path: ./solo-mode/target/release/install-sd-solo-mode.exe
           retention-days: 365
 
       - name: Temporary store remove-sd-solo-mode.exe
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: service-remover
           path: ./solo-mode/target/release/remove-sd-solo-mode.exe
           retention-days: 365
 
       - name: Temporary store sd-solo-mode.exe
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: service
           path: ./solo-mode/target/release/sd-solo-mode.exe
@@ -51,7 +51,7 @@ jobs:
           args: --manifest-path macro/Cargo.toml --release
 
       - name: Temporary store macro.exe
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macro
           path: ./macro/target/release/macro.exe
