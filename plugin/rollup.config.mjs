@@ -53,7 +53,7 @@ const config = {
     }),
     copy({
       copyOnce: true,
-      hook: "buildStart",
+      hook: isWatching ? "buildStart" : "writeBundle",
       targets: [
         {
           src: "./node_modules/clipboardy/fallbacks/windows",
