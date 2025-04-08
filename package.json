@@ -4,10 +4,10 @@
   "description": "A Stream Deck plugin to interact with Destiny Item Manager",
   "main": "index.js",
   "dependencies": {
-    "prettier": "^3.3.3"
+    "prettier": "^3.5.3"
   },
   "devDependencies": {
-    "turbo": "^2.4.4"
+    "turbo": "^2.5.0"
   },
   "scripts": {
     "dev": "turbo run dev",
