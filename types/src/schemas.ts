@@ -96,6 +96,9 @@ export const CheckpointSettingsSchema = z.object({
 // Vault
 
 export const VaultTypeSchema = z.enum([
+  /**
+   * @deprecated
+   */
   "shards",
   "brightDust",
   "glimmer",
