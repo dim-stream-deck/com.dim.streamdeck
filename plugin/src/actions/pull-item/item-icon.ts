@@ -26,7 +26,12 @@ export const ItemIcon = async (
   options?: ItemIconOptions
 ) => {
   // Check if the image is already cached
-  const cacheKey = [item.icon, options?.grayscale, options?.equipped];
+  const cacheKey = [
+    item.icon,
+    item.overlay,
+    options?.grayscale,
+    options?.equipped,
+  ];
   if (cache.has(cacheKey)) {
     return cache.get(cacheKey);
   }
