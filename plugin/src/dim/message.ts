@@ -7,13 +7,13 @@ export const DimMessageSchema = z.discriminatedUnion("action", [
   }),
   z.object({
     action: z.literal("state"),
-    data: z.record(z.any()),
+    data: z.record(z.string(), z.any()),
   }),
   z.object({
     action: z.literal("pickerItems"),
     data: z.object({
       device: z.string(),
-      items: z.record(z.any()).array(),
+      items: z.record(z.string(), z.any()).array(),
     }),
   }),
   z.object({

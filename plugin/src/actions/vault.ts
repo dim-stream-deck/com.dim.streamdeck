@@ -1,16 +1,18 @@
-import { Cycler } from "@/lib/cycle";
+import { DIM } from "@/dim/api";
+import { downloadAsBase64 } from "@/lib/image";
 import { State } from "@/state";
+import { bungify } from "@/util/images";
 import { log } from "@/util/logger";
 import { Watcher } from "@/util/watcher";
 import {
-	action,
-	DidReceiveSettingsEvent,
-	KeyDownEvent,
-	SingletonAction,
-	WillAppearEvent,
-	WillDisappearEvent
+  action,
+  DidReceiveSettingsEvent,
+  KeyDownEvent,
+  SingletonAction,
+  WillAppearEvent,
+  WillDisappearEvent,
 } from "@elgato/streamdeck";
-import { Schemas, VaultSettings, VaultTypeSchema } from "@plugin/types";
+import { Schemas, VaultSettings } from "@plugin/types";
 
 /**
  * Show Vault counters
@@ -23,10 +25,15 @@ export class Vault extends SingletonAction {
     action: WillAppearEvent["action"],
     settings?: VaultSettings
   ) {
-    const vault = State.get("vault");
-    const { type } = settings ?? Schemas.vault(await action.getSettings());
-    action.setImage(`./imgs/canvas/vault/${type}.png`);
-    action.setTitle(`${vault?.[type]?.toLocaleString("en-US") ?? "?"}`);
+    const vault = State.get("inventory");
+    const { current = 0, items = [] } =
+      settings ?? Schemas.vault(await action.getSettings());
+    const item = items[current];
+    if (item) {
+      const image = await downloadAsBase64(bungify(item.icon));
+      image && action.setImage(image);
+      action.setTitle(`${vault?.[item.item]?.toLocaleString("en-US") ?? "?"}`);
+    }
   }
 
   onDidReceiveSettings(e: DidReceiveSettingsEvent<VaultSettings>) {
@@ -43,11 +50,21 @@ export class Vault extends SingletonAction {
 
   // cycle through the available items
   onKeyDown(e: KeyDownEvent<VaultSettings>) {
-    const current = Schemas.vault(e.payload.settings);
-    const type = new Cycler(VaultTypeSchema.options).after(current.type);
-    e.action.setSettings({ type });
+    const settings = Schemas.vault(e.payload.settings);
+    e.action.setSettings({
+      ...settings,
+      current: (settings.current + 1) % settings.items.length,
+    });
     this.update(e.action);
     // log action
     log("vault");
+  }
+
+  onPropertyInspectorDidAppear() {
+    DIM.selection({ type: "inventory-item" });
+  }
+
+  onPropertyInspectorDidDisappear() {
+    DIM.selection();
   }
 }

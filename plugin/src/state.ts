@@ -1,5 +1,5 @@
 import { db, saveDB } from "./util/db";
-import { Metric, VaultType } from "@plugin/types";
+import { Metric } from "@plugin/types";
 import { ev } from "./util/ev";
 
 export const Equipment = new Set<string>();
@@ -33,7 +33,7 @@ export type State = {
   character?: Character;
   maxPower?: MaxPower;
   postmaster?: Postmaster;
-  vault?: Record<VaultType, number>;
+  inventory?: Record<string, number>;
   metrics?: Record<Metric, number> & {
     artifactIcon: string;
   };

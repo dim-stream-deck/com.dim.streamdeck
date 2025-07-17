@@ -1,43 +1,89 @@
-import { Avatar, Divider, Group, SegmentedControl, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Divider,
+  Flex,
+  Group,
+  Image,
+  Stack,
+  Text,
+  ThemeIcon,
+} from "@mantine/core";
 import { useStreamDeck } from "../hooks/useStreamDeck";
-import dust from "../assets/vault/dust.png";
-import glimmer from "../assets/vault/glimmer.png";
-import vault from "../assets/vault/vault.png";
-import { Schemas, VaultType, VaultTypeSchema } from "@plugin/types";
+import { PickerCard } from "../components/PickerCard";
+import { IconTrash, IconX } from "@tabler/icons-react";
+import { PickText } from "../components/PickText";
+import { Schemas, VaultSettings } from "@plugin/types";
+import { useEffect } from "react";
+import $ from "@elgato/streamdeck";
 
-const resources = [
-  { value: "brightDust", image: dust, label: "Bright Dust" },
-  { value: "glimmer", image: glimmer, label: "Glimmer" },
-  { value: "vault", image: vault, label: "Vault Items" },
-] satisfies Array<{
-  value: VaultType;
-  image: string;
-  label: string;
-}>;
+type VaultItem = VaultSettings["items"][number];
 
 export default () => {
-  const { settings, setSettings } = useStreamDeck(Schemas.vault);
+  const { settings, overrideSettings } = useStreamDeck(Schemas.vault);
+
+  if (!settings) {
+    return;
+  }
+
+  useEffect(() => {
+    $.plugin.registerRoute("/selection", (req, res) => {
+      const newItems = [...(settings.items ?? []), req.body as VaultItem];
+      overrideSettings({
+        items: newItems,
+        current: settings.current,
+      });
+      res.send(200);
+    });
+  }, [settings]);
 
   return (
-    <div>
-      <Divider labelPosition="center" label="Resource Type" mb="sm" />
-      <SegmentedControl
-        fullWidth
-        orientation="vertical"
-        value={settings.type}
-        onChange={(value) =>
-          setSettings({ type: VaultTypeSchema.parse(value) })
-        }
-        data={resources.map((it) => ({
-          value: it.value,
-          label: (
-            <Group>
-              <Avatar size="sm" src={it.image} />
-              <Text ml="sm">{it.label}</Text>
-            </Group>
-          ),
-        }))}
-      />
-    </div>
+    <Stack gap="sm">
+      <PickerCard>
+        <Group gap="sm">
+          <Stack gap={4} style={{ flex: 1 }}>
+            <PickText type="inventory-item" selected={false} />
+          </Stack>
+        </Group>
+      </PickerCard>
+      {settings.items.map((item, index) => (
+        <>
+          <Group>
+            {item?.icon ? (
+              <Image
+                radius="md"
+                w={64}
+                h={64}
+                draggable={false}
+                src={`https://bungie.net${item.icon}`}
+              />
+            ) : (
+              <ThemeIcon variant="light" style={{ width: 64, height: 64 }}>
+                <IconX />
+              </ThemeIcon>
+            )}
+            <Flex flex={1} direction="column">
+              <Text variant="text">{item.label}</Text>
+              <Text variant="text" c="dimmed">
+                {item.subtitle}
+              </Text>
+            </Flex>
+            <ActionIcon
+              variant="subtle"
+              c="dim"
+              onClick={() => {
+                const newItems = settings.items.filter((_, i) => i !== index);
+                overrideSettings({
+                  items: newItems,
+                  current: settings.current % newItems.length || 0,
+                });
+              }}
+            >
+              <IconTrash />
+            </ActionIcon>
+          </Group>
+          {index < settings.items.length - 1 && <Divider />}
+        </>
+      ))}
+    </Stack>
   );
 };

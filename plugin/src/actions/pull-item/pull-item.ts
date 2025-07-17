@@ -14,7 +14,6 @@ import { Watcher } from "@/util/watcher";
 import { splitTitle } from "@/util/canvas";
 import { PullItemSettings, Schemas } from "@plugin/types";
 import { Equipment } from "@/state";
-import { ev } from "@/util/ev";
 import { Loaders } from "@/util/images";
 import { log } from "@/util/logger";
 import { Gestures } from "@/lib/gesture";

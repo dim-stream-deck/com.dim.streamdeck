@@ -69,8 +69,8 @@ export default () => {
           {settings?.icon ? (
             <Image
               radius="md"
-              width={64}
-              height={64}
+              w={64}
+              h={64}
               draggable={false}
               src={`https://bungie.net${settings.icon}`}
             />

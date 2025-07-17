@@ -11,7 +11,7 @@ export const GlobalSettingsSchema = z.object({
   checkpointJoinPrefix: z.string().optional(),
   checkpointPaste: z.boolean().default(true),
   enabledSoloService: z.boolean().default(false),
-  authentication: z.record(z.string()).default({}),
+  authentication: z.record(z.string(), z.string()).default({}),
   setupDate: z.string().optional(),
   promptSupport: z.boolean().default(true),
 });
@@ -103,10 +103,24 @@ export const VaultTypeSchema = z.enum([
   "brightDust",
   "glimmer",
   "vault",
+  "enhancementCores",
 ]);
 
 export const VaultSettingsSchema = z.object({
-  type: VaultTypeSchema.default("vault"),
+  current: z
+    .number()
+    .nullish()
+    .transform((val) => val ?? 0),
+  items: z
+    .object({
+      label: z.string(),
+      subtitle: z.string(),
+      item: z.string(),
+      icon: z.string(),
+      isExotic: z.boolean().default(false),
+    })
+    .array()
+    .default([]),
 });
 
 // Pull Item
@@ -211,7 +225,18 @@ export const PickerSettingsSchema = z.object({
         ]),
       perk: z.string().array().optional(),
     })
-    .default({}),
+    .default({
+      weapon: [],
+      filters: [
+        "element",
+        "crafted",
+        "weapon",
+        "armor",
+        "class",
+        "perk",
+        "rarity",
+      ],
+    }),
 });
 
 export const Schemas = {

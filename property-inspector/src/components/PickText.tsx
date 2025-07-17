@@ -2,7 +2,7 @@ import { Divider, Text } from "@mantine/core";
 
 interface DropTextProps {
   selected: boolean;
-  type: "item" | "loadout";
+  type: "item" | "loadout" | "inventory-item";
 }
 
 export const PickText = ({ selected, type }: DropTextProps) => (

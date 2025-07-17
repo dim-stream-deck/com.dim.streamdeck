@@ -2,7 +2,6 @@ import { z } from "zod";
 import {
   AppSettingsSchema,
   CheckpointSettingsSchema,
-  CheckpointsSchema,
   GlobalSettingsSchema,
   LoadoutSettingsSchema,
   MaxPowerSettingsSchema,
@@ -70,8 +69,6 @@ export type CheckpointGroup = {
 // Vault
 
 export type VaultSettings = z.infer<typeof VaultSettingsSchema>;
-
-export type VaultType = VaultSettings["type"];
 
 // Pull Item
 
