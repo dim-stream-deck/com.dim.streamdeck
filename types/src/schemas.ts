@@ -31,14 +31,9 @@ export const AppSettingsSchema = z.object({
 
 export const MetricSchema = z.enum([
   "battlePass",
-  "crucible",
-  "gambit",
   "gunsmith",
-  "ironBanner",
-  "trials",
   "triumphs",
   "triumphsActive",
-  "vanguard",
 ]);
 
 export const MetricsSettingsSchema = z.object({
@@ -137,6 +132,7 @@ export const PullItemSettingsSchema = z.object({
   overlay: z.string().nullish(),
   subtitle: z.string().nullish(),
   element: z.string().nullish(),
+  tier: z.coerce.number().nullish().transform((val) => val ?? 0),
   // gestures
   keepGestureLocal: z.boolean().default(false),
   pullItemSinglePress: z.enum(["equip", "pull", "vault"]).default("equip"),

@@ -1,11 +1,6 @@
 import { ActionIcon, Divider, Group, Text, Tooltip } from "@mantine/core";
 import { useStreamDeck } from "../hooks/useStreamDeck";
-import Vanguard from "../assets/metrics/vanguard.png";
-import Crucible from "../assets/metrics/crucible.png";
-import Osiris from "../assets/metrics/osiris.png";
-import IronBanner from "../assets/metrics/iron-banner.png";
 import Gunsmith from "../assets/metrics/gunsmith.png";
-import Gambit from "../assets/metrics/gambit.png";
 import BattlePass from "../assets/metrics/battlePass.png";
 import Triumphs from "../assets/metrics/triumphs.png";
 import { SortableContext, arrayMove, useSortable } from "@dnd-kit/sortable";
@@ -32,12 +27,7 @@ import { Metric, MetricSchema, MetricsSettings } from "@plugin/types";
 
 const items = [
   { id: "battlePass", icon: BattlePass, label: "Battle Pass" },
-  { id: "vanguard", icon: Vanguard, label: "Vanguard" },
-  { id: "gambit", icon: Gambit, label: "Gambit" },
-  { id: "crucible", icon: Crucible, label: "Crucible" },
   { id: "gunsmith", icon: Gunsmith, label: "Gunsmith" },
-  { id: "ironBanner", icon: IronBanner, label: "Iron Banner" },
-  { id: "trials", icon: Osiris, label: "Trials of Osiris" },
   { id: "triumphs", icon: Triumphs, label: "Triumphs (Total score)" },
   { id: "triumphsActive", icon: Triumphs, label: "Triumphs (Active score)" },
 ] satisfies Array<{

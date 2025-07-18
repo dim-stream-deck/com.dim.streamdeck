@@ -29,6 +29,7 @@ export const ItemIcon = async (
   const cacheKey = [
     item.icon,
     item.overlay,
+    item.tier,
     options?.grayscale,
     options?.equipped,
   ];
@@ -89,6 +90,16 @@ export const ItemIcon = async (
         size - 8
       );
     }
+  }
+
+  ctx.fillStyle = "white";
+
+  for (let i = 0; i < item.tier; i++) {
+    ctx.save();
+    ctx.translate(16 + 6, 48 + i * 18 + 6);
+    ctx.rotate(Math.PI / 4);
+    ctx.fillRect(-6, -6, 12, 12);
+    ctx.restore();
   }
 
   if (options) {
