@@ -9,10 +9,13 @@ import { log } from "@/util/logger";
 @action({ UUID: "com.dim.streamdeck.search" })
 export class Search extends SingletonAction {
   async onKeyDown(e: KeyDownEvent) {
-    const { query, behavior, page } = Schemas.search(e.payload.settings);
+    const { query, behavior, append, page } = Schemas.search(
+      e.payload.settings
+    );
     DIM.search({
       query,
       page,
+      append: behavior === "search" ? append : false,
       pullItems: behavior === "pull",
       sendToVault: behavior === "send-to-vault",
     });

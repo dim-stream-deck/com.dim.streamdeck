@@ -25,6 +25,7 @@ export interface DimActions {
     query: string;
     page: string;
     pullItems: boolean;
+    append: boolean;
     sendToVault: boolean;
   }) => void;
 

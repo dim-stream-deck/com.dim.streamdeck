@@ -1,4 +1,11 @@
-import { Autocomplete, Divider, Group, SegmentedControl } from "@mantine/core";
+import {
+  Autocomplete,
+  Checkbox,
+  Divider,
+  Group,
+  SegmentedControl,
+  Switch,
+} from "@mantine/core";
 import { IconArrowBackUp, IconHandGrab, IconSearch } from "@tabler/icons-react";
 import { useStreamDeck } from "../hooks/useStreamDeck";
 import { Schemas, SearchBehavior } from "@plugin/types";
@@ -78,6 +85,17 @@ export default () => {
         onChange={(value) => setSettings({ behavior: value as SearchBehavior })}
         data={behavior}
       />
+      {settings.behavior === "search" && (
+        <>
+          <Divider labelPosition="center" my="sm" label="Additive Filter" />
+          <Switch
+            mt="sm"
+            label="Append query to existing filters"
+            checked={settings.append}
+            onChange={(e) => setSettings({ append: e.target.checked })}
+          />
+        </>
+      )}
     </div>
   );
 };

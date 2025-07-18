@@ -51,6 +51,7 @@ export const SearchSettingsSchema = z.object({
   query: z.string().default(""),
   page: z.string().default("inventory"),
   behavior: SearchBehaviorSchema.default("search"),
+  append: z.boolean().default(false),
 });
 
 // Randomize
@@ -132,7 +133,10 @@ export const PullItemSettingsSchema = z.object({
   overlay: z.string().nullish(),
   subtitle: z.string().nullish(),
   element: z.string().nullish(),
-  tier: z.coerce.number().nullish().transform((val) => val ?? 0),
+  tier: z.coerce
+    .number()
+    .nullish()
+    .transform((val) => val ?? 0),
   // gestures
   keepGestureLocal: z.boolean().default(false),
   pullItemSinglePress: z.enum(["equip", "pull", "vault"]).default("equip"),
