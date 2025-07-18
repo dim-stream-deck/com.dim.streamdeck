@@ -86,13 +86,11 @@ export const loadActivities = async () => {
 export const searchCheckpoint = (settings: CheckpointSettings) => {
   const { id, encounter } = settings;
   const key = `${id}:${encounter}`;
-  console.log(key, cps.get(key));
   return cps.get(key);
 };
 
 export const updateCheckpointsBots = async () => {
   const bots = await fetchBots();
-  console.log(bots);
   for (const bot of bots) {
     const key = `${bot.activityHash}:${bot.encounter}`;
     cps.set(key, bot.name);

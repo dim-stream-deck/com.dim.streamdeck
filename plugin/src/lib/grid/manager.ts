@@ -1,11 +1,11 @@
 import $, {
-	DialDownEvent,
-	DialRotateEvent,
-	KeyDownEvent,
-	KeyUpEvent,
-	TouchTapEvent,
-	WillAppearEvent,
-	WillDisappearEvent,
+  DialDownEvent,
+  DialRotateEvent,
+  KeyDownEvent,
+  KeyUpEvent,
+  TouchTapEvent,
+  WillAppearEvent,
+  WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { GridHelper, Encoders, Size } from "./helper";
 
