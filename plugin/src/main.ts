@@ -18,9 +18,20 @@ process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
 const server = http.createServer();
 
 server.on("request", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Private-Network", "true");
+  // Handle preflight requests
+  if (req.method === "OPTIONS") {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
   if (req.url === "/version") {
-    res.writeHead(200, { "Access-Control-Allow-Origin": "*" });
     res.end(manifest.Version);
+  } else {
+    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.end("Not Found");
   }
 });
 
