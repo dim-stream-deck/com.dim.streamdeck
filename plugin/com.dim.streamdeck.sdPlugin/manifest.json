@@ -31,7 +31,7 @@
       "DontAutoSwitchWhenInstalled": true
     },
     {
-      "Name": "DIM-Plus",
+      "Name": "DIM-Plus-v2",
       "Readonly": true,
       "DeviceType": 7,
       "DontAutoSwitchWhenInstalled": true
@@ -233,6 +233,9 @@
       "UserTitleEnabled": false,
       "Icon": "imgs/actions/tile/state",
       "Controllers": ["Keypad", "Encoder"],
+      "Encoder": {
+        "layout": "picker-layout.json"
+      },
       "States": [
         {
           "Image": "imgs/actions/tile/state",

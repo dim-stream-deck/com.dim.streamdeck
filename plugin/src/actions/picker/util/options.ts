@@ -106,5 +106,5 @@ export const Profiles = [
   undefined,
   undefined,
   undefined,
-  "-Plus",
+  "-Plus-v2",
 ];
