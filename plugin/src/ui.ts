@@ -19,7 +19,7 @@ streamDeck.ui.onSendToPlugin(async ({ payload, action }) => {
   try {
     const body =
       path === "checkpoints-activities"
-        ? getActivitiesDefinitions()
+        ? await getActivitiesDefinitions()
         : await updateSoloService(request.data.body);
     if (streamDeck.ui.action?.id === action.id) {
       await streamDeck.ui.sendToPropertyInspector({ id, status: 200, body: body ?? null });

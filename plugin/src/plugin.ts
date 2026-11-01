@@ -9,12 +9,11 @@ import {
   updateCheckpointsBots,
 } from "./actions/checkpoint/manager";
 
-/// Load activities for checkpoints
-loadActivities().then(async () => {
-  // Finally, connect to the Stream Deck.
-  await $.connect();
+// Connect before loading optional checkpoint data.
+$.connect().then(async () => {
+  await loadActivities();
   await updateCheckpointsBots();
-});
+}).catch((err) => $.logger.error("Plugin startup failed", err));
 
 // Propagate the deep link to internal event emitter
 $.system.onDidReceiveDeepLink((link) => {

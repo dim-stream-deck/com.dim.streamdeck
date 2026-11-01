@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 
-it("starts the packaged plugin and handles SDK 3 settings and inspector requests", async () => {
+it.each([false, true])("starts the packaged plugin and handles requests with stalled checkpoints=%s", async (stalled) => {
   const bundle = resolve("plugin/com.dim.streamdeck.sdPlugin");
   const temp = await mkdtemp(`${tmpdir()}/dim-runtime-`);
   const server = new WebSocketServer({ host: "127.0.0.1", port: 0 });
@@ -39,7 +39,7 @@ it("starts the packaged plugin and handles SDK 3 settings and inspector requests
       "-info",
       JSON.stringify(info),
     ],
-    { cwd: temp, stdio: ["ignore", "pipe", "pipe"] },
+    { cwd: temp, stdio: ["ignore", "pipe", "pipe"], env: { ...process.env, STALL_CHECKPOINTS: stalled ? "1" : "" } },
   );
   let output = "";
   child.stdout.on("data", (chunk) => (output += chunk));
@@ -47,7 +47,7 @@ it("starts the packaged plugin and handles SDK 3 settings and inspector requests
   try {
     const [socket] = await Promise.race([
       connection,
-      delay(5000, undefined, { ref: false }).then(() => {
+      delay(2000, undefined, { ref: false }).then(() => {
         throw new Error(`Plugin did not connect: ${output.slice(-2000)}`);
       }),
       once(child, "exit").then(([code]) => {
@@ -109,6 +109,7 @@ it("starts the packaged plugin and handles SDK 3 settings and inspector requests
         () =>
           messages.find((m) => m.event === "sendToPropertyInspector" && m.payload.id === "request")
             ?.payload,
+        { timeout: 7000 },
       )
       .toEqual({ id: "request", status: 200, body: [] });
     expect(child.exitCode).toBeNull();

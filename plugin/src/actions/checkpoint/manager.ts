@@ -6,6 +6,7 @@ import { z } from "zod";
 const cps = new Map<string, string>();
 
 const activities: CheckpointGroup[] = [];
+const activitiesLoaded = Promise.withResolvers<void>();
 
 export const definitions = new Map<string, Checkpoint>();
 
@@ -64,10 +65,12 @@ export const fetchBots = async () => {
 export const loadActivities = async () => {
   try {
     const response = await fetch(`${endpoint}/definitions.json`, {
+      signal: AbortSignal.timeout(5000),
       headers: {
         Authorization: process.env.CHECKPOINT_API_KEY!,
       },
     });
+    if (!response.ok) throw new Error(`Checkpoint definitions: HTTP ${response.status}`);
     const data = (await response.json()) as CheckpointGroup[];
     activities.length = 0;
     activities.push(...data);
@@ -80,6 +83,9 @@ export const loadActivities = async () => {
     });
   } catch (e) {
     console.error(e);
+  } finally {
+    activitiesLoaded.resolve();
+    ev.emit("checkpoints");
   }
 };
 
@@ -100,7 +106,7 @@ export const updateCheckpointsBots = async () => {
 
 setInterval(updateCheckpointsBots, 1000 * 60 * 5);
 
-export const getActivitiesDefinitions = () =>
-  [...activities.values()].map((activity) => ({
-    ...activity,
-  }));
+export const getActivitiesDefinitions = async () => {
+  await activitiesLoaded.promise;
+  return activities.map((activity) => ({ ...activity }));
+};

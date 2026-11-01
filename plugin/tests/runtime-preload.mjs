@@ -3,7 +3,14 @@ import http from "node:http";
 import https from "node:https";
 import { syncBuiltinESMExports } from "node:module";
 
-globalThis.fetch = async () => new Response("[]", { status: 404 });
+globalThis.fetch = async (_url, options) => {
+  if (process.env.STALL_CHECKPOINTS) {
+    return new Promise((_resolve, reject) => {
+      options?.signal?.addEventListener("abort", () => reject(options.signal.reason), { once: true });
+    });
+  }
+  return new Response("[]", { status: 200 });
+};
 https.request = () => {
   throw new Error("External requests disabled in smoke test");
 };

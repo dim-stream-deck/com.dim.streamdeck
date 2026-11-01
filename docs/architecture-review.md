@@ -30,11 +30,13 @@ Packaging also excludes local `state.json`, image caches, and logs. The pnpm sto
 ## Follow-up priorities
 
 1. **High: global TLS verification bypass.** `plugin/src/main.ts` sets `NODE_TLS_REJECT_UNAUTHORIZED=0`, affecting every HTTPS request. Remove the process-wide setting after verifying the checkpoint service's certificate requirements. If a private CA is required, configure that trust only for the relevant service. This migration preserves the existing network behavior; it does not resolve this security issue.
-2. **Medium: startup depends on checkpoint networking.** `plugin/src/plugin.ts` waits for `loadActivities()` before connecting to Stream Deck, and that fetch has no timeout. A stalled service can prevent unrelated actions from connecting. Connect first and load checkpoint data independently, with an explicit readiness state and a bounded timeout.
+2. **Fixed: startup depended on checkpoint networking.** The plugin now connects to Stream Deck before loading checkpoint definitions. The definitions request has a five-second timeout, including response body consumption. Inspector requests wait for the load to settle, and checkpoint buttons refresh afterward. A packaged-plugin regression test stalls the fetch and verifies registration and unrelated action settings still work; a unit test covers definitions arriving after an inspector request.
 3. **Medium: image ownership is unbounded.** `plugin/src/util/canvas.ts` keeps CanvasKit images in a module-level map without eviction or disposal. Define who owns each native image before introducing eviction, then verify memory use while repeatedly changing inventories.
 4. **Architecture: imports start services.** Importing the DIM API transitively starts the HTTP/WebSocket server and persistence timers. Move startup and shutdown into explicit functions called by the plugin entry point. Keep the message transport separate from state and action registration so tests can instantiate them without starting the process.
 
 ## Verification and limits
+
+Startup follow-up: all 11 regression tests pass, the plugin bundle builds, and `pnpm --filter plugin exec tsc --noEmit` passes. The current workspace build stops in the locally changed `tsrs` typecheck at `plugin/src/dim/api.ts:8` with TS7031; that compiler migration is outside this fix. Lint completes with existing warnings. The results below describe the original migration review.
 
 - Production builds and type checks pass under Node 26.13.0.
 - Nine regression tests pass, including a packaged-plugin test in a temporary directory with external services blocked.
