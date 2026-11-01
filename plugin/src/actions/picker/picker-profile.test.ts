@@ -26,11 +26,17 @@ it("bundles a complete Stream Deck+ picker grid on the selected page", () => {
   expect(manifest.Profiles.find((p: any) => p.DeviceType === 7).Name).toBe(name);
   const archive = `${bundle}/${name}.streamDeckProfile`;
   const entries = execFileSync("unzip", ["-Z1", archive], { encoding: "utf8" }).trim().split("\n");
-  const root = entries.find((entry) => /^[^/]+\/manifest.json$/.test(entry))!;
+  const root = entries.find((entry) => /^Profiles\/[^/]+\/manifest.json$/.test(entry))!;
   const read = (entry: string) =>
     JSON.parse(execFileSync("unzip", ["-p", archive, entry], { encoding: "utf8" }));
+  expect(read("package.json")).toMatchObject({
+    FormatVersion: 1,
+    DeviceModel: "20GBD9901",
+    RequiredPlugins: ["com.dim.streamdeck"],
+  });
   const profile = read(root);
-  const pagePath = `${root.slice(0, -"manifest.json".length)}Profiles/${profile.Pages.Current}/manifest.json`;
+  expect(profile.Version).toBe("3.0");
+  const pagePath = `${root.slice(0, -"manifest.json".length)}Profiles/${profile.Pages.Current.toUpperCase()}/manifest.json`;
   expect(entries).toContain(pagePath);
   const page = read(pagePath);
   const grid = new GridHelper({ rows: 3, columns: 4 }, { enabled: true }, vi.fn(), vi.fn());
