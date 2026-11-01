@@ -12,11 +12,11 @@ jobs:
       PLUGIN_VERSION:
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: voidzero-dev/setup-vp@v1.22.0
         with:
           node-version-file: .node-version
-          cache: pnpm
+          cache: true
+          run-install: false
 
       - name: Extract version
         id: version
