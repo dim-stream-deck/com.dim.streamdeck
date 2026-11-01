@@ -32,7 +32,7 @@ export class Vault extends SingletonAction {
     const item = items[current];
     if (item) {
       const image = await downloadAsBase64(bungify(item.icon));
-      image && action.setImage(image);
+      if (image) action.setImage(image);
       action.setTitle(`${vault?.[item.item]?.toLocaleString("en-US") ?? "?"}`);
     }
   }

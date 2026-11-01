@@ -143,7 +143,7 @@ export const onPickerActivate = (
         const id = filters[filter];
         const image =
           filter === "perk" && id !== "all"
-            ? ImageIcon(Options.perk.find((it) => it.title === id)?.image!)
+            ? ImageIcon(Options.perk.find((it) => it.title === id)?.image ?? "")
             : `./imgs/canvas/picker/${filter}/${id}.png`;
 
         grid.update(button, {

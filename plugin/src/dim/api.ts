@@ -5,7 +5,8 @@ import { PickerCategory } from "@plugin/types";
 let latestSelection = Date.now();
 
 export const DIM: DimActions = {
-  selection: ({ type } = {}) => {
+  selection: (params) => {
+    const type = params?.type;
     // This is a hack to prevent the selection reset from being sent to client after an item/loadout selection
     if (!type && Date.now() - latestSelection < 1000) return;
     latestSelection = Date.now();

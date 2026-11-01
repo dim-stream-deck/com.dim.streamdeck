@@ -119,7 +119,7 @@ export default () => {
                     }
                   />
                 </Fieldset>
-                {gestures.map((it, i) => (
+                {gestures.map((it) => (
                   <Fieldset legend={it.label}>
                     <SegmentedControl
                       fullWidth

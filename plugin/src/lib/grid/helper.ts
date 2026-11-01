@@ -153,7 +153,7 @@ export class GridHelper {
    */
   init() {
     const total = this.size.rows * this.size.columns;
-    this.buttons = [...new Array(total)].map((_, idx) => ({ idx }));
+    this.buttons = Array.from({ length: total }, (_, idx) => ({ idx }));
   }
 
   /**

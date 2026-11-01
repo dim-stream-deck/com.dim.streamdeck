@@ -23,7 +23,9 @@ export const PaginationManager = (helper: GridHelper) => {
     },
     reset: (reload = true) => {
       page = 0;
-      reload && helper.reload();
+      if (reload) {
+        helper.reload();
+      }
     },
   };
 };

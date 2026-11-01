@@ -76,7 +76,7 @@ export const loadActivities = async () => {
     activities.push(...data);
     activities.forEach((group) => {
       group.items.forEach((activity) => {
-        Object.entries(activity.ids ?? {}).forEach(([_, id]) => {
+        Object.values(activity.ids ?? {}).forEach((id) => {
           definitions.set(id, activity);
         });
       });

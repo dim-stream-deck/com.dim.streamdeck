@@ -1,6 +1,5 @@
 import {
   Autocomplete,
-  Checkbox,
   Divider,
   Group,
   SegmentedControl,

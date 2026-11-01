@@ -60,7 +60,9 @@ export const Gestures = () => {
 
       if (prevUp) {
         if (now - prevUp < 400) {
-          timeout && clearTimeout(timeout);
+          if (timeout) {
+            clearTimeout(timeout);
+          }
           keyUp.delete(id);
           keyDown.delete(id);
           ev.emit(id, "double");

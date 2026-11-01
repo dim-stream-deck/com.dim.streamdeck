@@ -69,7 +69,7 @@ export const ItemIcon = async (
         const overlayImage = decode(
           await downloadAsArrayBuffer(bungify(item.overlay))
         );
-        overlayImage && ctx.drawImage(overlayImage, 0, 0, 144, 144);
+        if (overlayImage) ctx.drawImage(overlayImage, 0, 0, 144, 144);
       }
       ctx.drawImage(rarityImage, 0, 0, 144, 144);
     }

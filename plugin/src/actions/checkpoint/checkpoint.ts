@@ -94,7 +94,9 @@ export class Checkpoint extends SingletonAction {
     if (cp) {
       const { command, paste } = await joinCommand(cp);
       clipboard.writeSync(command);
-      paste && sendCommand();
+      if (paste) {
+        sendCommand();
+      }
       e.action.showOk();
     } else {
       e.action.showAlert();

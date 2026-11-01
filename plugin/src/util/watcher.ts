@@ -12,7 +12,9 @@ export const Watcher = (event: string) => {
     },
     stop: (id: string) => {
       const listener = listeners.get(id);
-      listener && ev.off(event, listener);
+      if (listener) {
+        ev.off(event, listener);
+      }
       listeners.delete(id);
     },
   };
