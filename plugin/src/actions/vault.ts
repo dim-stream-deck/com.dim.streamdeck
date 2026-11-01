@@ -25,6 +25,7 @@ export class Vault extends SingletonAction {
     action: WillAppearEvent["action"],
     settings?: VaultSettings
   ) {
+    if (action.isNeoInfobar()) return;
     const vault = State.get("inventory");
     const { current = 0, items = [] } =
       settings ?? Schemas.vault(await action.getSettings());

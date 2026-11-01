@@ -33,6 +33,7 @@ export class SoloMode extends SingletonAction {
     e: WillAppearEvent["action"],
     action: ServiceAction
   ) => {
+    if (e.isNeoInfobar()) return;
     const status = await invoke(action);
     e.setImage(imageState(status));
   };
@@ -48,7 +49,7 @@ export class SoloMode extends SingletonAction {
   }
 }
 
-$.ui.registerRoute("update-solo-service", async (req, res) => {
+export const updateSoloService = async (action: "install" | "remove") => {
   // calc the service path outside the plugin directory (to avoid issues on update)
   const servicePath = join(process.env.APPDATA!, "./sd-solo-mode.exe");
 
@@ -57,22 +58,21 @@ $.ui.registerRoute("update-solo-service", async (req, res) => {
     await copyFile("./solo-mode/sd-solo-mode.exe", servicePath);
   }
 
-  // get the action
-  const action = req.body as ServiceAction;
-
   // run the installer/remover
   const p = exec(`start ./solo-mode/${action}-sd-solo-mode.exe`);
 
-  // verify and update the global settings
-  p.on("exit", () =>
-    setTimeout(async () => {
-      if ((await checkInstalledService()) && req.action.isKey()) {
-        const status = await invoke(action);
-        req.action.setImage(imageState(status));
-        res.send(200, "OK");
-      }
-    }, 1500)
-  );
-});
+  await new Promise<void>((resolve, reject) => {
+    p.on("error", reject);
+    p.on("exit", (code) => code === 0 ? resolve() : reject(new Error(`Service installer exited with ${code}`)));
+  });
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+  const installed = await checkInstalledService();
+  const status = installed && await invoke("status");
+  for (const key of $.actions) {
+    if (key.manifestId === "com.dim.streamdeck.solo-mode" && key.isKey()) {
+      await key.setImage(imageState(status));
+    }
+  }
+};
 
 checkInstalledService();

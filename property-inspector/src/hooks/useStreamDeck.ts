@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { GlobalSettings } from "@plugin/types";
-import $, { JsonObject } from "@elgato/streamdeck";
+import $, { JsonObject } from "../streamdeck";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { actionInfoAtom, infoAtom } from "../atoms";
@@ -38,13 +38,17 @@ export const useStreamDeck = <Settings extends JsonObject>(
   });
 
   useEffect(() => {
-    $.settings.onDidReceiveSettings<Settings>((e) => {
+    const settingsSubscription = $.settings.onDidReceiveSettings<Settings>((e) => {
       client.setQueryData(["settings"], e.payload.settings);
     });
-    $.settings.onDidReceiveGlobalSettings<GlobalSettings>((e) => {
+    const globalSubscription = $.settings.onDidReceiveGlobalSettings<GlobalSettings>((e) => {
       client.setQueryData(["global-settings"], e.settings);
     });
-  }, []);
+    return () => {
+      settingsSubscription.dispose();
+      globalSubscription.dispose();
+    };
+  }, [client]);
 
   const overrideSettings = (payload: Partial<Settings>) => {
     $.settings.setSettings(payload);

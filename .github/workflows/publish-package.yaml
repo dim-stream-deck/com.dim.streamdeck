@@ -12,7 +12,11 @@ jobs:
       PLUGIN_VERSION:
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
 
       - name: Extract version
         id: version
@@ -30,7 +34,7 @@ jobs:
 
       - name: Build
         working-directory: .
-        run: bun i && bun run build
+        run: pnpm install --frozen-lockfile && pnpm run test && pnpm run pack
         env:
           VITE_DISCORD: ${{secrets.VITE_DISCORD}}
           VITE_PATREON: ${{secrets.VITE_PATREON}}

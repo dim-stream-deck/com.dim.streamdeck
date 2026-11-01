@@ -1,7 +1,7 @@
 import { Alert, Button, Divider, Group, Text } from "@mantine/core";
 import { IconApps, IconBrandWindows, IconX } from "@tabler/icons-react";
 import { useStreamDeck } from "../hooks/useStreamDeck";
-import streamDeck from "@elgato/streamdeck";
+import streamDeck from "../streamdeck";
 import { useMutation } from "@tanstack/react-query";
 
 export default () => {

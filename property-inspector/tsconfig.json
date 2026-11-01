@@ -3,7 +3,7 @@
     "customConditions": ["browser"],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["dom", "es2022"],
+    "lib": ["dom", "es2024"],
     "module": "es2022",
     "moduleResolution": "Bundler",
     "skipLibCheck": true,
@@ -18,5 +18,9 @@
     "jsx": "react-jsx"
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }

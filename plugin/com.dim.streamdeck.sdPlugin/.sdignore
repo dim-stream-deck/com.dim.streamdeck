@@ -1,0 +1,4 @@
+logs/
+state.json
+cache.json.br
+*.log

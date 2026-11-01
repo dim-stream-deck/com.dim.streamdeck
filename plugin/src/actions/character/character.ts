@@ -1,3 +1,4 @@
+import type { JsonObject } from "@elgato/utils";
 import { Watcher } from "@/util/watcher";
 import {
   action,
@@ -16,7 +17,7 @@ import { State } from "@/state";
 export class Character extends SingletonAction {
   private watcher = Watcher("state");
 
-  private async update(e: KeyAction) {
+  private async update(e: KeyAction<JsonObject>) {
     const character = State.get("character");
     if (!character) return;
     e.setImage(await CharacterIcon(character));
@@ -25,7 +26,7 @@ export class Character extends SingletonAction {
   onWillAppear(e: WillAppearEvent) {
     if (e.action.isKey()) {
       this.update(e.action);
-      this.watcher.start(e.action.id, () => this.update(e.action as KeyAction));
+      this.watcher.start(e.action.id, () => this.update(e.action as KeyAction<JsonObject>));
     }
   }
 

@@ -1,4 +1,4 @@
-import { Container, MantineProvider } from "@mantine/core";
+import { Container, MantineProvider, v8CssVariablesResolver } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
@@ -11,6 +11,7 @@ export const render = (component: any) =>
   ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <MantineProvider
       defaultColorScheme="dark"
+      cssVariablesResolver={v8CssVariablesResolver}
       theme={{
         primaryColor: "dim",
         defaultGradient: {

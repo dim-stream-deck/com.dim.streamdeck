@@ -17,7 +17,7 @@ import { useStreamDeck } from "../hooks/useStreamDeck";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { Schemas, CheckpointGroup } from "@plugin/types";
-import $ from "@elgato/streamdeck";
+import $ from "../streamdeck";
 
 const loadDefinitions = async () => {
   const res = await $.plugin.fetch("checkpoints-activities");
@@ -109,7 +109,7 @@ export default () => {
             />
           </CardSection>
         )}
-        <Grid align="center" gutter="sm">
+        <Grid align="center" gap="sm">
           <Grid.Col span={4}>
             <Text size="sm" fw="bold">
               Difficulty

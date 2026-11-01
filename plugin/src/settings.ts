@@ -1,3 +1,4 @@
+import type { JsonObject } from "@elgato/utils";
 import $, { DialAction, KeyAction } from "@elgato/streamdeck";
 import { mergeDeep } from "remeda";
 import { GlobalSettings, GlobalSettingsSchema } from "@plugin/types";
@@ -12,4 +13,4 @@ export const setGlobalSettings = async (update: Partial<GlobalSettings>) => {
   return $.settings.setGlobalSettings(mergeDeep(settings, update));
 };
 
-export type Action = KeyAction | DialAction;
+export type Action = KeyAction<JsonObject> | DialAction<JsonObject>;

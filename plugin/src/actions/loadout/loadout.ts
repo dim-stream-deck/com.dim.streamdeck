@@ -22,6 +22,7 @@ export class Loadout extends SingletonAction {
     e: WillAppearEvent["action"],
     settings?: LoadoutSettings
   ) {
+    if (e.isNeoInfobar()) return;
     // load settings
     const { label, inGameIcon, icon } =
       settings ?? Schemas.loadout(await e.getSettings());

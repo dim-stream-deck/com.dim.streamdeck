@@ -268,7 +268,7 @@
   "Icon": "imgs/plugin/marketplace",
   "SDKVersion": 2,
   "Software": {
-    "MinimumVersion": "6.5"
+    "MinimumVersion": "7.1"
   },
   "OS": [
     {
@@ -281,7 +281,7 @@
     }
   ],
   "Nodejs": {
-    "Version": "20",
+    "Version": "26",
     "Debug": "--inspect=127.0.0.1:9999"
   },
   "UUID": "com.dim.streamdeck"

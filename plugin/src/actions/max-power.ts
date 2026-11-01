@@ -19,6 +19,7 @@ export class MaxPower extends SingletonAction {
   private watcher = Watcher("state");
 
   private async update(action: WillAppearEvent["action"], settings?: MaxPowerSettings) {
+    if (action.isNeoInfobar()) return;
     const maxPower = State.get("maxPower");
     const { type } = settings ?? Schemas.maxPower(await action.getSettings());
     action.setImage(`./imgs/canvas/max-power/${type}.png`);

@@ -12,7 +12,7 @@ import {
 	QueryClient,
 	QueryClientProvider
 } from "@tanstack/react-query";
-import streamDeck from "@elgato/streamdeck";
+import streamDeck from "./streamdeck";
 import { createStore, Provider, useAtom } from "jotai";
 import { actionInfoAtom, infoAtom } from "./atoms";
 

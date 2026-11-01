@@ -3,6 +3,7 @@ import { ev } from "@/util/ev";
 
 // Register all the actions in the `actions` directory.
 import "@/actions";
+import "./ui";
 import {
   loadActivities,
   updateCheckpointsBots,

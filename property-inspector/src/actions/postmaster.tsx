@@ -47,7 +47,7 @@ export default () => {
   const item = settings.type;
   return (
     <div>
-      <Collapse in={item === "total"}>
+      <Collapse expanded={item === "total"}>
         <Divider labelPosition="center" label="Style" mb="sm" />
         <SegmentedControl
           mb="sm"

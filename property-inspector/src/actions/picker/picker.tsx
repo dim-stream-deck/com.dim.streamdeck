@@ -95,7 +95,7 @@ export default () => {
           )}
         </Filters>
 
-        <Collapse in={picked.length < slots}>
+        <Collapse expanded={picked.length < slots}>
           <SimpleGrid spacing={8} cols={3}>
             {PickerFilterSchema.options
               .filter((it) => !picked.includes(it))

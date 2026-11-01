@@ -1,3 +1,4 @@
+import type { JsonObject } from "@elgato/utils";
 import {
   DialAction,
   DialDownEvent,
@@ -226,14 +227,14 @@ export class GridHelper {
     }
 
     if (btn.layout) {
-      const action = btn.action as DialAction;
+      const action = btn.action as DialAction<JsonObject>;
       action.setFeedbackLayout(btn.layout);
       action.setFeedback({
         image,
         title: btn.title ?? "",
       });
     } else {
-      const action = btn.action as KeyAction;
+      const action = btn.action as KeyAction<JsonObject>;
       action.setImage(image);
       action.setTitle(btn.title);
     }
@@ -273,6 +274,7 @@ export class GridHelper {
    * @param fromEncoder if the action comes from an encoder
    */
   link(e: WillAppearEvent, fromEncoder = false) {
+    if (e.action.isNeoInfobar()) return;
     const idx = this.sub2Idx(e, fromEncoder);
     const button = this.buttons[idx];
     // update the action

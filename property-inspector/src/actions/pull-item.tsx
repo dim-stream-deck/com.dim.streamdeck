@@ -17,7 +17,7 @@ import { IconAccessible, IconHandClick, IconX } from "@tabler/icons-react";
 import { PickSubText, PickText } from "../components/PickText";
 import { Schemas } from "@plugin/types";
 import { useEffect } from "react";
-import $ from "@elgato/streamdeck";
+import $ from "../streamdeck";
 
 export default () => {
   const {
@@ -33,10 +33,8 @@ export default () => {
   }
 
   useEffect(() => {
-    $.plugin.registerRoute("/selection", (req, res) => {
-      overrideSettings(req.body as any);
-      res.send(200);
-    });
+    const subscription = $.plugin.onSelection(overrideSettings);
+    return () => subscription.dispose();
   }, []);
 
   const gestures = [
@@ -101,7 +99,7 @@ export default () => {
         <PickSubText type="item" />
       </PickerCard>
 
-      <Collapse in={!settings.isSubClass && !!settings.item}>
+      <Collapse expanded={!settings.isSubClass && !!settings.item}>
         <Accordion>
           <Accordion.Item value="gestures">
             <Accordion.Control icon={<IconHandClick />}>

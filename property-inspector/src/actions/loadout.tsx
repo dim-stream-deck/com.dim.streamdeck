@@ -5,16 +5,14 @@ import { PickSubText, PickText } from "../components/PickText";
 import { IconX } from "@tabler/icons-react";
 import { Schemas } from "@plugin/types";
 import { useEffect } from "react";
-import $ from "@elgato/streamdeck";
+import $ from "../streamdeck";
 
 export default () => {
   const { settings, overrideSettings } = useStreamDeck(Schemas.loadout);
 
   useEffect(() => {
-    $.plugin.registerRoute("/selection", (req, res) => {
-      overrideSettings(req.body as any);
-      res.send(200);
-    });
+    const subscription = $.plugin.onSelection(overrideSettings);
+    return () => subscription.dispose();
   }, []);
 
   return (

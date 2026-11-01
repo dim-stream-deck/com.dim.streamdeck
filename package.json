@@ -1,22 +1,25 @@
 {
   "name": "com.dim.streamdeck",
   "version": "1.0.0",
+  "private": true,
   "description": "A Stream Deck plugin to interact with Destiny Item Manager",
-  "main": "index.js",
-  "dependencies": {
-    "prettier": "^3.6.2"
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm -r --parallel run dev",
+    "build": "pnpm run typecheck && pnpm -r run build",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm --filter plugin run build && vp test run",
+    "pack": "pnpm run build && pnpm --filter plugin pack",
+    "lint": "vp lint",
+    "format": "vp fmt"
   },
   "devDependencies": {
-    "turbo": "^2.5.5"
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2",
+    "vite-plus": "1.4.0"
   },
-  "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build"
+  "engines": {
+    "node": ">=26.13.0 <27"
   },
-  "packageManager": "bun@1.2.7",
-  "workspaces": [
-    "plugin",
-    "property-inspector",
-    "types"
-  ]
+  "packageManager": "pnpm@12.16.1"
 }

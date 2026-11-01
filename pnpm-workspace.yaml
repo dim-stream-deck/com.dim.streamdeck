@@ -1,0 +1,12 @@
+packages:
+  - plugin
+  - property-inspector
+  - types
+
+minimumReleaseAgeExclude:
+  - "@tanstack/query-core@5.105.1"
+  - "@tanstack/react-query@5.105.1"
+  - remeda@2.58.0
+
+overrides:
+  "vite@*": npm:@voidzero-dev/vite-plus-core@1.4.0

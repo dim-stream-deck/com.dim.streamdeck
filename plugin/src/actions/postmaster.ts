@@ -20,7 +20,7 @@ import { PostmasterSettings, Schemas } from "@plugin/types";
 export class Postmaster extends SingletonAction {
   private watcher = Watcher("state");
 
-  private async update(e: KeyAction, settings?: PostmasterSettings) {
+  private async update(e: KeyAction<PostmasterSettings>, settings?: PostmasterSettings) {
     const { type, style } =
       settings ?? Schemas.postmaster(await e.getSettings());
     const postmaster = State.get("postmaster");
@@ -46,7 +46,7 @@ export class Postmaster extends SingletonAction {
 
   onWillAppear(e: WillAppearEvent) {
     if (e.action.isKey()) {
-      this.watcher.start(e.action.id, () => this.update(e.action as KeyAction));
+      this.watcher.start(e.action.id, () => this.update(e.action as KeyAction<PostmasterSettings>));
     }
   }
 

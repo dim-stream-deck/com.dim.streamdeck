@@ -1,4 +1,4 @@
-import { ActionInfo, RegistrationInfo } from "@elgato/streamdeck";
+import { ActionInfo, RegistrationInfo } from "./streamdeck";
 import { atom } from "jotai";
 
 export const actionInfoAtom = atom<ActionInfo>();

@@ -11,7 +11,7 @@ import { useStreamDeck } from "../hooks/useStreamDeck";
 import patreon from "../assets/patreon.png";
 import { log } from "../logger";
 import dayjs from "dayjs";
-import $ from "@elgato/streamdeck";
+import $ from "../streamdeck";
 
 export const Support = () => {
   const { globalSettings, setGlobalSettings } = useStreamDeck();

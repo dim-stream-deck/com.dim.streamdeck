@@ -36,6 +36,7 @@ export class PullItem extends SingletonAction {
     e: WillAppearEvent["action"],
     settings?: PullItemSettings
   ) {
+    if (e.isNeoInfobar()) return;
     const { item: id, ...item } =
       settings ?? Schemas.pullItem(await e.getSettings());
 
@@ -76,7 +77,8 @@ export class PullItem extends SingletonAction {
       const settings = Schemas.pullItem(await e.action.getSettings());
 
       if (!settings.item) {
-        return e.action.showAlert();
+        if (e.action.isKey()) e.action.showAlert();
+        return;
       }
 
       const gestures = settings.keepGestureLocal ? settings : global;

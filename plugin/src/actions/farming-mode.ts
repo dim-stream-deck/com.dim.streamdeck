@@ -1,3 +1,4 @@
+import type { JsonObject } from "@elgato/utils";
 import { DIM } from "@/dim/api";
 import { ev } from "@/util/ev";
 import { State } from "@/state";
@@ -16,7 +17,7 @@ import {
 export class FarmingMode extends SingletonAction {
   private listener: any;
 
-  private update(e: KeyAction) {
+  private update(e: KeyAction<JsonObject>) {
     const farmingMode = State.get("farmingMode");
     e.setState(farmingMode ? 1 : 0);
   }
@@ -24,7 +25,7 @@ export class FarmingMode extends SingletonAction {
   onWillAppear(e: WillAppearEvent) {
     if (e.action.isKey()) {
       this.update(e.action);
-      this.listener = () => this.update(e.action as KeyAction);
+      this.listener = () => this.update(e.action as KeyAction<JsonObject>);
       ev.on("farmingMode", this.listener);
     }
   }

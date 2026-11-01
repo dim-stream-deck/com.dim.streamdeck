@@ -24,6 +24,7 @@ export class Metrics extends SingletonAction {
     action: WillAppearEvent["action"],
     settings?: MetricsSettings
   ) {
+    if (action.isNeoInfobar()) return;
     const { metric } = settings ?? Schemas.metrics(await action.getSettings());
     const metrics = State.get("metrics");
 

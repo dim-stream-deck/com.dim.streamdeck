@@ -10,8 +10,7 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
-.turbo
-.turbo.log
+.vite
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
@@ -46,6 +45,7 @@ build/Release
 
 # Dependency directories
 node_modules/
+.pnpm-store/
 jspm_packages/
 
 # Snowpack dependency directory (https://snowpack.dev/)
@@ -170,3 +170,6 @@ plugin/*/bin
 canvaskit.wasm
 state.json
 cache.json.br
+
+# Copied from clipboardy during build
+plugin/com.dim.streamdeck.sdPlugin/fallbacks/

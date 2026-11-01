@@ -14,7 +14,7 @@ import { IconTrash, IconX } from "@tabler/icons-react";
 import { PickText } from "../components/PickText";
 import { Schemas, VaultSettings } from "@plugin/types";
 import { useEffect } from "react";
-import $ from "@elgato/streamdeck";
+import $ from "../streamdeck";
 
 type VaultItem = VaultSettings["items"][number];
 
@@ -26,14 +26,14 @@ export default () => {
   }
 
   useEffect(() => {
-    $.plugin.registerRoute("/selection", (req, res) => {
-      const newItems = [...(settings.items ?? []), req.body as VaultItem];
+    const subscription = $.plugin.onSelection((item) => {
+      const newItems = [...(settings.items ?? []), item as VaultItem];
       overrideSettings({
         items: newItems,
         current: settings.current,
       });
-      res.send(200);
     });
+    return () => subscription.dispose();
   }, [settings]);
 
   return (

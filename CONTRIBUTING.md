@@ -13,8 +13,9 @@ First, thank you for contributing to **DIM Stream Deck**!
 ### Pre-requisites
 
 * Install [Git](https://git-scm.com/downloads).
-* Install [NodeJS](https://nodejs.org/).
-* Install [bun](https://bun.sh/).
+* Install [Node.js](https://nodejs.org/) 26.13.0, pinned in `.node-version`.
+* Install [pnpm](https://pnpm.io/) 12.16.1.
+* Install Stream Deck 7.1 or newer. The plugin uses Node.js 26 and Elgato SDK 3.
 
 ### Clone the repo
 
@@ -37,21 +38,31 @@ More detailed information on these steps are [here](https://docs.github.com/en/g
 
 This CLI is required to develop plugins for the Elgato Stream Deck.
 
-* Run `npm i -g @elgato/cli`
+* Run `pnpm install --frozen-lockfile` from the repository root.
+* The workspace includes the Stream Deck CLI; use `pnpm --filter plugin exec streamdeck`.
 
 ### Develop
 
-Enter the `./plugin/com.dim.streamdeck.sdPlugin` directory and
+From the repository root:
 
-* run `streamdeck link`
-* run `streamdeck dev`
+* run `pnpm --filter plugin link`
+* run `pnpm --filter plugin exec streamdeck dev`
 
-You're ready, you can now test your changes using only `cd ../.. && bun dev`.
+You're ready, you can now test your changes using only `pnpm run dev`.
 
 Usually actions on the plugin have a relative code also on [DIM](https://github.com/DestinyItemManager/DIM), follow their [contributing guidelines](https://github.com/DestinyItemManager/DIM/blob/master/docs/CONTRIBUTING.md) to setup your local instance.
 
 ### Build
 
-This step will build the plugin and generate the .streamDeckPackage file.
+Both workspaces build with Vite Plus. The plugin bundle stays CommonJS at `bin/plugin.js`; the property inspector uses relative asset URLs in `pi/`.
 
-* Run `bun build` (from the root)
+* Run `pnpm run build` to type-check and build both workspaces.
+* Run `pnpm run test` for the regression suite.
+* Run `pnpm run lint` for the quality checks. Existing warnings are tracked separately from migration failures.
+* Run `pnpm run pack` to build and generate `plugin/com.dim.streamdeck.streamDeckPlugin`.
+
+The release workflow also downloads the Windows solo-mode and macro executables. Local packaging requires those same files in `solo-mode/` and `macro/` inside the `.sdPlugin` directory.
+
+The plugin build reads its existing `.env` values and copies CanvasKit WASM and clipboard executables using package resolution, which works with pnpm. Never commit `.env` files or generated bundles containing deployment credentials.
+
+The inspector communicates through `property-inspector/src/streamdeck.ts` because Elgato removed the browser SDK export in version 2. Plugin requests are handled in `plugin/src/ui.ts`. Preserve action IDs, saved settings, and the DIM WebSocket protocol when changing these boundaries.

@@ -5,7 +5,6 @@ import $, {
   SingletonAction,
   WillAppearEvent,
   WillDisappearEvent,
-  route,
 } from "@elgato/streamdeck";
 import { CheckpointIcon } from "./checkpoint-icon";
 import clipboard from "clipboardy";
@@ -16,7 +15,6 @@ import { CheckpointSettings, GlobalSettings, Schemas } from "@plugin/types";
 import { log } from "@/util/logger";
 import {
   definitions,
-  getActivitiesDefinitions,
   searchCheckpoint,
 } from "./manager";
 
@@ -60,6 +58,7 @@ export class Checkpoint extends SingletonAction {
     e: WillAppearEvent["action"],
     settings?: CheckpointSettings
   ) {
+    if (e.isNeoInfobar()) return;
     const { id, encounter } =
       settings ?? Schemas.checkpoint(await e.getSettings());
 
@@ -102,11 +101,6 @@ export class Checkpoint extends SingletonAction {
     }
     // log action
     log("checkpoint");
-  }
-
-  @route("checkpoints-activities")
-  async getDefinitions() {
-    return getActivitiesDefinitions();
   }
 
   onDidReceiveSettings(e: DidReceiveSettingsEvent<CheckpointSettings>) {

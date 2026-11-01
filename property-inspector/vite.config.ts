@@ -1,18 +1,12 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
+import { defineConfig } from "vite-plus";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
 
 export default defineConfig({
-  plugins: [
-    tsconfigPaths(),
-    react({
-      babel: {
-        plugins: [["babel-plugin-react-compiler", {}]],
-      },
-    }),
-  ],
+  plugins: [react(), babel({ presets: [reactCompilerPreset()] })],
   base: "./",
   build: {
+    target: "chrome130",
     emptyOutDir: true,
     outDir: "../plugin/com.dim.streamdeck.sdPlugin/pi",
   },
