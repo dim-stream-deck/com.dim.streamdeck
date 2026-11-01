@@ -5,7 +5,7 @@
   "homepage": ".",
   "type": "module",
   "scripts": {
-    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json",
+    "typecheck": "tsrs --noEmit && tsrs --noEmit -p tsconfig.node.json",
     "build": "vp build",
     "dev": "vp build --watch"
   },
@@ -26,19 +26,17 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.7",
     "@elgato/utils": "^0.6.2",
     "@plugin/types": "workspace:*",
-    "@rolldown/plugin-babel": "^0.2.4",
-    "@types/babel__core": "^7.20.5",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
-    "babel-plugin-react-compiler": "^1.0.0",
+    "oxc-transform-react": "^0.156.0",
     "postcss": "^8.5.32",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
+    "tsrs": "0.20.1-ts7.1.0-beta",
     "vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
     "vite-plus": "1.4.0"
   }
