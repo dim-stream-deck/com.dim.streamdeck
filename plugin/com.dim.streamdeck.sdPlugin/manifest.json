@@ -275,7 +275,7 @@
   "CodePath": "bin/plugin.js",
   "Description": "Use Destiny Item Manager from your Stream Deck! Equip Loadouts, Pull Items, Search and much more",
   "Icon": "imgs/plugin/marketplace",
-  "SDKVersion": 2,
+  "SDKVersion": 3,
   "Software": {
     "MinimumVersion": "7.1"
   },
