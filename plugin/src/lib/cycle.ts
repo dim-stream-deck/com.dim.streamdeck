@@ -19,7 +19,7 @@ type CurrentType<T> = T extends Record<string, unknown> ? T[keyof T] : T;
 export class Cycler<const TItem, TCurrent extends CurrentType<TItem>> {
   constructor(
     private readonly items: TItem[],
-    private readonly extractor?: (item: TItem) => TCurrent
+    private readonly extractor?: (item: TItem) => TCurrent,
   ) {}
 
   private obtain(current: TCurrent | undefined, direction: 1 | -1) {

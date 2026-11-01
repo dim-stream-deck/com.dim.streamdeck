@@ -6,5 +6,5 @@ const ManifestSchema = z.object({
 });
 
 export const manifest = ManifestSchema.parse(
-  JSON.parse(fs.readFileSync("./manifest.json", "utf-8"))
+  JSON.parse(fs.readFileSync("./manifest.json", "utf-8")),
 );

@@ -33,21 +33,15 @@ export const DIM: DimActions = {
 
   randomize: (args) => sendToWeb({ action: "randomize", ...args }),
 
-  requestPickerItems: (args) =>
-    sendToWeb({ action: "requestPickerItems", ...args }),
+  requestPickerItems: (args) => sendToWeb({ action: "requestPickerItems", ...args }),
 
   requestPerks: () => sendToWeb({ action: "requestPerks" }),
 };
 
-export const buildQuery = (
-  filters: Record<string, string | undefined>,
-  type: PickerCategory
-) => {
+export const buildQuery = (filters: Record<string, string | undefined>, type: PickerCategory) => {
   const stringified = Object.entries(filters)
     .filter(([, it]) => Boolean(it) && it !== "all")
-    .map(([key, value]) =>
-      key === "perk" ? `exactperk:"${value}"` : `is:${value}`
-    )
+    .map(([key, value]) => (key === "perk" ? `exactperk:"${value}"` : `is:${value}`))
     .join(" ");
   const prefix = type === "all" ? ["is:weapon", "is:armor"] : [`is:${type}`];
   return `(${prefix.join(" or ")}) ` + stringified;

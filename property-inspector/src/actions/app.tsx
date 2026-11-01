@@ -1,11 +1,6 @@
 import { Divider, Group, SegmentedControl, Stack, Switch } from "@mantine/core";
 import { useStreamDeck } from "../hooks/useStreamDeck";
-import {
-  IconBrandChrome,
-  IconBrandEdge,
-  IconBrandWindows,
-  IconBrowser,
-} from "@tabler/icons-react";
+import { IconBrandChrome, IconBrandEdge, IconBrandWindows, IconBrowser } from "@tabler/icons-react";
 import { AppType, AppTypeSchema, Schemas } from "@plugin/types";
 
 const Options = [

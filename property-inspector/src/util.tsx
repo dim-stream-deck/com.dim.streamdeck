@@ -75,5 +75,5 @@ export const render = (component: any) =>
       <Container fluid ml={50} mt={16}>
         {component}
       </Container>
-    </MantineProvider>
+    </MantineProvider>,
   );

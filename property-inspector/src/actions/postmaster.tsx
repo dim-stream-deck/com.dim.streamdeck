@@ -1,12 +1,4 @@
-import {
-  Avatar,
-  Collapse,
-  Divider,
-  Group,
-  SegmentedControl,
-  Switch,
-  Text,
-} from "@mantine/core";
+import { Avatar, Collapse, Divider, Group, SegmentedControl, Switch, Text } from "@mantine/core";
 import { useStreamDeck } from "../hooks/useStreamDeck";
 import Shard from "../assets/postmaster/shard.jpg";
 import Spoils from "../assets/postmaster/spoils.jpg";
@@ -54,9 +46,7 @@ export default () => {
           fullWidth
           orientation="vertical"
           value={settings.style}
-          onChange={(value) =>
-            setSettings({ style: CounterStyleSchema.parse(value) })
-          }
+          onChange={(value) => setSettings({ style: CounterStyleSchema.parse(value) })}
           data={styles.map((it) => ({
             value: it.value,
             label: (
@@ -71,9 +61,7 @@ export default () => {
         <Switch
           label="Collect items on tap"
           checked={settings.collectPostmaster}
-          onChange={(e) =>
-            setSettings({ collectPostmaster: e.currentTarget.checked })
-          }
+          onChange={(e) => setSettings({ collectPostmaster: e.currentTarget.checked })}
         />
       </Collapse>
       <Divider labelPosition="center" label="Item" my="sm" />
@@ -81,9 +69,7 @@ export default () => {
         fullWidth
         orientation="vertical"
         value={settings.type}
-        onChange={(value) =>
-          setSettings({ type: PostmasterTypeSchema.parse(value) })
-        }
+        onChange={(value) => setSettings({ type: PostmasterTypeSchema.parse(value) })}
         data={resources.map((it) => ({
           value: it.value,
           label: (

@@ -18,7 +18,8 @@ it("shares concurrent downloads and reuses completed bytes", async () => {
 });
 
 it("retries HTTP failures and rejected downloads", async () => {
-  const fetch = vi.fn()
+  const fetch = vi
+    .fn()
     .mockResolvedValueOnce(new Response(null, { status: 503 }))
     .mockRejectedValueOnce(new Error("offline"))
     .mockResolvedValueOnce(new Response(new Uint8Array([1])));

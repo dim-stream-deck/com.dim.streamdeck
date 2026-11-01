@@ -74,7 +74,7 @@ export const Gestures = () => {
             keyUp.delete(id);
             keyDown.delete(id);
             ev.emit(id, "single");
-          }, 400)
+          }, 400),
         );
       }
     },

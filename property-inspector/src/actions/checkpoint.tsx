@@ -31,13 +31,8 @@ const difficulties = [
 ];
 
 export default () => {
-  const {
-    globalSettings,
-    overrideSettings,
-    setGlobalSettings,
-    settings,
-    setSettings,
-  } = useStreamDeck(Schemas.checkpoint);
+  const { globalSettings, overrideSettings, setGlobalSettings, settings, setSettings } =
+    useStreamDeck(Schemas.checkpoint);
 
   const { data = [] } = useQuery({
     queryKey: ["checkpoints"],
@@ -54,9 +49,9 @@ export default () => {
             ...item,
             difficulty: key,
           },
-        ])
-      )
-    )
+        ]),
+      ),
+    ),
   );
 
   const [difficulty, setDifficulty] = useState("standard");
@@ -65,9 +60,7 @@ export default () => {
     return data.map(({ group, items }) => ({
       group,
       items: items
-        .filter((item) =>
-          difficulty === "master" ? item.ids.master : item.ids.standard
-        )
+        .filter((item) => (difficulty === "master" ? item.ids.master : item.ids.standard))
         .map((item) => ({
           label: item.name,
           value: item.ids[difficulty as "standard" | "master"],
@@ -90,9 +83,7 @@ export default () => {
     }
   }, [checkpoint]);
 
-  const image = checkpoint
-    ? `${checkpoint.images}/${settings.encounter}.webp`
-    : undefined;
+  const image = checkpoint ? `${checkpoint.images}/${settings.encounter}.webp` : undefined;
 
   return (
     <Stack gap="sm" mb="sm">
@@ -100,13 +91,7 @@ export default () => {
       <Card withBorder radius="md">
         {image && (
           <CardSection pb="md">
-            <Image
-              draggable={false}
-              alt="Step image"
-              src={image}
-              width="100%"
-              height="auto"
-            />
+            <Image draggable={false} alt="Step image" src={image} width="100%" height="auto" />
           </CardSection>
         )}
         <Grid align="center" gap="sm">
@@ -178,38 +163,30 @@ export default () => {
           placeholder="/join"
           variant="filled"
           defaultValue={globalSettings.checkpointJoinPrefix}
-          onChange={(e) =>
-            setGlobalSettings({ checkpointJoinPrefix: e.target.value })
-          }
+          onChange={(e) => setGlobalSettings({ checkpointJoinPrefix: e.target.value })}
         />
         <Text c="dimmed" size="sm">
           Checkpoint#1111
         </Text>
       </Group>
       <Text c="dimmed" size="sm">
-        *This field should be filled only if you don't use{" "}
-        <strong>English</strong> as your game language.
+        *This field should be filled only if you don't use <strong>English</strong> as your game
+        language.
       </Text>
       <Divider labelPosition="center" label="Type in chat" />
       <Switch
         label="Paste the command"
         checked={globalSettings.checkpointPaste}
-        onChange={(e) =>
-          setGlobalSettings({ checkpointPaste: e.target.checked })
-        }
+        onChange={(e) => setGlobalSettings({ checkpointPaste: e.target.checked })}
       />
       <Text size="sm" c="dimmed">
-        If enabled, you can press this button to write the join command. Just
-        remember to open the game chat 🤣.
+        If enabled, you can press this button to write the join command. Just remember to open the
+        game chat 🤣.
       </Text>
       <Divider labelPosition="center" label="Credits" />
       <Text c="dimmed">
         Checkpoints are provided by{" "}
-        <Anchor
-          td="underline"
-          href={`https://${import.meta.env.VITE_CHECKPOINTS}`}
-          target="_blank"
-        >
+        <Anchor td="underline" href={`https://${import.meta.env.VITE_CHECKPOINTS}`} target="_blank">
           {import.meta.env.VITE_CHECKPOINTS}
         </Anchor>
         , <strong>donate</strong> to them if you can!

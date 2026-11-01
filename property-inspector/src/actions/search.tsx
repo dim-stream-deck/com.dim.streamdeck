@@ -1,10 +1,4 @@
-import {
-  Autocomplete,
-  Divider,
-  Group,
-  SegmentedControl,
-  Switch,
-} from "@mantine/core";
+import { Autocomplete, Divider, Group, SegmentedControl, Switch } from "@mantine/core";
 import { IconArrowBackUp, IconHandGrab, IconSearch } from "@tabler/icons-react";
 import { useStreamDeck } from "../hooks/useStreamDeck";
 import { Schemas, SearchBehavior } from "@plugin/types";

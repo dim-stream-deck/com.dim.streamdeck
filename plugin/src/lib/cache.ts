@@ -90,8 +90,7 @@ export const Cache = <TCacheType extends string | number | boolean>({
   });
 
   if (save) {
-    const path =
-      typeof save === "object" && save.path ? save.path : "./cache.json.br";
+    const path = typeof save === "object" && save.path ? save.path : "./cache.json.br";
 
     const every = typeof save === "object" && save.every ? save.every : "10m";
 
@@ -127,7 +126,6 @@ export const Cache = <TCacheType extends string | number | boolean>({
   return {
     get: (key: KeyPart | KeyPart[]) => cache.get(flat(key)) ?? defaultValue,
     has: (key: KeyPart | KeyPart[]) => cache.has(flat(key)),
-    set: (key: KeyPart | KeyPart[], value: TCacheType) =>
-      cache.set(flat(key), value),
+    set: (key: KeyPart | KeyPart[], value: TCacheType) => cache.set(flat(key), value),
   };
 };

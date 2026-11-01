@@ -1,13 +1,4 @@
-import {
-  ActionIcon,
-  Divider,
-  Flex,
-  Group,
-  Image,
-  Stack,
-  Text,
-  ThemeIcon,
-} from "@mantine/core";
+import { ActionIcon, Divider, Flex, Group, Image, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useStreamDeck } from "../hooks/useStreamDeck";
 import { PickerCard } from "../components/PickerCard";
 import { IconTrash, IconX } from "@tabler/icons-react";

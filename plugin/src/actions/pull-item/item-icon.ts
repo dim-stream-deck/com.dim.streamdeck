@@ -1,16 +1,6 @@
 import { cache } from "@/util/cache";
-import {
-  CanvasKit,
-  grayscale,
-  withCanvas,
-} from "@/util/canvas";
-import {
-  bungify,
-  crafted,
-  equippedMark,
-  exotic,
-  legendary,
-} from "@/util/images";
+import { CanvasKit, grayscale, withCanvas } from "@/util/canvas";
+import { bungify, crafted, equippedMark, exotic, legendary } from "@/util/images";
 import { downloadAsArrayBuffer } from "@/lib/image";
 import { PullItemSettings } from "@plugin/types";
 import { EmulatedCanvas2DContext } from "canvaskit-wasm";
@@ -20,10 +10,7 @@ interface ItemIconOptions {
   equipped?: boolean;
 }
 
-export const itemIconCacheKey = (
-  item: PullItemSettings,
-  options?: ItemIconOptions
-) => [
+export const itemIconCacheKey = (item: PullItemSettings, options?: ItemIconOptions) => [
   "item-v2",
   item.icon,
   item.overlay,
@@ -36,10 +23,7 @@ export const itemIconCacheKey = (
   options?.equipped ?? false,
 ];
 
-export const ItemIcon = async (
-  item: PullItemSettings,
-  options?: ItemIconOptions
-) => {
+export const ItemIcon = async (item: PullItemSettings, options?: ItemIconOptions) => {
   // Check if the image is already cached
   const cacheKey = itemIconCacheKey(item, options);
   if (cache.has(cacheKey)) {
@@ -57,27 +41,21 @@ export const ItemIcon = async (
   return withCanvas(Canvas, 144, 144, async (canvas, decode) => {
     const ctx = canvas.getContext("2d") as EmulatedCanvas2DContext;
     const image = decode(source);
-    const rarityImage = decode(
-      item.isCrafted ? crafted : item.isExotic ? exotic : legendary
-    );
+    const rarityImage = decode(item.isCrafted ? crafted : item.isExotic ? exotic : legendary);
 
     ctx.drawImage(image, 0, 0, 144, 144);
 
     // skip some overlay stuff for subclasses
     if (!item.isSubClass) {
       if (item.overlay) {
-        const overlayImage = decode(
-          await downloadAsArrayBuffer(bungify(item.overlay))
-        );
+        const overlayImage = decode(await downloadAsArrayBuffer(bungify(item.overlay)));
         if (overlayImage) ctx.drawImage(overlayImage, 0, 0, 144, 144);
       }
       ctx.drawImage(rarityImage, 0, 0, 144, 144);
     }
 
     if (item.element) {
-      const elementImage = decode(
-        await downloadAsArrayBuffer(bungify(item.element))
-      );
+      const elementImage = decode(await downloadAsArrayBuffer(bungify(item.element)));
       const size = 32;
       const circle = size + 8;
       if (elementImage) {
@@ -89,17 +67,11 @@ export const ItemIcon = async (
           144 - circle - 8 + circle / 2,
           circle / 2,
           0,
-          2 * Math.PI
+          2 * Math.PI,
         );
         ctx.fill();
         ctx.globalAlpha = 1;
-        ctx.drawImage(
-          elementImage,
-          144 - size - 8,
-          144 - size - 8,
-          size - 8,
-          size - 8
-        );
+        ctx.drawImage(elementImage, 144 - size - 8, 144 - size - 8, size - 8, size - 8);
       }
     }
 

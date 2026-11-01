@@ -39,7 +39,7 @@ export const setupProfileGrid = ({
       () => {
         grids.delete(device);
         streamDeck.profiles.switchToProfile(device);
-      }
+      },
     );
     grids.set(device, grid);
   }
@@ -54,7 +54,7 @@ export const getGrid = (
     | TouchTapEvent
     | DialDownEvent
     | DialRotateEvent
-    | KeyDownEvent
+    | KeyDownEvent,
 ) => {
   return grids.get(e.action.device.id);
 };

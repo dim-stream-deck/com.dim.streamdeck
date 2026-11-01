@@ -8,9 +8,7 @@ import { log } from "@/util/logger";
  * @param env of the application (beta or app)
  */
 const openPWA = (beta: boolean, isEdge = false) => {
-  const appId = beta
-    ? "enmhfhfpkdkdgbhjafjkkfdmeopcfiig"
-    : "aeeidfelonceeehdppacnjlimhoneige";
+  const appId = beta ? "enmhfhfpkdkdgbhjafjkkfdmeopcfiig" : "aeeidfelonceeehdppacnjlimhoneige";
 
   if (isEdge) {
     return exec(`start msedge --app-id=${appId}`, {});
@@ -44,9 +42,7 @@ export class App extends SingletonAction {
     // open the app
     switch (open) {
       case "browser":
-        $.system.openUrl(
-          `https://${beta ? "beta" : "app"}.destinyitemmanager.com`
-        );
+        $.system.openUrl(`https://${beta ? "beta" : "app"}.destinyitemmanager.com`);
         break;
       case "chrome":
       case "edge":

@@ -82,6 +82,6 @@ export const readAsBase64 = (path: string) => {
   const parts = path.split(".");
   return toBase64(
     file.buffer.slice(file.byteOffset, file.byteOffset + file.byteLength),
-    `image/${parts.at(-1)}`
+    `image/${parts.at(-1)}`,
   );
 };

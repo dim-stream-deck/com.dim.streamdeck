@@ -11,7 +11,10 @@ afterEach(() => {
 it("waits for definitions and refreshes visible checkpoints when they arrive", async () => {
   vi.useFakeTimers();
   const response = Promise.withResolvers<Response>();
-  vi.stubGlobal("fetch", vi.fn(() => response.promise));
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(() => response.promise),
+  );
   const { loadActivities, getActivitiesDefinitions, definitions } = await import("./manager");
   const refresh = vi.fn();
   ev.on("checkpoints", refresh);

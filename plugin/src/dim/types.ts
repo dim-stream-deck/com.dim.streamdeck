@@ -3,23 +3,15 @@ export interface DimActions {
 
   toggleFarmingMode: () => void;
 
-  selection: (params?: {
-    type?: "item" | "inventory-item" | "loadout";
-  }) => void;
+  selection: (params?: { type?: "item" | "inventory-item" | "loadout" }) => void;
 
-  equipLoadout: (params: {
-    loadout: string;
-    character: string | "vault";
-  }) => void;
+  equipLoadout: (params: { loadout: string; character: string | "vault" }) => void;
 
   equipMaxPower: () => void;
 
   collectPostmaster: () => void;
 
-  pullItem: (params: {
-    itemId: string;
-    type: "equip" | "pull" | "vault";
-  }) => void;
+  pullItem: (params: { itemId: string; type: "equip" | "pull" | "vault" }) => void;
 
   search: (params: {
     query: string;

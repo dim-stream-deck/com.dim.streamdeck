@@ -24,7 +24,7 @@ export const LockManager = (helper: GridHelper) => {
         return range(0, helper.size.rows).map((i) => i * helper.size.columns);
       case "last-column":
         return range(0, helper.size.rows).map(
-          (i) => i * helper.size.columns + helper.size.columns - 1
+          (i) => i * helper.size.columns + helper.size.columns - 1,
         );
     }
     return [];
@@ -42,11 +42,10 @@ export const LockManager = (helper: GridHelper) => {
    * Lock the given buttons
    * @param lock the lock to apply
    */
-  const add = (
-    lock: Lock,
-    { start, count }: { start?: number; count?: number }
-  ) => {
-    const buttons = get(lock).slice(start ?? 0, count ? count + 1 : undefined).filter(Boolean);
+  const add = (lock: Lock, { start, count }: { start?: number; count?: number }) => {
+    const buttons = get(lock)
+      .slice(start ?? 0, count ? count + 1 : undefined)
+      .filter(Boolean);
     buttons.forEach((btn) => {
       btn.locked = true;
     });

@@ -16,8 +16,8 @@ export const withCanvas = async (
   height: number,
   render: (
     canvas: EmulatedCanvas2D,
-    decode: (bytes: ArrayBuffer | null) => Image | null
-  ) => Promise<string>
+    decode: (bytes: ArrayBuffer | null) => Image | null,
+  ) => Promise<string>,
 ) => {
   const canvas = kit.MakeCanvas(width, height);
   const images: Image[] = [];

@@ -20,13 +20,8 @@ import { useEffect } from "react";
 import $ from "../streamdeck";
 
 export default () => {
-  const {
-    settings,
-    overrideSettings,
-    setSettings,
-    globalSettings,
-    setGlobalSettings,
-  } = useStreamDeck(Schemas.pullItem);
+  const { settings, overrideSettings, setSettings, globalSettings, setGlobalSettings } =
+    useStreamDeck(Schemas.pullItem);
 
   if (!settings || !globalSettings) {
     return;
@@ -52,13 +47,9 @@ export default () => {
     },
   ] as const;
 
-  const gesturesSettings = settings.keepGestureLocal
-    ? settings
-    : globalSettings;
+  const gesturesSettings = settings.keepGestureLocal ? settings : globalSettings;
 
-  const setGestures = settings.keepGestureLocal
-    ? setSettings
-    : setGlobalSettings;
+  const setGestures = settings.keepGestureLocal ? setSettings : setGlobalSettings;
 
   return (
     <Stack gap="sm">
@@ -102,9 +93,7 @@ export default () => {
       <Collapse expanded={!settings.isSubClass && !!settings.item}>
         <Accordion>
           <Accordion.Item value="gestures">
-            <Accordion.Control icon={<IconHandClick />}>
-              Gestures
-            </Accordion.Control>
+            <Accordion.Control icon={<IconHandClick />}>Gestures</Accordion.Control>
             <Accordion.Panel>
               <Stack>
                 <Fieldset legend="Local Gestures">
@@ -146,8 +135,7 @@ export default () => {
                             }
                           />
                           <Text c="dimmed" size="sm">
-                            if the item is already equipped send it to the{" "}
-                            <strong>vault</strong>
+                            if the item is already equipped send it to the <strong>vault</strong>
                           </Text>
                         </Group>
                       </>
@@ -158,9 +146,7 @@ export default () => {
             </Accordion.Panel>
           </Accordion.Item>
           <Accordion.Item value="accessibility">
-            <Accordion.Control icon={<IconAccessible />}>
-              Accessibility
-            </Accordion.Control>
+            <Accordion.Control icon={<IconAccessible />}>Accessibility</Accordion.Control>
             <Accordion.Panel>
               <Switch
                 mt="xs"

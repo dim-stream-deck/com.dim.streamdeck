@@ -1,12 +1,5 @@
 import { DIM, buildQuery } from "@/dim/api";
-import {
-  Armor,
-  Classes,
-  Crafted,
-  Elements,
-  Rarity,
-  WeaponButtons,
-} from "./options";
+import { Armor, Classes, Crafted, Elements, Rarity, WeaponButtons } from "./options";
 import { ItemIcon } from "@/actions/pull-item/item-icon";
 import { ev } from "@/util/ev";
 import { KeyDownEvent } from "@elgato/streamdeck";
@@ -23,13 +16,7 @@ type OptionCell = {
   image: string;
 };
 
-const useDisclosure = ({
-  onOpen,
-  onClose,
-}: {
-  onOpen: () => void;
-  onClose: () => void;
-}) => {
+const useDisclosure = ({ onOpen, onClose }: { onOpen: () => void; onClose: () => void }) => {
   const stack = new Set<string>();
   let open: string | undefined;
   return {
@@ -56,7 +43,7 @@ export const onPickerActivate = (
   grid: GridHelper,
   device: string,
   settings: PickerSettings,
-  action: KeyDownEvent["action"]
+  action: KeyDownEvent["action"],
 ) => {
   // init the grid
   grid.init();
@@ -80,15 +67,13 @@ export const onPickerActivate = (
 
   // cleanup weapon keys
   if (settings.options.weapon) {
-    const keys = new Set(
-      settings.options.weapon.map((it) => it.replace("-", ""))
-    );
+    const keys = new Set(settings.options.weapon.map((it) => it.replace("-", "")));
     Options.weapon = Options.weapon.filter((it) => it.id && keys.has(it.id));
   }
 
   // init filters
   const filters: Record<string, string | undefined> = Object.fromEntries(
-    settings.filters.map((it) => [it, settings.defaultOptions[it]])
+    settings.filters.map((it) => [it, settings.defaultOptions[it]]),
   );
 
   const updateNavigation = () => {
@@ -181,8 +166,8 @@ export const onPickerActivate = (
           id: item.item,
           image: () => ItemIcon(item),
           loader: item.isExotic ? Loaders.exotic : Loaders.legendary,
-        }))
-      )
+        })),
+      ),
     );
   };
 
@@ -207,9 +192,7 @@ export const onPickerActivate = (
         const options = Options[button.type];
         // cycle through elements
         const cycler = new Cycler(options, (it) => it.id);
-        const next = cycler[button.clockwise === false ? "before" : "after"](
-          button.id
-        );
+        const next = cycler[button.clockwise === false ? "before" : "after"](button.id);
         // update the filter
         filters[button.type] = next.id;
         // refresh the button
@@ -226,16 +209,13 @@ export const onPickerActivate = (
         grid.fill(
           settings.options.filters?.map((filter) => {
             const id = filters[filter] ?? "all";
-            const option = Options[filter]?.find(
-              (it) => (it.id ?? it.title) === id
-            );
+            const option = Options[filter]?.find((it) => (it.id ?? it.title) === id);
             return {
               id,
-              image:
-                option?.image ?? `./imgs/canvas/picker/${filter}/${id}.png`,
+              image: option?.image ?? `./imgs/canvas/picker/${filter}/${id}.png`,
               type: filter as PickerFilterType,
             };
-          })
+          }),
         );
         break;
       case "perk":

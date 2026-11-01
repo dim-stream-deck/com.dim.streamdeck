@@ -20,12 +20,7 @@ export default () => {
       <div>
         <Group>
           {settings.icon ? (
-            <Image
-              radius="md"
-              w={64}
-              h={64}
-              src={`https://bungie.net${settings.icon}`}
-            />
+            <Image radius="md" w={64} h={64} src={`https://bungie.net${settings.icon}`} />
           ) : settings.inGameIcon ? (
             <Image
               style={{

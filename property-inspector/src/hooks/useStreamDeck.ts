@@ -19,7 +19,7 @@ export const useSize = () => {
 };
 
 export const useStreamDeck = <Settings extends JsonObject>(
-  validator?: (data: unknown) => Settings
+  validator?: (data: unknown) => Settings,
 ) => {
   const [info] = useAtom(infoAtom);
   const [action] = useAtom(actionInfoAtom);
@@ -64,9 +64,7 @@ export const useStreamDeck = <Settings extends JsonObject>(
     client.setQueryData(["settings"], value);
   };
 
-  const setGlobalSettings = async (
-    partialSettings: Partial<GlobalSettings>
-  ) => {
+  const setGlobalSettings = async (partialSettings: Partial<GlobalSettings>) => {
     const value = {
       ...globalSettings,
       ...partialSettings,

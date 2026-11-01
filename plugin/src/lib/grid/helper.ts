@@ -50,11 +50,7 @@ export type Size = {
   columns: number;
 };
 
-type ImagePromised =
-  | string
-  | null
-  | undefined
-  | Promise<string | null | undefined>;
+type ImagePromised = string | null | undefined | Promise<string | null | undefined>;
 
 export type GridExtension = {
   setup: (grid: GridHelper) => void;
@@ -76,7 +72,7 @@ export class GridHelper {
     public readonly size: Size,
     public readonly encoders: Encoders,
     private readonly openGrid: () => void,
-    private readonly destroyGrid: () => void
+    private readonly destroyGrid: () => void,
   ) {}
 
   /**
@@ -138,12 +134,11 @@ export class GridHelper {
       | KeyUpEvent
       | TouchTapEvent
       | DialRotateEvent,
-    fromEncoder = false
+    fromEncoder = false,
   ) {
     const coords = e.payload as unknown as ActionCoordinates;
     return (
-      (fromEncoder ? this.size.rows - 1 : coords.coordinates.row) *
-        this.size.columns +
+      (fromEncoder ? this.size.rows - 1 : coords.coordinates.row) * this.size.columns +
       coords.coordinates.column
     );
   }
@@ -166,7 +161,7 @@ export class GridHelper {
     cells: Cell[],
     options?: {
       keepPage?: boolean;
-    }
+    },
   ) {
     this.cells = cells;
     if (options?.keepPage) {
@@ -191,7 +186,7 @@ export class GridHelper {
           // reset the button
           ResetAction,
           // apply the cell
-          this.cells[idx++] ?? {}
+          this.cells[idx++] ?? {},
         );
       }
     });
@@ -210,8 +205,7 @@ export class GridHelper {
     if (!btn.action) return;
 
     // load the image if it's a promise
-    let imageRes: ImagePromised =
-      typeof btn.image === "function" ? btn.image() : btn.image;
+    let imageRes: ImagePromised = typeof btn.image === "function" ? btn.image() : btn.image;
 
     // show a loader if the image is not ready
     if (typeof imageRes !== "string" && btn.loader) {
@@ -324,10 +318,7 @@ export class GridHelper {
    * @param e the event
    * @param fromEncoder if the action comes from an encoder
    */
-  onPress(
-    e: KeyDownEvent | DialDownEvent | KeyUpEvent | TouchTapEvent,
-    fromEncoder = false
-  ) {
+  onPress(e: KeyDownEvent | DialDownEvent | KeyUpEvent | TouchTapEvent, fromEncoder = false) {
     const idx = this.sub2Idx(e, fromEncoder);
     const btn = this.buttons[idx];
 

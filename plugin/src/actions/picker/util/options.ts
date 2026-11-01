@@ -68,24 +68,11 @@ export const Elements = expandDefinitions("element", [
   "kinetic",
 ]);
 
-export const Crafted = expandDefinitions("crafted", [
-  "all",
-  "crafted",
-  "randomroll",
-]);
+export const Crafted = expandDefinitions("crafted", ["all", "crafted", "randomroll"]);
 
-export const Classes = expandDefinitions("class", [
-  "all",
-  "warlock",
-  "titan",
-  "hunter",
-]);
+export const Classes = expandDefinitions("class", ["all", "warlock", "titan", "hunter"]);
 
-export const Rarity = expandDefinitions("rarity", [
-  "all",
-  "exotic",
-  "legendary",
-]);
+export const Rarity = expandDefinitions("rarity", ["all", "exotic", "legendary"]);
 
 export const Armor = expandDefinitions("armor", [
   "all",
@@ -98,13 +85,4 @@ export const Armor = expandDefinitions("armor", [
 
 // Profile Suffixes
 
-export const Profiles = [
-  "",
-  "-Mini",
-  "-XL",
-  "",
-  undefined,
-  undefined,
-  undefined,
-  "-Plus-v2",
-];
+export const Profiles = ["", "-Mini", "-XL", "", undefined, undefined, undefined, "-Plus-v2"];

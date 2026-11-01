@@ -5,7 +5,7 @@ import { log } from "../logger";
 export const useDroppable = (
   type: string,
   onSelect: (data: Record<string, any>) => void,
-  onError: (error: Error, dt: string) => void
+  onError: (error: Error, dt: string) => void,
 ) => {
   const [isOver, setIsOver] = useState(false);
 
@@ -34,7 +34,7 @@ export const useDroppable = (
         });
       }
     },
-    [type, onSelect]
+    [type, onSelect],
   );
 
   const onDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {

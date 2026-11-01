@@ -1,9 +1,4 @@
-import {
-  action,
-  KeyDownEvent,
-  SingletonAction,
-  WillAppearEvent,
-} from "@elgato/streamdeck";
+import { action, KeyDownEvent, SingletonAction, WillAppearEvent } from "@elgato/streamdeck";
 import { exec } from "child_process";
 import { checkInstalledService } from "./service";
 import { log } from "@/util/logger";
@@ -20,8 +15,7 @@ const invoke = async (action: ServiceAction) => {
   return status === "true";
 };
 
-const imageState = (status: boolean) =>
-  `./imgs/canvas/solo-mode/${status ? "on" : "off"}.png`;
+const imageState = (status: boolean) => `./imgs/canvas/solo-mode/${status ? "on" : "off"}.png`;
 
 /**
  * Trigger the solo mode status (if the Windows services is running)
@@ -29,10 +23,7 @@ const imageState = (status: boolean) =>
 @action({ UUID: "com.dim.streamdeck.solo-mode" })
 export class SoloMode extends SingletonAction {
   // update the state of the button
-  private updateState = async (
-    e: WillAppearEvent["action"],
-    action: ServiceAction
-  ) => {
+  private updateState = async (e: WillAppearEvent["action"], action: ServiceAction) => {
     if (e.isNeoInfobar()) return;
     const status = await invoke(action);
     e.setImage(imageState(status));
@@ -63,11 +54,13 @@ export const updateSoloService = async (action: "install" | "remove") => {
 
   await new Promise<void>((resolve, reject) => {
     p.on("error", reject);
-    p.on("exit", (code) => code === 0 ? resolve() : reject(new Error(`Service installer exited with ${code}`)));
+    p.on("exit", (code) =>
+      code === 0 ? resolve() : reject(new Error(`Service installer exited with ${code}`)),
+    );
   });
   await new Promise((resolve) => setTimeout(resolve, 1500));
   const installed = await checkInstalledService();
-  const status = installed && await invoke("status");
+  const status = installed && (await invoke("status"));
   for (const key of $.actions) {
     if (key.manifestId === "com.dim.streamdeck.solo-mode" && key.isKey()) {
       await key.setImage(imageState(status));

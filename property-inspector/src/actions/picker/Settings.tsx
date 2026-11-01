@@ -112,14 +112,10 @@ export const WeaponSettings = ({ value, onChange }: SettingsProps) => {
 
 // Filters
 
-const filtersOptions = PickerFilterSchema.options.filter(
-  (it) => it !== "filters"
-);
+const filtersOptions = PickerFilterSchema.options.filter((it) => it !== "filters");
 
 export const FiltersSettings = ({ picked, value, onChange }: SettingsProps) => {
-  const selected = (value ?? filtersOptions).filter(
-    (it) => !picked.includes(it)
-  );
+  const selected = (value ?? filtersOptions).filter((it) => !picked.includes(it));
   return (
     <Checkbox.Group defaultValue={selected} onChange={onChange}>
       <Stack>

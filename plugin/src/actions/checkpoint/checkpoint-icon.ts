@@ -28,7 +28,7 @@ export const CheckpointIcon = async (iconUrl: string, enabled: boolean) => {
         0,
         0,
         144,
-        144
+        144,
       );
     }
 

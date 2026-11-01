@@ -21,14 +21,10 @@ import { Schemas, VaultSettings } from "@plugin/types";
 export class Vault extends SingletonAction {
   private watcher = Watcher("state");
 
-  private async update(
-    action: WillAppearEvent["action"],
-    settings?: VaultSettings
-  ) {
+  private async update(action: WillAppearEvent["action"], settings?: VaultSettings) {
     if (action.isNeoInfobar()) return;
     const vault = State.get("inventory");
-    const { current = 0, items = [] } =
-      settings ?? Schemas.vault(await action.getSettings());
+    const { current = 0, items = [] } = settings ?? Schemas.vault(await action.getSettings());
     const item = items[current];
     if (item) {
       const image = await downloadAsBase64(bungify(item.icon));

@@ -33,10 +33,7 @@ export type ButtonPosition =
  * @param size the size of the grid
  * @returns the index of the button
  */
-export const idxByPosition = (
-  position: ButtonPosition,
-  size: GridHelper["size"]
-) => {
+export const idxByPosition = (position: ButtonPosition, size: GridHelper["size"]) => {
   switch (position) {
     case "top-left":
       return 0;

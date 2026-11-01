@@ -10,12 +10,7 @@ import {
   Text,
 } from "@mantine/core";
 import { useSize, useStreamDeck } from "../../hooks/useStreamDeck";
-import {
-  PickerCategorySchema,
-  PickerFilterSchema,
-  PickerFilterType,
-  Schemas,
-} from "@plugin/types";
+import { PickerCategorySchema, PickerFilterSchema, PickerFilterType, Schemas } from "@plugin/types";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { Filters } from "./Filters";
 import { Filter } from "./Filter";
@@ -76,8 +71,8 @@ export default () => {
       <div>
         <Divider labelPosition="center" label="Filters (Last row)" />
         <Text size="sm" c="dimmed">
-          Customize the filters that appear on the last row of the picker
-          (between exit and pagination).
+          Customize the filters that appear on the last row of the picker (between exit and
+          pagination).
         </Text>
       </div>
       <DndContext onDragEnd={handleDragEnd}>
@@ -100,11 +95,7 @@ export default () => {
             {PickerFilterSchema.options
               .filter((it) => !picked.includes(it))
               .map((type) => (
-                <Filter
-                  disabled={picked.length >= slots}
-                  key={type}
-                  type={type}
-                />
+                <Filter disabled={picked.length >= slots} key={type} type={type} />
               ))}
           </SimpleGrid>
         </Collapse>
@@ -117,9 +108,7 @@ export default () => {
             color="dim"
             data={Categories}
             value={settings.category}
-            onChange={(value) =>
-              setSettings({ category: PickerCategorySchema.parse(value) })
-            }
+            onChange={(value) => setSettings({ category: PickerCategorySchema.parse(value) })}
           />
         </div>
 
@@ -151,22 +140,13 @@ export default () => {
               );
             })}
             <Accordion.Item key="defaultOptions" value="defaultOptions">
-              <Accordion.Control icon={<IconSelect />}>
-                Initial options
-              </Accordion.Control>
+              <Accordion.Control icon={<IconSelect />}>Initial options</Accordion.Control>
               <Accordion.Panel>
                 <SimpleGrid cols={2}>
                   <Select
                     label="armor"
                     value={settings.defaultOptions.class}
-                    data={[
-                      "all",
-                      "helmet",
-                      "gauntlets",
-                      "chest",
-                      "leg",
-                      "classitem",
-                    ]}
+                    data={["all", "helmet", "gauntlets", "chest", "leg", "classitem"]}
                     onChange={(value) => onDefaultValueChange("armor", value)}
                   />
                   <Select
@@ -189,15 +169,7 @@ export default () => {
                   />
                   <Select
                     label="element"
-                    data={[
-                      "all",
-                      "solar",
-                      "void",
-                      "arc",
-                      "stasis",
-                      "strand",
-                      "kinetic",
-                    ]}
+                    data={["all", "solar", "void", "arc", "stasis", "strand", "kinetic"]}
                     value={settings.defaultOptions.class}
                     onChange={(value) => onDefaultValueChange("element", value)}
                   />

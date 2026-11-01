@@ -20,10 +20,7 @@ import { Cycler } from "@/lib/cycle";
 export class Metrics extends SingletonAction {
   private watcher = Watcher("state");
 
-  private async update(
-    action: WillAppearEvent["action"],
-    settings?: MetricsSettings
-  ) {
+  private async update(action: WillAppearEvent["action"], settings?: MetricsSettings) {
     if (action.isNeoInfobar()) return;
     const { metric } = settings ?? Schemas.metrics(await action.getSettings());
     const metrics = State.get("metrics");
@@ -31,9 +28,7 @@ export class Metrics extends SingletonAction {
     // detect if the metric is the artifact
     const icon = metric === "battlePass" ? metrics?.artifactIcon : undefined;
 
-    const image = icon
-      ? await ArtifactIcon(icon)
-      : `./imgs/canvas/metrics/${metric}.png`;
+    const image = icon ? await ArtifactIcon(icon) : `./imgs/canvas/metrics/${metric}.png`;
 
     action.setTitle(`${metrics?.[metric] ?? "?"}`);
     action.setImage(image);
@@ -52,17 +47,13 @@ export class Metrics extends SingletonAction {
   }
 
   onKeyDown(e: KeyDownEvent<MetricsSettings>) {
-    const { pinned, order, metric, disabled } = Schemas.metrics(
-      e.payload.settings
-    );
+    const { pinned, order, metric, disabled } = Schemas.metrics(e.payload.settings);
     // ignore if pinned
     if (pinned) {
       return;
     }
     // filter out disabled items
-    const metrics = new Cycler(
-      order.filter((metric) => !disabled?.includes(metric))
-    );
+    const metrics = new Cycler(order.filter((metric) => !disabled?.includes(metric)));
 
     // cycle through the available items
     e.action.setSettings({

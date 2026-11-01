@@ -100,7 +100,7 @@ ev.on("send-to-client", (data = {}) => {
         JSON.stringify({
           ...data,
           token,
-        })
+        }),
       );
     }
   });
@@ -112,9 +112,8 @@ ev.on("send-to-client", (data = {}) => {
  * @param data the content to send to the client
  * @returns void
  */
-export const sendToWeb = (
-  data: Record<string, string | boolean | number | undefined>
-) => ev.emit("send-to-client", data);
+export const sendToWeb = (data: Record<string, string | boolean | number | undefined>) =>
+  ev.emit("send-to-client", data);
 
 // Authentication Validator
 const Auth = z.object({

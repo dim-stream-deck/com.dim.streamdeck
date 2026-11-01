@@ -2,16 +2,9 @@ import { Suspense, lazy } from "react";
 import { render } from "./util";
 import "./index.css";
 import { ActionIcon, Center, Group, Loader } from "@mantine/core";
-import {
-	IconBrandDiscord,
-	IconBrandPatreon,
-	IconWorldWww,
-} from "@tabler/icons-react";
+import { IconBrandDiscord, IconBrandPatreon, IconWorldWww } from "@tabler/icons-react";
 import { NoSetting } from "./components/NoSettings";
-import {
-	QueryClient,
-	QueryClientProvider
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import streamDeck from "./streamdeck";
 import { createStore, Provider, useAtom } from "jotai";
 import { actionInfoAtom, infoAtom } from "./atoms";
@@ -77,9 +70,7 @@ const Links = () => {
       </ActionIcon>
       <ActionIcon
         title="Website"
-        onClick={() =>
-          streamDeck.system.openUrl("https://dimstreamdeck.vercel.app")
-        }
+        onClick={() => streamDeck.system.openUrl("https://dimstreamdeck.vercel.app")}
         ml="sm"
         color="gray"
         variant="default"
@@ -126,7 +117,7 @@ render(
         <App />
       </QueryClientProvider>
     </Provider>
-  </Suspense>
+  </Suspense>,
 );
 
 streamDeck.onConnected((info, actionInfo) => {

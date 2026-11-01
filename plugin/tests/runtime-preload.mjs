@@ -6,7 +6,9 @@ import { syncBuiltinESMExports } from "node:module";
 globalThis.fetch = async (_url, options) => {
   if (process.env.STALL_CHECKPOINTS) {
     return new Promise((_resolve, reject) => {
-      options?.signal?.addEventListener("abort", () => reject(options.signal.reason), { once: true });
+      options?.signal?.addEventListener("abort", () => reject(options.signal.reason), {
+        once: true,
+      });
     });
   }
   return new Response("[]", { status: 200 });

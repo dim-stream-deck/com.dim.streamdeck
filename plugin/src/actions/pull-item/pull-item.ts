@@ -32,21 +32,15 @@ export class PullItem extends SingletonAction {
   private gestures = Gestures();
   private watcher = Watcher("equipmentStatus");
 
-  private async update(
-    e: WillAppearEvent["action"],
-    settings?: PullItemSettings
-  ) {
+  private async update(e: WillAppearEvent["action"], settings?: PullItemSettings) {
     if (e.isNeoInfobar()) return;
-    const { item: id, ...item } =
-      settings ?? Schemas.pullItem(await e.getSettings());
+    const { item: id, ...item } = settings ?? Schemas.pullItem(await e.getSettings());
 
     if (!id || !item.icon) {
       return;
     }
 
-    const { equipmentGrayscale = true } = Schemas.global(
-      await $.settings.getGlobalSettings()
-    );
+    const { equipmentGrayscale = true } = Schemas.global(await $.settings.getGlobalSettings());
 
     const equipped = Equipment.has(id);
 

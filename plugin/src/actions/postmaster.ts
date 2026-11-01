@@ -21,8 +21,7 @@ export class Postmaster extends SingletonAction {
   private watcher = Watcher("state");
 
   private async update(e: KeyAction<PostmasterSettings>, settings?: PostmasterSettings) {
-    const { type, style } =
-      settings ?? Schemas.postmaster(await e.getSettings());
+    const { type, style } = settings ?? Schemas.postmaster(await e.getSettings());
     const postmaster = State.get("postmaster");
     const current = postmaster?.[type] ?? "?";
     const value =

@@ -18,20 +18,16 @@ import { downloadAsBase64 } from "@/lib/image";
  */
 @action({ UUID: "com.dim.streamdeck.loadout" })
 export class Loadout extends SingletonAction {
-  private async update(
-    e: WillAppearEvent["action"],
-    settings?: LoadoutSettings
-  ) {
+  private async update(e: WillAppearEvent["action"], settings?: LoadoutSettings) {
     if (e.isNeoInfobar()) return;
     // load settings
-    const { label, inGameIcon, icon } =
-      settings ?? Schemas.loadout(await e.getSettings());
+    const { label, inGameIcon, icon } = settings ?? Schemas.loadout(await e.getSettings());
     // update the title and image
     e.setTitle(splitTitle(label));
     e.setImage(
       (inGameIcon
         ? await LoadoutIcon(inGameIcon)
-        : icon && (await downloadAsBase64(bungify(icon)))) ?? undefined
+        : icon && (await downloadAsBase64(bungify(icon)))) ?? undefined,
     );
   }
 

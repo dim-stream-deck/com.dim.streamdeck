@@ -74,11 +74,7 @@ const MetricItem = ({
           <IconGripVertical />
         </ActionIcon>
         <Tooltip position="bottom" color="dim" withArrow label="Pin metric">
-          <ActionIcon
-            onClick={onPinChange}
-            variant="transparent"
-            c={pinned ? "dim" : "dimmed"}
-          >
+          <ActionIcon onClick={onPinChange} variant="transparent" c={pinned ? "dim" : "dimmed"}>
             {pinned ? <IconPinFilled /> : <IconPin />}
           </ActionIcon>
         </Tooltip>
@@ -98,8 +94,7 @@ const MetricItem = ({
 };
 
 const SortableMetric = ({ id, ...props }: SortableMetricProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -119,7 +114,7 @@ const itemsById = items.reduce(
     acc[item.id] = item;
     return acc;
   },
-  {} as Record<string, (typeof items)[0]>
+  {} as Record<string, (typeof items)[0]>,
 );
 
 // metric field
@@ -192,9 +187,7 @@ export default () => {
             />
           ))}
         </SortableContext>
-        <DragOverlay>
-          {dragged ? <MetricItem {...dragged} /> : null}
-        </DragOverlay>
+        <DragOverlay>{dragged ? <MetricItem {...dragged} /> : null}</DragOverlay>
       </DndContext>
     </div>
   );

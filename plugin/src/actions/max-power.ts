@@ -3,11 +3,11 @@ import { State } from "@/state";
 import { log } from "@/util/logger";
 import { Watcher } from "@/util/watcher";
 import {
-	action,
-	DidReceiveSettingsEvent,
-	SingletonAction,
-	WillAppearEvent,
-	WillDisappearEvent
+  action,
+  DidReceiveSettingsEvent,
+  SingletonAction,
+  WillAppearEvent,
+  WillDisappearEvent,
 } from "@elgato/streamdeck";
 import { MaxPowerSettings, Schemas } from "@plugin/types";
 

@@ -10,8 +10,7 @@ export default () => {
 
   const { isPending, mutate } = useMutation({
     mutationKey: ["solo-mode", enabledSoloService],
-    mutationFn: async (action: string) =>
-      streamDeck.plugin.fetch("update-solo-service", action),
+    mutationFn: async (action: string) => streamDeck.plugin.fetch("update-solo-service", action),
   });
 
   return (
@@ -33,8 +32,7 @@ export default () => {
         <>
           <Alert title="Warning" color="#222222" variant="filled">
             <Text mt={-4} c="dimmed">
-              This actions works only if you use{" "}
-              <strong>Windows Defender</strong> as Firewall
+              This actions works only if you use <strong>Windows Defender</strong> as Firewall
             </Text>
           </Alert>
 
@@ -42,8 +40,8 @@ export default () => {
 
           <Group mb="xs" gap={0}>
             <Text size="sm">
-              This is required the first time only. For more info about how this
-              "solo mode" works please see the
+              This is required the first time only. For more info about how this "solo mode" works
+              please see the
               <Text
                 component="span"
                 inline
@@ -53,7 +51,7 @@ export default () => {
                 style={{ cursor: "pointer" }}
                 onClick={() =>
                   streamDeck.system.openUrl(
-                    "https://github.com/dim-stream-deck/com.dim.streamdeck/wiki/Solo-Mode-(Action)"
+                    "https://github.com/dim-stream-deck/com.dim.streamdeck/wiki/Solo-Mode-(Action)",
                   )
                 }
               >
@@ -69,9 +67,7 @@ export default () => {
             loading={isPending}
             onClick={() => mutate(enabledSoloService ? "remove" : "install")}
             fullWidth
-            leftSection={
-              enabledSoloService ? <IconX size={20} /> : <IconApps size={20} />
-            }
+            leftSection={enabledSoloService ? <IconX size={20} /> : <IconApps size={20} />}
           >
             {enabledSoloService ? "Remove" : "Install"} the service
           </Button>

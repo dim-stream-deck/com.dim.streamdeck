@@ -1,12 +1,4 @@
-import {
-  Badge,
-  Button,
-  Card,
-  CardSection,
-  Group,
-  Image,
-  Text,
-} from "@mantine/core";
+import { Badge, Button, Card, CardSection, Group, Image, Text } from "@mantine/core";
 import { useStreamDeck } from "../hooks/useStreamDeck";
 import patreon from "../assets/patreon.png";
 import { log } from "../logger";
@@ -32,8 +24,8 @@ export const Support = () => {
             </Badge>
           </Group>
           <Text size="sm" c="dimmed">
-            Hello! If you want to support this project, and other plugins I'm
-            working on for Stream Deck, please consider becoming a patron. 😊
+            Hello! If you want to support this project, and other plugins I'm working on for Stream
+            Deck, please consider becoming a patron. 😊
           </Text>
           <Text size="sm" c="dimmed" mt="md">
             I have new tiers, starting from 1$/month!

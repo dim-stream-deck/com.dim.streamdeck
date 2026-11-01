@@ -13,10 +13,7 @@ import { exec, spawn } from "child_process";
 import { splitTitle } from "@/util/canvas";
 import { CheckpointSettings, GlobalSettings, Schemas } from "@plugin/types";
 import { log } from "@/util/logger";
-import {
-  definitions,
-  searchCheckpoint,
-} from "./manager";
+import { definitions, searchCheckpoint } from "./manager";
 
 /**
  * Generate the command to join the checkpoint
@@ -40,7 +37,7 @@ const joinCommand = async (id: string) => {
 const sendCommand = () => {
   if ($.info.application.platform === "mac") {
     exec(
-      `osascript -e 'tell application "System Events"' -e 'keystroke "v" using command down' -e 'key code 36' -e 'end tell'`
+      `osascript -e 'tell application "System Events"' -e 'keystroke "v" using command down' -e 'key code 36' -e 'end tell'`,
     );
   } else {
     spawn(`./macro/macro.exe`);
@@ -54,13 +51,9 @@ const sendCommand = () => {
 export class Checkpoint extends SingletonAction {
   private watcher = Watcher("checkpoints");
 
-  private async update(
-    e: WillAppearEvent["action"],
-    settings?: CheckpointSettings
-  ) {
+  private async update(e: WillAppearEvent["action"], settings?: CheckpointSettings) {
     if (e.isNeoInfobar()) return;
-    const { id, encounter } =
-      settings ?? Schemas.checkpoint(await e.getSettings());
+    const { id, encounter } = settings ?? Schemas.checkpoint(await e.getSettings());
 
     if (!id) return;
 
