@@ -35,6 +35,12 @@
       "Readonly": true,
       "DeviceType": 7,
       "DontAutoSwitchWhenInstalled": true
+    },
+    {
+      "Name": "DIM-Neo",
+      "Readonly": true,
+      "DeviceType": 9,
+      "DontAutoSwitchWhenInstalled": true
     }
   ],
   "Actions": [

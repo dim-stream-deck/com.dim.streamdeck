@@ -85,4 +85,15 @@ export const Armor = expandDefinitions("armor", [
 
 // Profile Suffixes
 
-export const Profiles = ["", "-Mini", "-XL", "", undefined, undefined, undefined, "-Plus-v2"];
+export const Profiles = [
+  "",
+  "-Mini",
+  "-XL",
+  "",
+  undefined,
+  undefined,
+  undefined,
+  "-Plus-v2",
+  undefined,
+  "-Neo",
+];

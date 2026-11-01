@@ -20,6 +20,9 @@ or from below:
 
 Go to [dimstreamdeck.vercel.app](https://dimstreamdeck.vercel.app) to see the available actions.
 
+The item picker supports Stream Deck Neo's eight keys. Items appear on the top row;
+the bottom row contains exit, up to two configurable filters, and pagination.
+
 ## Preview
 
 ![actions1](https://github.com/dim-stream-deck/com.dim.streamdeck/blob/main/plugin/com.dim.streamdeck.sdPlugin/previews/1-preview.png?raw=true)
