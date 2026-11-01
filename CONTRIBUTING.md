@@ -45,7 +45,7 @@ This CLI is required to develop plugins for the Elgato Stream Deck.
 
 From the repository root:
 
-* run `pnpm --filter plugin link`
+* run `pnpm --filter plugin run link`
 * run `pnpm --filter plugin exec streamdeck dev`
 
 You're ready, you can now test your changes using only `pnpm run dev`.

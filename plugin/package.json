@@ -5,7 +5,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "build": "vp build",
-    "dev": "vp build --watch",
+    "dev": "vp build --watch --mode development",
     "pack": "streamdeck pack -f ./com.dim.streamdeck.sdPlugin",
     "link": "streamdeck link com.dim.streamdeck.sdPlugin"
   },

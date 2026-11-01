@@ -30,6 +30,8 @@ export default defineConfig(({ mode }) => {
     ),
     build: {
       target: "node26",
+      sourcemap: mode === "development",
+      minify: mode !== "development",
       outDir: `${output}/bin`,
       emptyOutDir: true,
       lib: { entry: "src/plugin.ts", formats: ["cjs"], fileName: () => "plugin.js" },
