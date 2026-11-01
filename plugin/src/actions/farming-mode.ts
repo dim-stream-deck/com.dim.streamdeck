@@ -1,6 +1,6 @@
 import type { JsonObject } from "@elgato/utils";
 import { DIM } from "@/dim/api";
-import { ev } from "@/util/ev";
+import { Watcher } from "@/util/watcher";
 import { State } from "@/state";
 import { log } from "@/util/logger";
 import {
@@ -8,6 +8,7 @@ import {
   KeyAction,
   SingletonAction,
   WillAppearEvent,
+  WillDisappearEvent,
 } from "@elgato/streamdeck";
 
 /**
@@ -15,7 +16,7 @@ import {
  */
 @action({ UUID: "com.dim.streamdeck.farming-mode" })
 export class FarmingMode extends SingletonAction {
-  private listener: any;
+  private watcher = Watcher("farmingMode");
 
   private update(e: KeyAction<JsonObject>) {
     const farmingMode = State.get("farmingMode");
@@ -24,14 +25,13 @@ export class FarmingMode extends SingletonAction {
 
   onWillAppear(e: WillAppearEvent) {
     if (e.action.isKey()) {
-      this.update(e.action);
-      this.listener = () => this.update(e.action as KeyAction<JsonObject>);
-      ev.on("farmingMode", this.listener);
+      const key = e.action;
+      this.watcher.start(key.id, () => this.update(key));
     }
   }
 
-  onWillDisappear() {
-    ev.off("farmingMode", this.listener);
+  onWillDisappear(e: WillDisappearEvent) {
+    this.watcher.stop(e.action.id);
   }
 
   onKeyUp() {

@@ -4,6 +4,8 @@ export const Watcher = (event: string) => {
   const listeners = new Map<string, (data: any) => void>();
   return {
     start: (id: string, cb: (data?: any) => void) => {
+      const previous = listeners.get(id);
+      if (previous) ev.off(event, previous);
       listeners.set(id, cb);
       ev.on(event, cb);
       cb();

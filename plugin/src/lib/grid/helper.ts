@@ -314,9 +314,9 @@ export class GridHelper {
     }
     this.buttons = [];
     this.cells = [];
-    this.events.removeAllListeners();
     this.destroyGrid();
     this.emit("close");
+    this.events.removeAllListeners();
   }
 
   /**
