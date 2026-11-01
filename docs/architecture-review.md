@@ -6,14 +6,14 @@ Reviewed against `08d7890`, using the requested Vite Plus/pnpm migration, depend
 
 Two confirmed migration findings were fixed:
 
-- Inspector requests used the registration UUID rather than the action context and omitted the action identifier on settings commands. The client now sends the documented command shape. Protocol tests cover registration, settings, request correlation, timeouts, and subscription disposal.
+- The initial review incorrectly recommended replacing the inspector registration UUID with the action context. Live Stream Deck testing exposed that regression: inspector commands must use the registration UUID for both action and global settings, as the official SDPI Components client does. The client now uses that ID and includes the action identifier. Protocol tests cover registration, settings, request correlation, timeouts, and subscription disposal.
 - The release workflow and contributor instructions still used Bun. Both now use the pinned pnpm and Node versions.
 
 One review question concerned replies after switching inspectors. The SDK's `sendToPropertyInspector` targets the current inspector, so the server deliberately checks the action ID before replying. This prevents a delayed service operation from sending its result to another action. The abandoned client's request expires after ten seconds.
 
 ## Spec
 
-One confirmed migration finding was fixed, also found by the standards review: action-scoped messages must use `actionInfo.context`. The packaged-plugin smoke test exercises SDK 3 registration, action settings updates, and checkpoint requests against a mock Stream Deck host.
+Live inspector testing corrected the original review finding: inspector commands must use the inspector registration UUID. The host translates this to the action context in events delivered to the plugin. The packaged-plugin smoke test exercises SDK 3 registration, action settings updates, and checkpoint requests against a mock Stream Deck host.
 
 The SDK upgrade raises the minimum supported Stream Deck version to 7.1. Action UUIDs, profile files, persisted settings schemas, and the DIM WebSocket protocol remain unchanged. The CommonJS entry point, CanvasKit WASM, and clipboard fallback files remain in the installable package. Mantine 9's renamed props are migrated, and its v8 color resolver preserves the existing light-variant colors.
 
@@ -37,10 +37,10 @@ Packaging also excludes local `state.json`, image caches, and logs. The pnpm sto
 ## Verification and limits
 
 - Production builds and type checks pass under Node 26.13.0.
-- Eight regression tests pass, including a packaged-plugin test in a temporary directory with external services blocked.
+- Nine regression tests pass, including a packaged-plugin test in a temporary directory with external services blocked.
 - Vite Plus lint reports warnings in existing code, with no errors. These are not suppressed.
 - Elgato validates the package with one existing warning: the Tile icon lacks an `@2x` variant.
 - pnpm reports Vite peer-version warnings because the Vite Plus core alias has version 1.4.0 while exposing Vite 8.3.5. Production builds and the bundled test runner pass.
-- Actual Stream Deck hardware, live DIM/checkpoint integrations, Windows service installation, and clipboard behavior on Windows still need manual testing. The smoke test does not prove those integrations work.
+- The rebuilt property inspector was verified in the running Stream Deck app: registration and both settings requests receive replies, and controls render. Hardware actions, live DIM/checkpoint integrations, Windows service installation, and clipboard behavior on Windows still need manual testing. The smoke test does not prove those integrations work.
 
 Standards: two confirmed findings fixed, one design question resolved. Spec: one confirmed finding fixed. Three pre-existing lifecycle bugs fixed with regression coverage.

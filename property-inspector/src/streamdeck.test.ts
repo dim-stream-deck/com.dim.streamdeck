@@ -59,14 +59,39 @@ describe("property inspector protocol", () => {
     });
     const settings = client.settings.getSettings();
     await vi.waitFor(() => expect(Socket.current.sent.at(-1)?.event).toBe("getSettings"));
+    expect(Socket.current.sent.at(-1)).toEqual({
+      event: "getSettings",
+      context: "inspector",
+      action: action.action,
+    });
     Socket.current.receive("didReceiveSettings", { settings: { loadout: "one" } });
     await expect(settings).resolves.toEqual({ loadout: "one" });
     await client.settings.setSettings({ loadout: "two" });
     expect(Socket.current.sent.at(-1)).toMatchObject({
       event: "setSettings",
       action: action.action,
-      context: "key",
+      context: "inspector",
       payload: { loadout: "two" },
+    });
+  });
+
+  it("routes global settings through the inspector registration, not the plugin UUID", async () => {
+    const client = await connect();
+    const settings = client.settings.getGlobalSettings();
+    await vi.waitFor(() => expect(Socket.current.sent.at(-1)?.event).toBe("getGlobalSettings"));
+    expect(Socket.current.sent.at(-1)).toEqual({
+      event: "getGlobalSettings",
+      context: "inspector",
+      action: action.action,
+    });
+    Socket.current.receive("didReceiveGlobalSettings", { settings: { promptSupport: false } });
+    await expect(settings).resolves.toEqual({ promptSupport: false });
+    await client.settings.setGlobalSettings({ promptSupport: true });
+    expect(Socket.current.sent.at(-1)).toEqual({
+      event: "setGlobalSettings",
+      context: "inspector",
+      action: action.action,
+      payload: { promptSupport: true },
     });
   });
 
@@ -75,6 +100,13 @@ describe("property inspector protocol", () => {
     const first = client.plugin.fetch("checkpoints-activities");
     const second = client.plugin.fetch("update-solo-service", "install");
     await vi.waitFor(() => expect(Socket.current.sent).toHaveLength(3));
+    for (const message of Socket.current.sent.slice(1)) {
+      expect(message).toMatchObject({
+        event: "sendToPlugin",
+        context: "inspector",
+        action: action.action,
+      });
+    }
     const [a, b] = Socket.current.sent.slice(1).map((message) => message.payload);
     Socket.current.receive("sendToPropertyInspector", { id: b.id, status: 200, body: "ok" });
     Socket.current.receive("sendToPropertyInspector", { id: a.id, status: 200, body: [] });

@@ -34,14 +34,14 @@ function subscribe(event: string, listener: (message: Message) => void) {
 }
 
 async function send(event: string, payload?: unknown) {
-  const { socket, info, action } = await connected.promise;
+  const { socket, uuid, action } = await connected.promise;
   socket.send(
     JSON.stringify({
       event,
-      context: event.includes("GlobalSettings") ? info.plugin.uuid : action.context,
-      ...(["sendToPlugin", "getSettings", "setSettings"].includes(event)
-        ? { action: action.action }
-        : {}),
+      // The host routes inspector commands by the registration UUID, not the action context.
+      // This matches SDPI Components: https://sdpi-components.dev/releases/v4/sdpi-components.js
+      context: uuid,
+      action: action.action,
       payload,
     }),
   );
