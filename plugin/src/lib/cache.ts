@@ -1,4 +1,3 @@
-import $ from "@elgato/streamdeck";
 import { LRUCache } from "lru-cache";
 import { Stream } from "stream";
 import { createHash } from "node:crypto";
@@ -132,9 +131,3 @@ export const Cache = <TCacheType extends string | number | boolean>({
       cache.set(flat(key), value),
   };
 };
-
-export const cache = Cache<string>({
-  log: $.logger.info.bind($.logger),
-  onError: $.logger.error.bind($.logger),
-  defaultValue: "",
-});

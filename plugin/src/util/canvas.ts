@@ -1,37 +1,36 @@
 import CanvasKitInit, {
   EmulatedCanvas2DContext,
   Image,
+  EmulatedCanvas2D,
 } from "canvaskit-wasm/bin/canvaskit.js";
 import { splitAt } from "remeda";
-import { bungify } from "./images";
-import { downloadAsArrayBuffer } from "@/lib/image";
 
 export const CanvasKit = CanvasKitInit({
   locateFile: (file) => process.cwd() + "/" + file,
 });
 
-const CanvasImages = new Map<string, Image>();
-
-export const loadImage = (
+// Native images belong to one render. Only encoded bytes are shared between renders.
+export const withCanvas = async (
   kit: Awaited<typeof CanvasKit>,
-  key: string,
-  image: ArrayBuffer
+  width: number,
+  height: number,
+  render: (
+    canvas: EmulatedCanvas2D,
+    decode: (bytes: ArrayBuffer | null) => Image | null
+  ) => Promise<string>
 ) => {
-  if (CanvasImages.has(key)) {
-    return CanvasImages.get(key);
-  }
-  const img = kit.MakeImageFromEncoded(image);
-  img && CanvasImages.set(key, img);
-  return img;
-};
-
-export const loadImageFromUrl = async (
-  kit: Awaited<typeof CanvasKit>,
-  url: string
-) => {
-  const image = await downloadAsArrayBuffer(bungify(url));
-  if (image) {
-    return loadImage(kit, url, image);
+  const canvas = kit.MakeCanvas(width, height);
+  const images: Image[] = [];
+  const decode = (bytes: ArrayBuffer | null) => {
+    const image = bytes ? kit.MakeImageFromEncoded(bytes) : null;
+    if (image) images.push(image);
+    return image;
+  };
+  try {
+    return await render(canvas, decode);
+  } finally {
+    canvas.dispose();
+    images.forEach((image) => image.delete());
   }
 };
 

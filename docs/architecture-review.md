@@ -31,7 +31,7 @@ Packaging also excludes local `state.json`, image caches, and logs. The pnpm sto
 
 1. **High: global TLS verification bypass.** `plugin/src/main.ts` sets `NODE_TLS_REJECT_UNAUTHORIZED=0`, affecting every HTTPS request. Remove the process-wide setting after verifying the checkpoint service's certificate requirements. If a private CA is required, configure that trust only for the relevant service. This migration preserves the existing network behavior; it does not resolve this security issue.
 2. **Fixed: startup depended on checkpoint networking.** The plugin now connects to Stream Deck before loading checkpoint definitions. The definitions request has a five-second timeout, including response body consumption. Inspector requests wait for the load to settle, and checkpoint buttons refresh afterward. A packaged-plugin regression test stalls the fetch and verifies registration and unrelated action settings still work; a unit test covers definitions arriving after an inspector request.
-3. **Medium: image ownership is unbounded.** `plugin/src/util/canvas.ts` keeps CanvasKit images in a module-level map without eviction or disposal. Define who owns each native image before introducing eviction, then verify memory use while repeatedly changing inventories.
+3. **Fixed: image ownership was unbounded.** Downloaded image bytes now use a 32 MiB LRU cache with shared pending requests. Each icon render owns its native images and canvas and releases them in `finally`. Repeated inventory changes still need a live memory check on Stream Deck.
 4. **Architecture: imports start services.** Importing the DIM API transitively starts the HTTP/WebSocket server and persistence timers. Move startup and shutdown into explicit functions called by the plugin entry point. Keep the message transport separate from state and action registration so tests can instantiate them without starting the process.
 
 ## Verification and limits
@@ -46,3 +46,20 @@ Startup follow-up: all 11 regression tests pass, the plugin bundle builds, and `
 - The rebuilt property inspector was verified in the running Stream Deck app: registration and both settings requests receive replies, and controls render. Hardware actions, live DIM/checkpoint integrations, Windows service installation, and clipboard behavior on Windows still need manual testing. The smoke test does not prove those integrations work.
 
 Standards: two confirmed findings fixed, one design question resolved. Spec: one confirmed finding fixed. Three pre-existing lifecycle bugs fixed with regression coverage.
+
+## Performance and caching follow-up
+
+- Removed the unused second persistent cache, leaving one writer for `cache.json.br`.
+- Shared pending image downloads and bounded retained encoded bytes to 32 MiB. Failed requests remain retryable.
+- Removed duplicate Pull Item and Character initialization updates.
+- Made Pull Item's loader use the renderer's cache key, including all visual inputs. Existing item entries are regenerated once under the new key.
+- Released native canvases and images after successful and failed renders. Rendered PNGs remain cached; encoded bytes are reused across visual variants. Decoding on a rendered-image cache miss is the tradeoff for simple, bounded ownership.
+
+Manual checks after rebuilding and restarting the plugin:
+
+1. Open a profile with Pull Item and Character buttons. Check that icons appear correctly and revisiting the profile does not flash item loaders when images are cached.
+2. Equip and unequip items with grayscale enabled and disabled. Check crafted/exotic borders, elements, overlays, tier marks, and the equipped indicator.
+3. Page through the picker, then revisit pages. Check loadout, artifact, character, and enabled/disabled checkpoint icons as well.
+4. Disconnect and reconnect the network while opening an uncached icon. Check that a subsequent update can load it after connectivity returns.
+5. Leave the plugin running beyond ten minutes, then restart it. Check that cached icons return and logs show one cache-save event per interval, without decompression errors.
+6. Repeatedly browse different inventory pages and profiles while watching the plugin process in Activity Monitor. Allow warm-up; memory should settle rather than grow continuously for the same workload. Allocators may retain freed WASM memory, so immediate RSS drops are not expected.

@@ -1,5 +1,5 @@
 import { cache } from "@/util/cache";
-import { CanvasKit } from "@/util/canvas";
+import { withCanvas, CanvasKit } from "@/util/canvas";
 import { bungify } from "@/util/images";
 import { downloadAsArrayBuffer } from "@/lib/image";
 
@@ -25,15 +25,16 @@ export const LoadoutIcon = async (def: IconDefinition) => {
     return;
   }
   const Canvas = await CanvasKit;
-  const canvas = Canvas.MakeCanvas(size, size);
-  const ctx = canvas.getContext("2d");
-  const icon = Canvas.MakeImageFromEncoded(iconSource);
-  const bg = Canvas.MakeImageFromEncoded(bgSource);
-  ctx.drawImage(bg, 0, 0, size, size);
-  ctx.drawImage(icon, 0, 0, size, size);
+  return withCanvas(Canvas, size, size, async (canvas, decode) => {
+    const ctx = canvas.getContext("2d");
+    const icon = decode(iconSource);
+    const bg = decode(bgSource);
+    ctx.drawImage(bg, 0, 0, size, size);
+    ctx.drawImage(icon, 0, 0, size, size);
 
-  // Cache the image
-  const image = canvas.toDataURL();
-  cache.set(cacheKey, image);
-  return image;
+    // Cache the image
+    const image = canvas.toDataURL();
+    cache.set(cacheKey, image);
+    return image;
+  });
 };

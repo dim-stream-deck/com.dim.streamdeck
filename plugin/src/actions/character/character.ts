@@ -25,7 +25,6 @@ export class Character extends SingletonAction {
 
   onWillAppear(e: WillAppearEvent) {
     if (e.action.isKey()) {
-      this.update(e.action);
       this.watcher.start(e.action.id, () => this.update(e.action as KeyAction<JsonObject>));
     }
   }

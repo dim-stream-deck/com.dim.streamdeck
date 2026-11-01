@@ -8,7 +8,7 @@ import $, {
   WillAppearEvent,
   WillDisappearEvent,
 } from "@elgato/streamdeck";
-import { ItemIcon } from "./item-icon";
+import { ItemIcon, itemIconCacheKey } from "./item-icon";
 import { cache } from "@/util/cache";
 import { Watcher } from "@/util/watcher";
 import { splitTitle } from "@/util/canvas";
@@ -50,7 +50,10 @@ export class PullItem extends SingletonAction {
 
     const equipped = Equipment.has(id);
 
-    const cacheKey = [item.icon, equipmentGrayscale, equipped];
+    const cacheKey = itemIconCacheKey(item, {
+      grayscale: equipmentGrayscale,
+      equipped,
+    });
 
     const image = ItemIcon(item, {
       equipped,
@@ -68,8 +71,6 @@ export class PullItem extends SingletonAction {
   }
 
   onWillAppear(e: WillAppearEvent) {
-    this.update(e.action);
-
     this.watcher.start(e.action.id, () => this.update(e.action));
 
     this.gestures.start(e.action.id, async (gesture) => {

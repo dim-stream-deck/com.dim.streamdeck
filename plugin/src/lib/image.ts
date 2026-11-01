@@ -1,4 +1,11 @@
 import fs from "fs";
+import { LRUCache } from "lru-cache";
+
+const images = new LRUCache<string, ArrayBuffer>({
+  maxSize: 32 * 1024 * 1024,
+  sizeCalculation: (image) => image.byteLength,
+});
+const pending = new Map<string, Promise<ArrayBuffer | null>>();
 
 /**
  * Download an image from a URL and return it as ArrayBuffer
@@ -6,12 +13,27 @@ import fs from "fs";
  * @returns ArrayBuffer of the image
  */
 export const downloadAsArrayBuffer = async (url: string) => {
-  const res = await fetch(url);
-  const buffer = await res.arrayBuffer();
-  if (res.ok) {
+  const cached = images.get(url);
+  if (cached) return cached;
+  const existing = pending.get(url);
+  if (existing) return existing;
+
+  const request = (async () => {
+    const res = await fetch(url);
+    if (!res.ok) {
+      await res.body?.cancel();
+      return null;
+    }
+    const buffer = await res.arrayBuffer();
+    if (buffer.byteLength) images.set(url, buffer);
     return buffer;
+  })();
+  pending.set(url, request);
+  try {
+    return await request;
+  } finally {
+    pending.delete(url);
   }
-  return null;
 };
 
 /**
