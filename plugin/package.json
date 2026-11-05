@@ -32,7 +32,7 @@
     "@types/node": "^26.6.6",
     "@types/ws": "^8.18.2",
     "property-inspector": "workspace:*",
-    "tsrs": "0.20.1-ts7.1.0-beta",
-    "vite-plus": "1.4.0"
+    "tsrs": "0.21.0-ts7.1.0-beta",
+    "vite-plus": "1.5.0"
   }
 }
