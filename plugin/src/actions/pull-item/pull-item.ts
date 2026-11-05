@@ -32,6 +32,13 @@ export class PullItem extends SingletonAction {
   private gestures = Gestures();
   private watcher = Watcher("equipmentStatus");
 
+  constructor() {
+    super();
+    $.settings.onDidReceiveGlobalSettings(async () => {
+      await Promise.all(Array.from(this.actions, (action) => this.update(action)));
+    });
+  }
+
   private async update(e: WillAppearEvent["action"], settings?: PullItemSettings) {
     if (e.isNeoInfobar()) return;
     const { item: id, ...item } = settings ?? Schemas.pullItem(await e.getSettings());
@@ -40,18 +47,22 @@ export class PullItem extends SingletonAction {
       return;
     }
 
-    const { equipmentGrayscale = true } = Schemas.global(await $.settings.getGlobalSettings());
+    const { equipmentGrayscale = true, pullItemTileLayout } = Schemas.global(
+      await $.settings.getGlobalSettings(),
+    );
 
     const equipped = Equipment.has(id);
 
     const cacheKey = itemIconCacheKey(item, {
       grayscale: equipmentGrayscale,
+      layout: pullItemTileLayout,
       equipped,
     });
 
     const image = ItemIcon(item, {
       equipped,
       grayscale: equipmentGrayscale,
+      layout: pullItemTileLayout,
     });
 
     // show a loader if the image is not ready

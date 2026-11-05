@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { useStreamDeck } from "../hooks/useStreamDeck";
 import { PickerCard } from "../components/PickerCard";
-import { IconAccessible, IconHandClick, IconX } from "@tabler/icons-react";
+import { IconAccessible, IconHandClick, IconLayout, IconX } from "@tabler/icons-react";
 import { PickSubText, PickText } from "../components/PickText";
 import { Schemas } from "@plugin/types";
 import { useEffect } from "react";
@@ -92,6 +92,28 @@ export default () => {
 
       <Collapse expanded={!settings.isSubClass && !!settings.item}>
         <Accordion>
+          <Accordion.Item value="appearance">
+            <Accordion.Control icon={<IconLayout />}>Appearance</Accordion.Control>
+            <Accordion.Panel>
+              <Stack gap="xs">
+                <SegmentedControl<"fill" | "dim">
+                  aria-label="Key layout"
+                  fullWidth
+                  color="dim"
+                  data={[
+                    { label: "Fill key", value: "fill" },
+                    { label: "DIM style", value: "dim" },
+                  ]}
+                  value={globalSettings.pullItemTileLayout}
+                  onChange={(pullItemTileLayout) => setGlobalSettings({ pullItemTileLayout })}
+                />
+                <Text size="sm" c="dimmed">
+                  Applies to all Pull Item keys. Fill key crops the artwork to use the full button.
+                  DIM style shows the full item tile with side margins.
+                </Text>
+              </Stack>
+            </Accordion.Panel>
+          </Accordion.Item>
           <Accordion.Item value="gestures">
             <Accordion.Control icon={<IconHandClick />}>Gestures</Accordion.Control>
             <Accordion.Panel>

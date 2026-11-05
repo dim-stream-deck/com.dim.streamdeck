@@ -16,6 +16,7 @@ const app = lazy(() => import("./actions/app"));
 const search = lazy(() => import("./actions/search"));
 const vault = lazy(() => import("./actions/vault"));
 const loadout = lazy(() => import("./actions/loadout"));
+const loadoutBrowser = lazy(() => import("./actions/loadout-browser"));
 const postmaster = lazy(() => import("./actions/postmaster"));
 const randomize = lazy(() => import("./actions/randomize"));
 const metrics = lazy(() => import("./actions/metrics"));
@@ -35,6 +36,7 @@ const components = {
   randomize,
   metrics,
   checkpoint,
+  "loadout-browser": loadoutBrowser,
   "max-power": maxPower,
   "pull-item": pullItem,
   "solo-mode": soloMode,

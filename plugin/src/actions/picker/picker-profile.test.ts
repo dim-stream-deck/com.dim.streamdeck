@@ -8,7 +8,10 @@ import { getGrid } from "../../lib/grid/manager";
 import { ev } from "@/util/ev";
 
 vi.mock("@elgato/streamdeck", () => ({
-  default: { profiles: { switchToProfile: vi.fn() } },
+  default: {
+    profiles: { switchToProfile: vi.fn() },
+    settings: { getGlobalSettings: vi.fn(async () => ({ pullItemTileLayout: "fill" })) },
+  },
   SingletonAction: class {},
   action: () => (target: unknown) => target,
 }));
@@ -28,6 +31,7 @@ vi.mock("./util/ImageIcon", () => ({ ImageIcon: vi.fn() }));
 
 import { DIM, buildQuery } from "@/dim/api";
 import { Picker } from "./picker";
+import { ItemIcon } from "@/actions/pull-item/item-icon";
 
 afterEach(() => vi.clearAllMocks());
 
@@ -119,6 +123,7 @@ it.each([
           Array.from({ length: 9 }, (_, i) => ({ item: `item-${i}` })),
         );
         await expect.poll(() => grid.buttons[0].id).toBe("item-0");
+        expect(ItemIcon).toHaveBeenCalledWith({ item: "item-0" }, { layout: "fill" });
         expect(grid.buttons.slice(0, 4).map((button) => button.id)).toEqual([
           "item-0",
           "item-1",

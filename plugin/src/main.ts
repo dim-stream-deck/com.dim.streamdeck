@@ -4,7 +4,6 @@ import { setGlobalSettings } from "./settings";
 import { z } from "zod";
 import { WebSocket } from "ws";
 import http from "http";
-import { manifest } from "./util/version";
 import { State, reloadEquipment } from "./state";
 import { GlobalSettings } from "@plugin/types";
 import { DimMessageSchema } from "./dim/message";
@@ -28,7 +27,7 @@ server.on("request", (req, res) => {
     return;
   }
   if (req.url === "/version") {
-    res.end(manifest.Version);
+    res.end($.info.plugin.version);
   } else {
     res.writeHead(404, { "Content-Type": "text/plain" });
     res.end("Not Found");
@@ -41,16 +40,16 @@ reloadEquipment();
 const tokens = new Map<string, string>();
 
 // Load tokens from the global settings
-$.settings.getGlobalSettings<GlobalSettings>().then((settings) => {
+const settingsLoaded = $.settings.getGlobalSettings<GlobalSettings>().then((settings) => {
   Object.entries(settings.authentication ?? {}).forEach(([instance, token]) => {
-    tokens.set(instance, token);
+    if (!tokens.has(instance)) tokens.set(instance, token);
   });
   // Setup install date
   if (!settings.setupDate) {
     setGlobalSettings({ setupDate: new Date().toString() });
     log("install", {
       os: $.info.application.platform,
-      version: manifest.Version,
+      version: $.info.plugin.version,
     });
   }
 });
@@ -61,10 +60,30 @@ const ws = new WebSocketServer({
 
 server.listen(9120, "localhost");
 
+// Opt in through a WebSocket subprotocol so older DIM clients receive no new messages.
+const statusClients = new WeakSet<WebSocket>();
+
+// Confirm authorization without waiting for a button press.
+const sendConnectionStatus = (socket: WebSocket) => {
+  if (statusClients.has(socket) && socket.readyState === WebSocket.OPEN && socket.instance) {
+    socket.send(JSON.stringify({ action: "connected", token: tokens.get(socket.instance) }));
+  }
+};
+
 // Handle new connections and messages from the client
 ws.on("connection", (socket: WebSocket, req) => {
   // set the instance id on the socket
   socket.instance = req.url?.split("/").pop();
+  if (
+    req.headers["sec-websocket-protocol"]?.split(",").some((value) => value.trim() === "dim-status")
+  ) {
+    statusClients.add(socket);
+  }
+  settingsLoaded
+    .then(() => sendConnectionStatus(socket))
+    .catch((error) => {
+      $.logger.error("Failed to load DIM authorization", error);
+    });
   // watch for messages from the client
   socket.on("message", async (msg) => {
     const { action, data } = DimMessageSchema.parse(JSON.parse(msg.toString()));
@@ -81,6 +100,9 @@ ws.on("connection", (socket: WebSocket, req) => {
         break;
       case "perks":
         State.set({ perks: data });
+        break;
+      case "loadouts":
+        ev.emit(`loadouts:${data.device}`, data);
         break;
       case "pickerItems":
         ev.emit(`pickerItems:${data.device}`, data.items);
@@ -106,14 +128,28 @@ ev.on("send-to-client", (data = {}) => {
   });
 });
 
+let lastSetupOpened = -Infinity;
+
 /**
  * Send data to the client
  *
  * @param data the content to send to the client
  * @returns void
  */
-export const sendToWeb = (data: Record<string, string | boolean | number | undefined>) =>
+export const sendToWeb = (data: Record<string, string | boolean | number | undefined>) => {
+  const connected = [...ws.clients].some((client) => client.readyState === WebSocket.OPEN);
+  if (!connected) {
+    // Closing an inspector or loading perk metadata must not open a browser tab.
+    const interaction =
+      data.action !== "requestPerks" && (data.action !== "selection" || Boolean(data.type));
+    if (interaction && Date.now() - lastSetupOpened >= 30_000) {
+      lastSetupOpened = Date.now();
+      $.system.openUrl("https://app.destinyitemmanager.com/?streamdeck=setup");
+    }
+    return;
+  }
   ev.emit("send-to-client", data);
+};
 
 // Authentication Validator
 const Auth = z.object({
@@ -126,6 +162,9 @@ ev.on("connect", async (data) => {
   const { instance, token } = Auth.parse(data);
   // in-memory storage of tokens
   tokens.set(instance, token);
+  for (const socket of ws.clients) {
+    if (socket.instance === instance) sendConnectionStatus(socket);
+  }
   // persist tokens to the global settings
   setGlobalSettings({
     authentication: {

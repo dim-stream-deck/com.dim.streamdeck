@@ -1,0 +1,4 @@
+{
+  "id": "com.dim.streamdeck.loadout-browser-layout",
+  "items": [{ "key": "image", "type": "pixmap", "rect": [64, 14, 72, 72] }]
+}

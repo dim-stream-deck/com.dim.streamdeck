@@ -12,10 +12,10 @@ First, thank you for contributing to **DIM Stream Deck**!
 
 ### Pre-requisites
 
-* Install [Git](https://git-scm.com/downloads).
-* Install [Node.js](https://nodejs.org/) 26.13.0, pinned in `.node-version`.
-* Install [pnpm](https://pnpm.io/) 12.16.1.
-* Install Stream Deck 7.1 or newer. The plugin uses Node.js 26 and Elgato SDK 3.
+- Install [Git](https://git-scm.com/downloads).
+- Install [Node.js](https://nodejs.org/) 26.13.0, pinned in `.node-version`.
+- Install [pnpm](https://pnpm.io/) 12.16.1.
+- Install Stream Deck 7.1 or newer. The plugin uses Node.js 26 and Elgato SDK 3.
 
 ### Clone the repo
 
@@ -38,15 +38,15 @@ More detailed information on these steps are [here](https://docs.github.com/en/g
 
 This CLI is required to develop plugins for the Elgato Stream Deck.
 
-* Run `pnpm install --frozen-lockfile` from the repository root.
-* The workspace includes the Stream Deck CLI; use `pnpm --filter plugin exec streamdeck`.
+- Run `pnpm install --frozen-lockfile` from the repository root.
+- The workspace includes the Stream Deck CLI; use `pnpm --filter plugin exec streamdeck`.
 
 ### Develop
 
 From the repository root:
 
-* run `pnpm --filter plugin run link`
-* run `pnpm --filter plugin exec streamdeck dev`
+- run `pnpm --filter plugin run link`
+- run `pnpm --filter plugin exec streamdeck dev`
 
 You're ready, you can now test your changes using only `pnpm run dev`.
 
@@ -56,13 +56,42 @@ Usually actions on the plugin have a relative code also on [DIM](https://github.
 
 Both workspaces build with Vite Plus. The plugin bundle stays CommonJS at `bin/plugin.js`; the property inspector uses relative asset URLs in `pi/`.
 
-* Run `pnpm run build` to type-check and build both workspaces.
-* Run `pnpm run test` for the regression suite.
-* Run `pnpm run lint` for the quality checks. Existing warnings are tracked separately from migration failures.
-* Run `pnpm run pack` to build and generate `plugin/com.dim.streamdeck.streamDeckPlugin`.
+- Run `pnpm run build` to type-check and build both workspaces.
+- Run `pnpm run test` for the regression suite.
+- Run `pnpm run lint` for the quality checks. Existing warnings are tracked separately from migration failures.
+- Run `pnpm run pack` to build and generate `plugin/com.dim.streamdeck.streamDeckPlugin`.
 
 The release workflow also downloads the Windows solo-mode and macro executables. Local packaging requires those same files in `solo-mode/` and `macro/` inside the `.sdPlugin` directory.
 
 The plugin build reads its existing `.env` values and copies CanvasKit WASM and clipboard executables using package resolution, which works with pnpm. Never commit `.env` files or generated bundles containing deployment credentials.
 
 The inspector communicates through `property-inspector/src/streamdeck.ts` because Elgato removed the browser SDK export in version 2. Plugin requests are handled in `plugin/src/ui.ts`. Preserve action IDs, saved settings, and the DIM WebSocket protocol when changing these boundaries.
+
+### DIM connection status
+
+DIM opts into automatic authorization checks using the `dim-status` WebSocket
+subprotocol. After loading saved settings, the plugin sends a `connected` action
+with the token for that socket's instance, or no token if it is unpaired. It sends
+the status again when a connect deep link updates that instance. Older DIM clients
+that do not request the subprotocol receive only the existing action messages.
+
+### Pull Item tiles
+
+Pull Item keys use DIM-style tier pips, a power and damage-type strip, and optional
+Champion, weapon-frame or armor-stat, season, masterwork, and lock indicators.
+DIM supplies these details through item selection and picker results. Existing
+saved actions remain compatible; reselect an item in an updated DIM instance to
+populate its additional display details, including the crafted versus enhanced
+symbol. Older saved crafted items use the standard crafted symbol as a fallback.
+The global Appearance setting controls all Pull Item keys and picker item tiles.
+DIM style, the default, scales the full square artwork and separate power strip
+together, leaving narrow side margins. Fill key uses the full button width and
+crops the artwork above the footer. The key retains the existing equipped
+indicator and grayscale preference. Subclass keys keep their original display.
+
+### Installed plugin metadata
+
+Read the plugin version from `streamDeck.info.plugin.version`. Stream Deck can
+protect the installed `manifest.json` as a binary file, so parsing it as JSON
+crashes packaged plugins even when the development folder works. The runtime
+tests cover both plain and protected manifests.

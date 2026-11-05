@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
   "Name": "DIM Stream Deck",
-  "Version": "3.3.5.0",
+  "Version": "3.3.6.0",
   "Author": "fcannizzaro",
   "URL": "https://dimstreamdeck.vercel.app",
   "PropertyInspectorPath": "pi/index.html",
@@ -97,6 +97,20 @@
       "SupportedInMultiActions": true,
       "Tooltip": "Allow to switch Destiny 2 Loadout",
       "UUID": "com.dim.streamdeck.loadout"
+    },
+    {
+      "Icon": "imgs/actions/loadout/icon",
+      "Name": "Loadout Browser",
+      "States": [
+        {
+          "Image": "imgs/actions/loadout/state",
+          "TitleAlignment": "middle",
+          "Title": "Loadouts"
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Browse DIM and in-game loadouts, filter by class or hashtag, and equip",
+      "UUID": "com.dim.streamdeck.loadout-browser"
     },
     {
       "Icon": "imgs/actions/search/icon",

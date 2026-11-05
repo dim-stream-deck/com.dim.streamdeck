@@ -1,6 +1,10 @@
 import { z } from "zod";
 import {
   AppSettingsSchema,
+  BrowserLoadoutSchema,
+  BrowserLoadoutsSchema,
+  LoadoutBrowserClassSchema,
+  LoadoutBrowserSettingsSchema,
   CheckpointSettingsSchema,
   GlobalSettingsSchema,
   LoadoutSettingsSchema,
@@ -97,3 +101,9 @@ export type PickerCellType =
 export type PickerSettings = z.infer<typeof PickerSettingsSchema>;
 
 export type PickerCategory = PickerSettings["category"];
+
+// Loadout browser
+export type LoadoutBrowserSettings = z.infer<typeof LoadoutBrowserSettingsSchema>;
+export type LoadoutBrowserClass = z.infer<typeof LoadoutBrowserClassSchema>;
+export type BrowserLoadout = z.infer<typeof BrowserLoadoutSchema>;
+export type BrowserLoadouts = z.infer<typeof BrowserLoadoutsSchema>;

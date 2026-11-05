@@ -4,6 +4,7 @@ import { z } from "zod";
 
 export const GlobalSettingsSchema = z.object({
   equipmentGrayscale: z.boolean().optional(),
+  pullItemTileLayout: z.enum(["fill", "dim"]).default("dim"),
   pullItemSinglePress: z.enum(["equip", "pull", "vault"]).default("equip"),
   pullItemDoublePress: z.enum(["equip", "pull", "vault"]).default("pull"),
   pullItemHoldPress: z.enum(["equip", "pull", "vault"]).default("vault"),
@@ -29,12 +30,7 @@ export const AppSettingsSchema = z.object({
 
 // Metrics
 
-export const MetricSchema = z.enum([
-  "battlePass",
-  "gunsmith",
-  "triumphs",
-  "triumphsActive",
-]);
+export const MetricSchema = z.enum(["battlePass", "gunsmith", "triumphs", "triumphsActive"]);
 
 export const MetricsSettingsSchema = z.object({
   metric: MetricSchema.default("battlePass"),
@@ -128,11 +124,19 @@ export const PullItemSettingsSchema = z.object({
   icon: z.string().nullish(),
   isExotic: z.boolean().nullish(),
   isCrafted: z.boolean().nullish(),
+  craftedOverlay: z.string().nullish(),
+  craftedBackground: z.string().nullish(),
   isSubClass: z.boolean().nullish(),
   label: z.string().nullish(),
   overlay: z.string().nullish(),
   subtitle: z.string().nullish(),
   element: z.string().nullish(),
+  power: z.coerce.number().nullish(),
+  breaker: z.string().nullish(),
+  badge: z.string().nullish(),
+  seasonIcon: z.string().nullish(),
+  masterwork: z.boolean().nullish(),
+  locked: z.boolean().nullish(),
   tier: z.coerce
     .number()
     .nullish()
@@ -178,6 +182,32 @@ export const LoadoutSettingsSchema = z.object({
     .nullish(),
 });
 
+// Loadout browser
+
+export const LoadoutBrowserClassSchema = z.enum(["current", "all", "titan", "hunter", "warlock"]);
+
+export const LoadoutBrowserSettingsSchema = z.object({
+  classFilter: LoadoutBrowserClassSchema.default("current"),
+  hashtag: z.string().default(""),
+});
+
+export const BrowserLoadoutSchema = z.object({
+  loadout: z.string(),
+  character: z.string(),
+  classType: z.number(),
+  label: z.string(),
+  tags: z.string().array(),
+  icon: z.string().optional(),
+  inGameIcon: z.object({ icon: z.string(), background: z.string() }).optional(),
+});
+
+export const BrowserLoadoutsSchema = z.object({
+  device: z.string(),
+  requestId: z.string(),
+  currentCharacter: z.string(),
+  loadouts: BrowserLoadoutSchema.array(),
+});
+
 // Picker
 
 export const PickerFilterSchema = z.enum([
@@ -196,46 +226,28 @@ export const PickerCategorySchema = z.enum(["all", "weapon", "armor"]);
 export const PickerSettingsSchema = z.object({
   category: PickerCategorySchema.default("all"),
   filters: PickerFilterSchema.array().default([]),
-  defaultOptions: z
-    .record(PickerFilterSchema, z.string().default("all"))
-    .default({
-      element: "all",
-      crafted: "all",
-      weapon: "all",
-      armor: "all",
-      class: "all",
-      perk: "all",
-      rarity: "all",
-      filters: "all",
-    }),
+  defaultOptions: z.record(PickerFilterSchema, z.string().default("all")).default({
+    element: "all",
+    crafted: "all",
+    weapon: "all",
+    armor: "all",
+    class: "all",
+    perk: "all",
+    rarity: "all",
+    filters: "all",
+  }),
   options: z
     .object({
       weapon: z.string().array().optional(),
       filters: z
         .string()
         .array()
-        .default([
-          "element",
-          "crafted",
-          "weapon",
-          "armor",
-          "class",
-          "perk",
-          "rarity",
-        ]),
+        .default(["element", "crafted", "weapon", "armor", "class", "perk", "rarity"]),
       perk: z.string().array().optional(),
     })
     .default({
       weapon: [],
-      filters: [
-        "element",
-        "crafted",
-        "weapon",
-        "armor",
-        "class",
-        "perk",
-        "rarity",
-      ],
+      filters: ["element", "crafted", "weapon", "armor", "class", "perk", "rarity"],
     }),
 });
 
@@ -252,4 +264,5 @@ export const Schemas = {
   pullItem: (data: unknown) => PullItemSettingsSchema.parse(data),
   postmaster: (data: unknown) => PostmasterSettingsSchema.parse(data),
   loadout: (data: unknown) => LoadoutSettingsSchema.parse(data),
+  loadoutBrowser: (data: unknown) => LoadoutBrowserSettingsSchema.parse(data),
 };

@@ -23,6 +23,8 @@ export interface DimActions {
 
   requestPickerItems: (params: { query: string; device: string }) => void;
 
+  requestLoadouts: (params: { device: string; requestId: string }) => void;
+
   requestPerks: () => void;
 
   randomize: (params: { weaponsOnly: boolean }) => void;

@@ -9,8 +9,9 @@ const base = "./imgs/canvas/";
 export const shadow = readAsArrayBuffer(`${base}/shadow.png`);
 export const exotic = readAsArrayBuffer(`${base}/item/exotic.png`);
 export const legendary = readAsArrayBuffer(`${base}/item/legendary.png`);
-export const crafted = readAsArrayBuffer(`${base}/item/crafted.png`);
 export const equippedMark = readAsArrayBuffer(`${base}/item/equipped-mark.png`);
+
+export const itemFont = readAsArrayBuffer(`${base}/item/NotoSans-Regular.ttf`);
 
 // Classes
 const warlock = readAsArrayBuffer(`${base}/character/warlock.png`);

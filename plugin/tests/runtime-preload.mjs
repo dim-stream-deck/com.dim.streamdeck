@@ -18,6 +18,9 @@ https.request = () => {
 };
 const listen = http.Server.prototype.listen;
 http.Server.prototype.listen = function (port, ...args) {
+  if (port === 9120) {
+    this.once("listening", () => process.stdout.write(`DIM_TEST_PORT:${this.address().port}\n`));
+  }
   return listen.call(this, port === 9120 ? 0 : port, ...args);
 };
 syncBuiltinESMExports();

@@ -1,6 +1,8 @@
 import { z } from "zod";
+import { BrowserLoadoutsSchema } from "@plugin/types";
 
 export const DimMessageSchema = z.discriminatedUnion("action", [
+  z.object({ action: z.literal("loadouts"), data: BrowserLoadoutsSchema }),
   z.object({
     action: z.literal("farmingMode"),
     data: z.boolean(),

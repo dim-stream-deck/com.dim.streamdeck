@@ -36,6 +36,8 @@ export const DIM: DimActions = {
   requestPickerItems: (args) => sendToWeb({ action: "requestPickerItems", ...args }),
 
   requestPerks: () => sendToWeb({ action: "requestPerks" }),
+
+  requestLoadouts: (args) => sendToWeb({ action: "requestLoadouts", ...args }),
 };
 
 export const buildQuery = (filters: Record<string, string | undefined>, type: PickerCategory) => {

@@ -2,8 +2,8 @@ import { DIM, buildQuery } from "@/dim/api";
 import { Armor, Classes, Crafted, Elements, Rarity, WeaponButtons } from "./options";
 import { ItemIcon } from "@/actions/pull-item/item-icon";
 import { ev } from "@/util/ev";
-import { KeyDownEvent } from "@elgato/streamdeck";
-import { PickerFilterType, PickerSettings } from "@plugin/types";
+import $, { KeyDownEvent } from "@elgato/streamdeck";
+import { PickerFilterType, PickerSettings, Schemas } from "@plugin/types";
 import { Equipment, State } from "@/state";
 import { Loaders } from "@/util/images";
 import { ImageIcon } from "./ImageIcon";
@@ -159,15 +159,14 @@ export const onPickerActivate = (
 
   // watch for picker items
   const pickerItemsListener = async (items: Record<string, any>[]) => {
+    const { pullItemTileLayout } = Schemas.global(await $.settings.getGlobalSettings());
     grid.fill(
-      await Promise.all(
-        items.map(async (item: any) => ({
-          type: "selection:item",
-          id: item.item,
-          image: () => ItemIcon(item),
-          loader: item.isExotic ? Loaders.exotic : Loaders.legendary,
-        })),
-      ),
+      items.map((item: any) => ({
+        type: "selection:item",
+        id: item.item,
+        image: () => ItemIcon(item, { layout: pullItemTileLayout }),
+        loader: item.isExotic ? Loaders.exotic : Loaders.legendary,
+      })),
     );
   };
 
