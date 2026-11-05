@@ -63,6 +63,8 @@ Both workspaces build with Vite Plus. The plugin bundle stays CommonJS at `bin/p
 
 The release workflow also downloads the Windows solo-mode and macro executables. Local packaging requires those same files in `solo-mode/` and `macro/` inside the `.sdPlugin` directory.
 
+The publish workflow creates a draft release, uploads the plugin package, then publishes it. Asset upload failures stop publication, and existing releases are not updated. Enable release immutability in the GitHub repository settings to lock published release assets and tags.
+
 The plugin build reads its existing `.env` values and copies CanvasKit WASM and clipboard executables using package resolution, which works with pnpm. Never commit `.env` files or generated bundles containing deployment credentials.
 
 The inspector communicates through `property-inspector/src/streamdeck.ts` because Elgato removed the browser SDK export in version 2. Plugin requests are handled in `plugin/src/ui.ts`. Preserve action IDs, saved settings, and the DIM WebSocket protocol when changing these boundaries.
