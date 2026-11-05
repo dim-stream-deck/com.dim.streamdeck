@@ -3,6 +3,7 @@ import { render } from "./util";
 import "./index.css";
 import { ActionIcon, Center, Group, Loader } from "@mantine/core";
 import { IconBrandDiscord, IconBrandPatreon, IconWorldWww } from "@tabler/icons-react";
+import { AutoOpenDim } from "./components/AutoOpenDim";
 import { NoSetting } from "./components/NoSettings";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import streamDeck from "./streamdeck";
@@ -107,6 +108,9 @@ const App = () => {
         <Support />
       </Suspense>
       {!Component ? <NoSetting /> : <Component />}
+      <Suspense fallback={Loading}>
+        <AutoOpenDim />
+      </Suspense>
       <Links />
     </>
   );

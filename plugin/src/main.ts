@@ -136,15 +136,20 @@ let lastSetupOpened = -Infinity;
  * @param data the content to send to the client
  * @returns void
  */
-export const sendToWeb = (data: Record<string, string | boolean | number | undefined>) => {
+export const sendToWeb = async (data: Record<string, string | boolean | number | undefined>) => {
   const connected = [...ws.clients].some((client) => client.readyState === WebSocket.OPEN);
   if (!connected) {
     // Closing an inspector or loading perk metadata must not open a browser tab.
     const interaction =
       data.action !== "requestPerks" && (data.action !== "selection" || Boolean(data.type));
-    if (interaction && Date.now() - lastSetupOpened >= 30_000) {
+    if (!interaction) return;
+    const { autoOpenDim = "stable" } = await $.settings.getGlobalSettings<GlobalSettings>();
+    if (autoOpenDim === "disabled") return;
+    if (Date.now() - lastSetupOpened >= 30_000) {
       lastSetupOpened = Date.now();
-      $.system.openUrl("https://app.destinyitemmanager.com/?streamdeck=setup");
+      $.system.openUrl(
+        `https://${autoOpenDim === "beta" ? "beta" : "app"}.destinyitemmanager.com/?streamdeck=setup`,
+      );
     }
     return;
   }

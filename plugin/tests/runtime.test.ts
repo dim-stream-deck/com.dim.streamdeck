@@ -8,11 +8,12 @@ import { resolve } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 
 it.each([
-  { stalled: false, protectedManifest: false },
-  { stalled: true, protectedManifest: true },
+  { stalled: false, protectedManifest: false, autoOpenDim: undefined },
+  { stalled: true, protectedManifest: true, autoOpenDim: "beta" },
+  { stalled: false, protectedManifest: false, autoOpenDim: "disabled" },
 ])(
-  "starts the packaged plugin with stalled checkpoints=$stalled and protected manifest=$protectedManifest",
-  async ({ stalled, protectedManifest }) => {
+  "starts the packaged plugin with stalled checkpoints=$stalled and protected manifest=$protectedManifest and auto open=$autoOpenDim",
+  async ({ stalled, protectedManifest, autoOpenDim }) => {
     const bundle = resolve("plugin/com.dim.streamdeck.sdPlugin");
     const temp = await mkdtemp(`${tmpdir()}/dim-runtime-`);
     const server = new WebSocketServer({ host: "127.0.0.1", port: 0 });
@@ -78,7 +79,11 @@ it.each([
               event: "didReceiveGlobalSettings",
               id: message.id,
               payload: {
-                settings: { setupDate: "2026-01-01", authentication: { paired: "saved-token" } },
+                settings: {
+                  autoOpenDim,
+                  setupDate: "2026-01-01",
+                  authentication: { paired: "saved-token" },
+                },
               },
             }),
           );
@@ -165,7 +170,9 @@ it.each([
       const refresh = { ...event, action: "com.dim.streamdeck.refresh", context: "refresh" };
       socket.send(JSON.stringify({ ...refresh, event: "willAppear" }));
       socket.send(JSON.stringify({ ...refresh, event: "keyDown" }));
-      await expect.poll(() => messages.filter((m) => m.event === "openUrl").length).toBe(1);
+      if (autoOpenDim !== "disabled") {
+        await expect.poll(() => messages.filter((m) => m.event === "openUrl").length).toBe(1);
+      }
       socket.send(JSON.stringify({ ...refresh, event: "keyDown" }));
       // A reply confirms the host processed preceding events before checking the count.
       socket.send(
@@ -182,11 +189,17 @@ it.each([
           ),
         )
         .toBe(true);
-      expect(messages.filter((m) => m.event === "openUrl")).toEqual([
-        expect.objectContaining({
-          payload: { url: "https://app.destinyitemmanager.com/?streamdeck=setup" },
-        }),
-      ]);
+      expect(messages.filter((m) => m.event === "openUrl")).toEqual(
+        autoOpenDim === "disabled"
+          ? []
+          : [
+              expect.objectContaining({
+                payload: {
+                  url: `https://${autoOpenDim === "beta" ? "beta" : "app"}.destinyitemmanager.com/?streamdeck=setup`,
+                },
+              }),
+            ],
+      );
       // Older DIM sites do not opt in and must not receive the new status action.
       const legacy = new WebSocket(`ws://localhost:${port}/paired`);
       dimSockets.push(legacy);

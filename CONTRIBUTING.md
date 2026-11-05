@@ -95,3 +95,11 @@ Read the plugin version from `streamDeck.info.plugin.version`. Stream Deck can
 protect the installed `manifest.json` as a binary file, so parsing it as JSON
 crashes packaged plugins even when the development folder works. The runtime
 tests cover both plain and protected manifests.
+
+### Automatically opening DIM
+
+Every action's property inspector includes an **Automatically open DIM** global
+setting. Choose Stable DIM, Beta DIM, or Disabled. When an action needs DIM and
+no DIM tab is connected, the plugin opens the selected site's setup page, at most
+once every 30 seconds. Stable DIM is the default. Disabled prevents this automatic
+opening. DIM may redirect to login if the browser is not signed in.

@@ -2,7 +2,10 @@ import { z } from "zod";
 
 // Global Settings
 
+export const AutoOpenDimSchema = z.enum(["stable", "beta", "disabled"]);
+
 export const GlobalSettingsSchema = z.object({
+  autoOpenDim: AutoOpenDimSchema.default("stable"),
   equipmentGrayscale: z.boolean().optional(),
   pullItemTileLayout: z.enum(["fill", "dim"]).default("dim"),
   pullItemSinglePress: z.enum(["equip", "pull", "vault"]).default("equip"),
