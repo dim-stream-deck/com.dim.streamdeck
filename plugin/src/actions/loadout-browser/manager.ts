@@ -99,7 +99,7 @@ export const onLoadoutBrowserActivate = (
     grid.lock.add("last-row", {});
     const start = (grid.size.rows - 1) * grid.size.columns;
     grid.update(start, {
-      title: grid.hasTouchBar ? "" : panel ? "Back" : "Exit",
+      title: "",
       type: "navigation",
       image: `./imgs/canvas/picker/${panel ? "prev" : "close"}.png`,
       onPress: () => {
@@ -110,23 +110,16 @@ export const onLoadoutBrowserActivate = (
       },
     });
     grid.update(start + 1, {
-      title: grid.hasTouchBar
-        ? ""
-        : panel
-          ? "Filters"
-          : title(`Filters\n${classFilter}\n${hashtag ? `#${hashtag}` : "All tags"}`),
+      title: "",
       type: "navigation",
-      image: grid.hasTouchBar ? "./imgs/canvas/picker/filters/all.png" : "",
+      image: "./imgs/canvas/picker/filters/all.png",
       onPress: () => {
         panel = !panel;
         render();
       },
     });
     grid.update("bottom-right", {
-      title:
-        !grid.hasTouchBar && grid.pagination.required
-          ? `${grid.pagination.current + 1}/${Math.ceil(grid.cells.length / grid.available.length)}`
-          : "",
+      title: "",
       type: "navigation",
       image: grid.pagination.required ? "./imgs/canvas/picker/next.png" : "",
       onPress: () => {

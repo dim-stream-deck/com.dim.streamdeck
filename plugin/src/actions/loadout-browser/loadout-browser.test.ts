@@ -61,7 +61,11 @@ it.each([
   const pageSize = columns * (rows - 1);
   respond(Array.from({ length: pageSize + 1 }, (_, i) => loadout(i)));
   await expect.poll(() => grid.buttons[0].id).toBe("build-0:hunter");
-  expect(grid.buttons.at(-1)?.title).toBe(encoders ? "" : "1/2");
+  expect(grid.buttons.slice(pageSize).filter((cell) => cell.type === "navigation")).toEqual([
+    expect.objectContaining({ title: "", image: "./imgs/canvas/picker/close.png" }),
+    expect.objectContaining({ title: "", image: "./imgs/canvas/picker/filters/all.png" }),
+    expect.objectContaining({ title: "", image: "./imgs/canvas/picker/next.png" }),
+  ]);
   press(columns - 1);
   await expect.poll(() => grid.buttons[0].id).toBe(`build-${pageSize}:hunter`);
   press(0, 0);
@@ -85,6 +89,11 @@ it("filters by class and hashtag and equips the selected target character", asyn
   await expect.poll(() => grid.cells).toHaveLength(3);
   press(1);
   await expect.poll(() => grid.cells.some((cell) => cell.type === "browser:class")).toBe(true);
+  expect(grid.buttons[4]).toMatchObject({ title: "", image: "./imgs/canvas/picker/prev.png" });
+  expect(grid.buttons[5]).toMatchObject({
+    title: "",
+    image: "./imgs/canvas/picker/filters/all.png",
+  });
   grid.emit(
     "press",
     grid.cells.find((cell) => cell.type === "browser:class" && cell.id === "titan"),
